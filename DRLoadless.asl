@@ -1,4 +1,4 @@
-// Written by Souzooka, pls do not steal or you will be banished to the depths of hell.
+// Pointers found and code written by Souzooka.
 
 state("DeadRising", "SteamPatch3")
 {
@@ -8,8 +8,6 @@ state("DeadRising", "SteamPatch3")
 	bool CameraCheck : 0x01945F70, 0x70;
 	ushort CameraOverlayPresent : 0x019284E8, 0x28, 0x4C8, 0x2F8, 0x140, 0x14;
 }
-
-
 
 isLoading
 {	
@@ -21,5 +19,4 @@ isLoading
 	{
 	return false;
 	}
-
 }
