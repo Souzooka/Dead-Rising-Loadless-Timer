@@ -6,23 +6,20 @@ state("DeadRising", "SteamPatch3")
 //	float ActiveTime : 0x1950F08;
 	bool NothingIsBeingRendered : 0x01945FE0, 0x3C;
 	bool CameraCheck : 0x01945F70, 0x70;
+	ushort CameraOverlayPresent : 0x019284E8, 0x28, 0x4C8, 0x2F8, 0x140, 0x14;
 }
 
 
 
 isLoading
-{
-
-// 	Doesn't work
-//	return current.NothingIsBeingRendered;
-//	if (current.ActiveTime == old.ActiveTime)
-//	return current.NothingIsBeingRendered;
-//	if (current.ActiveTime > old.ActiveTime)
-//	return false;
-	
-	if (current.CameraCheck == true)
-	return current.NothingIsBeingRendered;
-	if (current.CameraCheck == false)
+{	
+	if (current.CameraCheck == true & current.NothingIsBeingRendered == true & current.CameraOverlayPresent != 257)
+	{
+	return true;
+	}
+	else
+	{
 	return false;
+	}
 
 }
