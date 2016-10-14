@@ -14,7 +14,7 @@ state("DeadRising", "SteamPatch3")
 
 isLoading
 {	
-	// room loads | title menu loading (?) | accurate cutscene lodas | intro (up to helipad) loads
+	// room loads | title menu loading (?) | accurate cutscene loads | intro (up to helipad) loads
 	if (current.gameStatus == 652 | current.gameStatus == 607 & current.currentRoomValue == current.loadingRoomValue | current.gameStatus != 607 & current.gameStatus != 608 & current.gameStatus != 609 & current.frankCanMove == 0 & current.NothingIsBeingRendered == true | current.gameStatus != 609 & current.currentRoomValue == 4294967295 & current.loadingRoomValue == 287 & current.NothingIsBeingRendered == true)
 	{
 	return true;
