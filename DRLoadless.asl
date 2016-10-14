@@ -2,16 +2,19 @@
 
 state("DeadRising", "SteamPatch3")
 {
-//	bool NothingIsBeingRenderedInverse : 0x019461B8, 0x8, 0x10, 0x0, 0x178, 0xB4;
-//	float ActiveTime : 0x1950F08;
+//	bool cameraCheck : 0x01945F70, 0x70;
 	bool NothingIsBeingRendered : 0x01945FE0, 0x3C;
-	bool CameraCheck : 0x01945F70, 0x70;
-	ushort CameraOverlayPresent : 0x019284E8, 0x28, 0x4C8, 0x2F8, 0x140, 0x14;
+	byte frankCanMove : 0x01945F70, 0x5C;
+	uint currentRoomValue : 0x01945F70, 0x40;
+	uint loadingRoomValue : 0x01945F70, 0x48;
+	uint oldRoomValue : 0x01945F70, 0x4B;
+	ushort gameStatus :0x01945F70, 0x88;
+	
 }
 
 isLoading
 {	
-	if (current.CameraCheck == true & current.NothingIsBeingRendered == true & current.CameraOverlayPresent != 257)
+	if (current.gameStatus == 652 | current.gameStatus != 607 & current.gameStatus != 608 & current.gameStatus != 609 & current.frankCanMove == 0 & current.NothingIsBeingRendered == true | current.gameStatus != 609 & current.currentRoomValue == 4294967295 & current.loadingRoomValue == 287 & current.NothingIsBeingRendered == true)
 	{
 	return true;
 	}
