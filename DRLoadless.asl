@@ -11,13 +11,45 @@ state("DeadRising", "SteamPatch3")
 	uint loadingRoomValue : 0x01945F70, 0x48;
 	uint oldRoomValue : 0x01945F70, 0x4B;
 	ushort gameStatus :0x01945F70, 0x88;
+}
 	
+startup
+{
+	vars.introSequence = 0;
+	vars.inLoad = 0;
 }
 
+update
+{
+	if (current.currentRoomValue == 4294967295 & current.nothingIsBeingRendered == true)
+	{
+		if (current.loadingRoomValue == 287)
+		{
+			vars.introSequence = 2;
+		}
+		else
+		{
+			vars.introSequence = 1;
+		}
+	}
+	else
+	{
+		vars.introSequence = 0;
+	}
+	
+	if (current.frankCanMove == 0 & current.frankCanMoveTwo == 0 & current.nothingIsBeingRendered == true | current.gameStatus == 652)
+	{
+		vars.inLoad = 1;
+	}
+	else
+	{
+		vars.inLoad = 0;
+	}
+}
+	
 isLoading
 {	
-	// room loads // title load (?) // accurate cutscene loads // 72 hour intro // overtime intro // infinity intro //
-	if (current.gameStatus == 652 | current.gameStatus == 607 & current.currentRoomValue == current.loadingRoomValue | current.gameStatus != 607 & current.gameStatus != 608 & current.gameStatus != 609 & current.frankCanMove == 0 & current.frankCanMoveTwo == 0 & current.nothingIsBeingRendered == true | current.gameStatus != 609 & current.currentRoomValue == 4294967295 & current.loadingRoomValue == 287 & current.nothingIsBeingRendered == true | current.currentRoomValue == 4294967295 & current.loadingRoomValue == 1025 & current.nothingIsBeingRendered == true | current.currentRoomValue == 4294967295 & current.loadingRoomValue == 288 & current.nothingIsBeingRendered == true)
+	if (609 < current.gameStatus & vars.inLoad == 1 | current.gameStatus != 609 & vars.introSequence == 2 | vars.introSequence == 1)
 	{
 	return true;
 	}
