@@ -2,7 +2,7 @@
 
 state("DeadRising", "SteamPatch3")
 {
-//	bool cameraCheck : 0x01945F70, 0x70;
+	bool cameraCheck : 0x01945F70, 0x70;
 	bool nothingIsBeingRendered : 0x01945FE0, 0x3C;
 	byte frankCanMove : 0x01945F70, 0x5C;
 	byte frankCanMoveTwo : 0x01945F70, 0x58;
@@ -10,13 +10,20 @@ state("DeadRising", "SteamPatch3")
 	uint currentRoomValue : 0x01945F70, 0x40;
 	uint loadingRoomValue : 0x01945F70, 0x48;
 	uint oldRoomValue : 0x01945F70, 0x4B;
-	ushort gameStatus :0x01945F70, 0x88;
+	ushort gameStatus : 0x01945F70, 0x88;
+	
+	uint mainMenuID : 0x1946FC0, 0x2F058, 0x38;
+	byte mainMenuButtonSelection : 0x1946FC0, 0x2F058, 0x4C;
+	ushort brockHealth : 0x01CF2620, 0x118, 0x12EC;
 }
 	
 startup
 {
 	vars.introSequence = 0;
 	vars.inLoad = 0;
+	vars.gameStartSaveFromMenu = 0;
+	
+	vars.overtimeSplits = 0;
 }
 
 update
@@ -45,6 +52,15 @@ update
 	{
 		vars.inLoad = 0;
 	}
+	
+	if (current.mainMenuID == 68097 & vars.gameStartSaveFromMenu == 0 | current.mainMenuID == 199169 & vars.gameStartSaveFromMenu == 0)
+	{
+		vars.gameStartSaveFromMenu++;
+	}
+	if (current.mainMenuID == 3 & vars.gameStartSaveFromMenu == 1)
+	{
+		vars.gameStartSaveFromMenu--;
+	}
 }
 	
 isLoading
@@ -57,4 +73,59 @@ isLoading
 	{
 	return false;
 	}
+}
+
+reset
+{
+//	Resets when the title menu is entered.
+	if (current.currentRoomValue != 4294967295 & current.nothingIsBeingRendered == true & current.gameStatus == 607  & vars.gameStartSaveFromMenu == 0)
+	{
+		vars.overtimeSplits = 0;
+		return true;
+	}
+}
+
+start
+{
+//	For runs starting from the main menu, starts on new game or save load. Comment this out this code for ILs.
+	if (current.mainMenuID == 199169 & current.mainMenuButtonSelection == 2)
+	vars.overtimeSplits = 1;
+	if (current.mainMenuID == 199169)
+	return true;
+}
+
+split
+{
+// Overtime splits, the user should not have to comment any of this out if they are not doing Overtime.
+	// supplies
+	if (current.currentRoomValue == 1025 & current.loadingRoomValue != 1024 & current.gameStatus == 652 & vars.overtimeSplits == 1 & vars.gameStartSaveFromMenu == 0)
+	{
+		vars.overtimeSplits++;
+		return true;
+	}
+	// queens
+	if (current.currentRoomValue == 1025 & current.loadingRoomValue == 2816 & current.gameStatus == 652 & vars.overtimeSplits == 2 & vars.gameStartSaveFromMenu == 0)
+	{
+		vars.overtimeSplits++;
+		return true;
+	}
+	// tunnel
+	if (current.currentRoomValue == 2818 & current.loadingRoomValue != 2817 & current.gameStatus == 652 & vars.overtimeSplits == 3 & vars.gameStartSaveFromMenu == 0)
+	{
+		vars.overtimeSplits++;
+		return true;
+	}
+	// tank
+	if (current.currentRoomValue == 2819 & current.gameStatus == 652 & current.nothingIsBeingRendered == true & vars.overtimeSplits == 4)
+	{
+		vars.overtimeSplits++;
+		return true; 
+	}
+	// brock, the man with the hardest health pointers to find
+	if (current.brockHealth == 0 & vars.overtimeSplits == 5)
+	{
+		vars.overtimeSplits = 0;
+		return true;
+	}
+// Launch Confetti
 }
