@@ -1,5 +1,15 @@
 // Pointers found and code written by Souzooka.
 
+// This script contains load removal and autosplitters (some of which not currently functional) which will become active completely automatically, no editing of this script needed. Simply have the right number of splits for the run category you are doing. 72 Hour (all cases)/all achievements/etc. not supported.
+// Overtime splits: 	5 splits: 	Supplies, Queens, Tunnel, Tank, Brock
+// Prologue% splits: 	1 split: 	Prologue
+// Case 1 splits: 		5 splits: 	Prologue, Case 1-1, Case 1-2, Case 1-3, Case 1-4
+// Case 2 splits:
+// Case 4 splits: 
+// Case 5 splits: 
+// Case 7 splits: 
+// Case 8 splits: 
+
 state("DeadRising", "SteamPatch3")
 {
 	bool cameraCheck : 0x01945F70, 0x70;
@@ -173,7 +183,7 @@ split
 	{
 		vars.overtimeSplits = 0;
 		return true;
-	//	launch vars.confetti
+	//	vars.confetti.launch();
 	}
 
 //	Prologue% + Case 1 splits
@@ -193,7 +203,7 @@ split
 	if (current.lastCutsceneSeen == 8 & current.currentRoomValue == 534 & current.gameStatus != 652 & current.gameStatus != 654 & vars.case1Splits == 2)
 	{
 		vars.stopWatch.Start();
-		if (vars.stopWatch.ElapsedMilliseconds >= 1000)
+		if (vars.stopWatch.ElapsedMilliseconds >= 2000)
 		{
 			if (current.inGameTimer != old.inGameTimer)
 			{
@@ -207,7 +217,7 @@ split
 	if (current.lastCutsceneSeen == 10 & current.currentRoomValue == 2560 & current.gameStatus != 652 & current.gameStatus != 654 & vars.case1Splits == 3)
 	{
 		vars.stopWatch.Start();
-		if (vars.stopWatch.ElapsedMilliseconds >= 2200)
+		if (vars.stopWatch.ElapsedMilliseconds >= 2000)
 		{
 			if (current.inGameTimer != old.inGameTimer)
 			{
@@ -221,7 +231,7 @@ split
 	if (current.lastCutsceneSeen == 12 & current.currentRoomValue == 256 & current.gameStatus != 652 & current.gameStatus != 654 & vars.case1Splits == 4)
 	{
 		vars.stopWatch.Start();
-		if (vars.stopWatch.ElapsedMilliseconds >= 2200)
+		if (vars.stopWatch.ElapsedMilliseconds >= 2000)
 		{
 			if (current.inGameTimer != old.inGameTimer)
 			{
@@ -235,7 +245,7 @@ split
 	if (current.lastCutsceneSeen == 13 & current.currentRoomValue == 288 & current.gameStatus != 652 & current.gameStatus != 654 & vars.case1Splits == 5)
 	{
 		vars.stopWatch.Start();
-		if (vars.stopWatch.ElapsedMilliseconds >= 1000)
+		if (vars.stopWatch.ElapsedMilliseconds >= 2000)
 		{
 			if (current.inGameTimer != old.inGameTimer)
 			{
