@@ -3,7 +3,7 @@
 // This script contains load removal and autosplitters (some of which not currently functional) which will become active completely automatically, no editing of this script needed. Simply have the right number of splits for the run category you are doing. 72 Hour (all cases)/all achievements/etc. not supported.
 // Overtime splits: 	5 splits: 	Supplies, Queens, Tunnel, Tank, Brock
 // Prologue% splits: 	1 split: 	Prologue
-// Case 1 splits: 		5 splits: 	Prologue, Case 1-1, Case 1-2, Case 1-3, Case 1-4
+// Case 1 splits: 	5 splits: 	Prologue, Case 1-1, Case 1-2, Case 1-3, Case 1-4
 // Case 2 splits:
 // Case 4 splits: 
 // Case 5 splits: 
