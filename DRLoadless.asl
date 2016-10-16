@@ -6,14 +6,16 @@ state("DeadRising", "SteamPatch3")
 	bool nothingIsBeingRendered : 0x01945FE0, 0x3C;
 	byte frankCanMove : 0x01945F70, 0x5C;
 	byte frankCanMoveTwo : 0x01945F70, 0x58;
-	uint zeroAtTitleMenu : 0x01945F70, 0x38;
+//	uint zeroAtTitleMenu : 0x01945F70, 0x38;
 	uint currentRoomValue : 0x01945F70, 0x40;
 	uint loadingRoomValue : 0x01945F70, 0x48;
-	uint oldRoomValue : 0x01945F70, 0x4B;
+//	uint oldRoomValue : 0x01945F70, 0x4B;
 	ushort gameStatus : 0x01945F70, 0x88;
 	
 	uint mainMenuID : 0x1946FC0, 0x2F058, 0x38;
 	byte mainMenuButtonSelection : 0x1946FC0, 0x2F058, 0x4C;
+	byte mainMenuMaxPossibleButtonSelection : 0x1946FC0, 0x2F058, 0x9C;
+	byte mainMenuSavePresent : 0x1946FC0, 0x2F058, 0xA0;
 	ushort brockHealth : 0x01CF2620, 0x118, 0x12EC;
 }
 	
@@ -24,6 +26,7 @@ startup
 	vars.gameStartSaveFromMenu = 0;
 	
 	vars.overtimeSplits = 0;
+	vars.overtimeSelected = 0;
 }
 
 update
@@ -61,6 +64,13 @@ update
 	{
 		vars.gameStartSaveFromMenu--;
 	}
+
+	if (current.mainMenuSavePresent == 1 & current.mainMenuMaxPossibleButtonSelection >= 3 & current.mainMenuButtonSelection == 2 | current.mainMenuSavePresent == 0 & current.mainMenuMaxPossibleButtonSelection >= 2 & current.mainMenuButtonSelection == 1)
+	{vars.overtimeSelected = 1;}
+	else
+	{vars.overtimeSelected = 0;}
+	
+	print(vars.overtimeSplits.ToString());
 }
 	
 isLoading
@@ -78,7 +88,7 @@ isLoading
 reset
 {
 //	Resets when the title menu is entered.
-	if (current.currentRoomValue != 4294967295 & current.nothingIsBeingRendered == true & current.gameStatus == 607  & vars.gameStartSaveFromMenu == 0)
+	if (current.mainMenuID == 264)
 	{
 		vars.overtimeSplits = 0;
 		return true;
@@ -88,7 +98,7 @@ reset
 start
 {
 //	For runs starting from the main menu, starts on new game or save load. Comment this out this code for ILs.
-	if (current.mainMenuID == 199169 & current.mainMenuButtonSelection == 2)
+	if (current.mainMenuID == 199169 & vars.overtimeSelected == 1)
 	vars.overtimeSplits = 1;
 	if (current.mainMenuID == 199169)
 	return true;
