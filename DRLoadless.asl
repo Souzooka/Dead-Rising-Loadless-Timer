@@ -16,7 +16,7 @@ state("DeadRising", "SteamPatch3")
 	byte mainMenuButtonSelection : 0x1946FC0, 0x2F058, 0x4C;
 	byte mainMenuMaxPossibleButtonSelection : 0x1946FC0, 0x2F058, 0x9C;
 	byte mainMenuSavePresent : 0x1946FC0, 0x2F058, 0xA0;
-	ushort brockHealth : 0x01CF2620, 0x118, 0x12EC;
+	uint brockHealth : 0x01CF2620, 0x118, 0x12EC;
 }
 	
 startup
@@ -69,8 +69,6 @@ update
 	{vars.overtimeSelected = 1;}
 	else
 	{vars.overtimeSelected = 0;}
-	
-	print(vars.overtimeSplits.ToString());
 }
 	
 isLoading
@@ -131,11 +129,11 @@ split
 		vars.overtimeSplits++;
 		return true; 
 	}
-	// brock, the man with the hardest health pointers to find
-	if (current.brockHealth == 0 & vars.overtimeSplits == 5)
+	// brock
+	if (current.brockHealth == 0 & current.gameStatus == 687 & current.nothingIsBeingRendered == false & vars.overtimeSplits == 5)
 	{
 		vars.overtimeSplits = 0;
 		return true;
+	//	launch vars.confetti
 	}
-// Launch Confetti
 }
