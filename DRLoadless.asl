@@ -13,7 +13,8 @@
 state("DeadRising", "SteamPatch3")
 {
 
-	uint mainMenuID : 0x1946FC0, 0x2F058, 0x38;
+ 	uint currentRoomValue : 0x01945F70, 0x40;
+   	uint loadingRoomValue : 0x01945F70, 0x48;
 
 	uint brockHealth : 0x01CF2620, 0x118, 0x12EC;
 
@@ -24,6 +25,7 @@ state("DeadRising", "SteamPatch3")
 	uint inGameTimer : 0x1946FC0, 0x2F058, 0x198;
 	byte caseFileOpen : 0x1946FC0, 0x2F058, 0x184;
 	byte caseMenuOpen : 0x1946FC0, 0x2F058, 0x182;
+	uint mainMenuID : 0x1946FC0, 0x2F058, 0x38;
 	
 }
 	
@@ -38,18 +40,17 @@ startup
 reset
 {
 //	Resets when the title menu is entered.
-	if (current.mainMenuID == 264)
-	{
-		vars.splitsTick = 0;
-		return true;
-	}
+	return current.mainMenuID == 264;
+
 }
 
 start
 {
 //	For runs starting from the main menu, starts on new game.
-	if (current.inGameTimer == 3888000 & current.inCutsceneOrLoad == false & current.mainMenuID == 3 | current.inGameTimer == 12528000 & current.inCutsceneOrLoad == false & current.mainMenuID == 3)
-		return true;
+	if (!current.inCutsceneOrLoad && current.mainMenuID == 3)
+	{
+		return current.inGameTimer == 3888000 || current.inGameTimer == 12528000;
+	}
 
 	
 //	Case 2 Start
@@ -59,11 +60,7 @@ start
 
 isLoading
 {
-	// No curly brackets because we're too good for that.
-	if (current.inCutsceneOrLoad == true)
-		return true;
-	else
-		return false;
+	return current.inCutsceneOrLoad;
 }
 
 split
