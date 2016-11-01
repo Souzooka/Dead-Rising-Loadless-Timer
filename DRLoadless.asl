@@ -5,10 +5,10 @@
 // Prologue% splits: 	1 split: 	Prologue
 // Case 1 splits: 	5 splits: 	Prologue, Case 1-1, Case 1-2, Case 1-3, Case 1-4
 // Case 2 splits:	3 splits:	Case 2-2, First-Aid Acquired, Case 2-3
-// Case 4 splits: 
-// Case 5 splits: 
-// Case 7 splits: 
-// Case 8 splits: 
+// Case 4 splits: 	1 split:	Case 4-2
+// Case 5 splits: 	1 split:	Case 5-2
+// Case 7 splits:	1 split:	Case 7-2
+// Case 8 splits: 	3 splits:	Case 8-2, Case 8-3, Case 8-4
 
 state("DeadRising", "SteamPatch3")
 {
@@ -49,15 +49,13 @@ reset
 
 start
 {
-//	For runs starting from the main menu, starts on new game.
-	if (!current.inCutsceneOrLoad && current.mainMenuID == 3)
-	{
-		return current.inGameTimer == 3888000 || current.inGameTimer == 12528000;
-	}
+//	For runs starting from the main menu, starts on new game. Also starts Case 5 (which doesn't start with a case file screen)
+	if (current.inGameTimer == 3888000 || current.inGameTimer == 12528000 || current.campaignProgress == 270)
+		return !current.inCutsceneOrLoad && current.mainMenuID == 3;
 
-//	Case 2 Start
-	if (current.campaignProgress == 160 & current.caseFileOpen == 0 & old.caseFileOpen == 2 & old.caseMenuOpen == 19)
-		return true;
+//	Case 2, 4, 7, 8 Start
+	if (current.caseMenuOpen == 0 && old.caseMenuOpen == 19)
+		return current.campaignProgress == 160 || current.campaignProgress == 230 || current.campaignProgress == 320 || current.campaignProgress == 350;
 }
 
 isLoading
@@ -72,7 +70,7 @@ split
 	if (current.frankWatchTime >= 11100 & current.frankWatchTime <= 11700)
 	{
 		// Prologue
-		if (current.campaignProgress == 65 & current.loadingRoomValue == 288 & current.currentRoomValue != 288 & vars.splitsTick == 0)
+		if (current.campaignProgress == 65 && current.loadingRoomValue == 288 && current.currentRoomValue != 288 && vars.splitsTick == 0)
 		{
 			vars.stopWatch.Start();
 			if (vars.stopWatch.ElapsedMilliseconds >= 1000)
@@ -85,25 +83,25 @@ split
 		if (current.caseFileOpen == 0 & old.caseFileOpen == 2)
 		{
 			//	Case 1-1
-			if (current.campaignProgress == 80 & vars.splitsTick == 1)
+			if (current.campaignProgress == 80 && vars.splitsTick == 1)
 			{
 				vars.splitsTick++;
 				return true;
 			}
 			//	Case 1-2
-			if (current.campaignProgress == 110 & vars.splitsTick == 2)
+			if (current.campaignProgress == 110 && vars.splitsTick == 2)
 			{
 				vars.splitsTick++;
 				return true;
 			}
 			//	Case 1-3
-			if (current.campaignProgress == 130 & vars.splitsTick == 3)
+			if (current.campaignProgress == 130 && vars.splitsTick == 3)
 			{
 				vars.splitsTick++;
 				return true;
 			}
 			//	Case 1-4
-			if (current.campaignProgress == 140 & vars.splitsTick == 4)
+			if (current.campaignProgress == 140 && vars.splitsTick == 4)
 			{
 				vars.splitsTick = 0;
 				return true;
@@ -112,7 +110,7 @@ split
 	}
 
 	//	Run this code only if we're actually in Case 2.
-	if (current.frankWatchTime >= 20400 & current.frankWatchTime <= 21200)
+	if (current.frankWatchTime >= 20400 && current.frankWatchTime <= 21200)
 	{
 		if (current.caseFileOpen == 0 & old.caseFileOpen == 2)
 		{
@@ -130,7 +128,7 @@ split
 			}
 		}
 		//	First Aid Acquired
-		if (current.campaignProgress == 215 & vars.splitsTick == 1)
+		if (current.campaignProgress == 215 && vars.splitsTick == 1)
 		{
 			vars.splitsTick++;
 			return true;
@@ -138,11 +136,81 @@ split
 		
 	}
 	
+	//	Run this code only if we're actually in Case 4.
+	if (current.frankWatchTime >= 21500 && current.frankWatchTime <= 30000)
+	{
+		if (current.caseFileOpen == 0 && old.caseFileOpen == 2)
+		{
+			//	Case 4-2
+			if (current.campaignProgress == 250 && vars.splitsTick == 0)
+			{
+				vars.splitsTick = 0;
+				return true;
+			}
+		}
+	}
+	
+	//	Run this code only if we're actually in Case 5.
+	if (current.frankWatchTime >= 30000 && current.frankWatchTime <= 30300)
+	{
+		if (current.caseFileOpen == 0 && old.caseFileOpen == 2)
+		{
+			//	Case 5-2
+			if (current.campaignProgress == 290 && vars.splitsTick == 0)
+			{
+				vars.splitsTick = 0;
+				return true;
+			}
+		}
+	}
+	
+	//	Run this code only if we're actually in Case 7.
+	if (current.frankWatchTime >= 31100 && current.frankWatchTime <= 31700)
+	{
+		if (current.caseFileOpen == 0 && old.caseFileOpen == 2)
+		{
+			//	Case 7-2
+			if (current.campaignProgress == 340 && vars.splitsTick == 0)
+			{
+				vars.splitsTick = 0;
+				return true;
+			}
+		}
+	}
+
+	//	Run this code only if we're actually in Case 8.
+	if (current.frankWatchTime >= 31700 && current.frankWatchTime <= 32200)
+	{
+		if (current.caseFileOpen == 0 && old.caseFileOpen == 2)
+		{
+			//	Case 8-2
+			if (current.campaignProgress == 360 && vars.splitsTick == 0)
+			{
+				vars.splitsTick++;
+				return true;
+			}
+			//	Case 8-3
+			if (current.campaignProgress == 370 && vars.splitsTick == 1)
+			{
+				vars.splitsTick++;
+				return true;
+			}
+			//	Case 8-2
+			if (current.campaignProgress == 390 && vars.splitsTick == 2)
+			{
+				vars.splitsTick = 0;
+				return true;
+			}
+		}
+	}
+
+
+	
 	// Run this code only if we're actually in Overtime.
 	if (current.frankWatchTime >= 41215)
 	{
 		// Supplies
-		if (current.currentRoomValue == 1025 & current.loadingRoomValue != 1024 & current.inCutsceneOrLoad == true & vars.splitsTick == 0)
+		if (current.currentRoomValue == 1025 && current.loadingRoomValue != 1024 && current.inCutsceneOrLoad == true & vars.splitsTick == 0)
 		{
 			vars.splitsTick++;
 			return true;
