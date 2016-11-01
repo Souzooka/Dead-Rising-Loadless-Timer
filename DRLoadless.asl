@@ -55,7 +55,7 @@ start
 
 //	Case 2, 4, 7, 8 Start
 	if (current.caseMenuOpen == 0 && old.caseMenuOpen == 19)
-		return current.campaignProgress == 160 || current.campaignProgress == 230 || current.campaignProgress == 320 || current.campaignProgress == 350;
+		return true;
 }
 
 isLoading
@@ -66,145 +66,22 @@ isLoading
 split
 {
 
-//	Run this code only if we're actually in Case 1.
+//	Run this code only if we're actually in Prologue.
 	if (current.frankWatchTime >= 11100 && current.frankWatchTime <= 11700)
 	{
 		// Prologue
-		if (current.campaignProgress == 65 && current.loadingRoomValue == 288 && current.currentRoomValue != 288 && vars.splitsTick == 0)
+		if (current.campaignProgress == 65 && current.loadingRoomValue == 288 && current.currentRoomValue != 288)
 		{
 			vars.stopWatch.Start();
 			if (vars.stopWatch.ElapsedMilliseconds >= 1000)
 			{
 				vars.stopWatch.Reset();
-				vars.splitsTick++;
 				return true;
 			}	
 		}
-		if (current.caseFileOpen == 0 && old.caseFileOpen == 2)
-		{
-			//	Case 1-1
-			if (current.campaignProgress == 80 && vars.splitsTick == 1)
-			{
-				vars.splitsTick++;
-				return true;
-			}
-			//	Case 1-2
-			if (current.campaignProgress == 110 && vars.splitsTick == 2)
-			{
-				vars.splitsTick++;
-				return true;
-			}
-			//	Case 1-3
-			if (current.campaignProgress == 130 && vars.splitsTick == 3)
-			{
-				vars.splitsTick++;
-				return true;
-			}
-			//	Case 1-4
-			if (current.campaignProgress == 140 && vars.splitsTick == 4)
-			{
-				vars.splitsTick = 0;
-				return true;
-			}
-		}
-	}
-
-	//	Run this code only if we're actually in Case 2.
-	if (current.frankWatchTime >= 20400 && current.frankWatchTime <= 21200)
-	{
-		if (current.caseFileOpen == 0 && old.caseFileOpen == 2)
-		{
-			//	Case 2-2
-			if (current.campaignProgress == 180 && vars.splitsTick == 0)
-			{
-				vars.splitsTick++;
-				return true;
-			}
-			//	Case 2-3
-			if (current.campaignProgress == 215 && current.currentRoomValue == 288 && vars.splitsTick == 2)
-			{
-				vars.splitsTick = 0;
-				return true;
-			}
-		}
-		//	First Aid Acquired
-		if (current.campaignProgress == 215 && vars.splitsTick == 1)
-		{
-			vars.splitsTick++;
-			return true;
-		}
-		
 	}
 	
-	//	Run this code only if we're actually in Case 4.
-	if (current.frankWatchTime >= 21500 && current.frankWatchTime <= 30000)
-	{
-		if (current.caseFileOpen == 0 && old.caseFileOpen == 2)
-		{
-			//	Case 4-2
-			if (current.campaignProgress == 250 && vars.splitsTick == 0)
-			{
-				vars.splitsTick = 0;
-				return true;
-			}
-		}
-	}
-	
-	//	Run this code only if we're actually in Case 5.
-	if (current.frankWatchTime >= 30000 && current.frankWatchTime <= 30300)
-	{
-		if (current.caseFileOpen == 0 && old.caseFileOpen == 2)
-		{
-			//	Case 5-2
-			if (current.campaignProgress == 290 && vars.splitsTick == 0)
-			{
-				vars.splitsTick = 0;
-				return true;
-			}
-		}
-	}
-	
-	//	Run this code only if we're actually in Case 7.
-	if (current.frankWatchTime >= 31100 && current.frankWatchTime <= 31700)
-	{
-		if (current.caseFileOpen == 0 && old.caseFileOpen == 2)
-		{
-			//	Case 7-2
-			if (current.campaignProgress == 340 && vars.splitsTick == 0)
-			{
-				vars.splitsTick = 0;
-				return true;
-			}
-		}
-	}
-
-	//	Run this code only if we're actually in Case 8.
-	if (current.frankWatchTime >= 31700 && current.frankWatchTime <= 32200)
-	{
-		if (current.caseFileOpen == 0 && old.caseFileOpen == 2)
-		{
-			//	Case 8-2
-			if (current.campaignProgress == 360 && vars.splitsTick == 0)
-			{
-				vars.splitsTick++;
-				return true;
-			}
-			//	Case 8-3
-			if (current.campaignProgress == 370 && vars.splitsTick == 1)
-			{
-				vars.splitsTick++;
-				return true;
-			}
-			//	Case 8-2
-			if (current.campaignProgress == 390 && vars.splitsTick == 2)
-			{
-				vars.splitsTick = 0;
-				return true;
-			}
-		}
-	}
-
-
+	return current.caseFileOpen == 0 && old.caseFileOpen == 2;
 	
 	// Run this code only if we're actually in Overtime.
 	if (current.frankWatchTime >= 41215)
