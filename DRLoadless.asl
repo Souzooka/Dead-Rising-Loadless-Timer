@@ -67,7 +67,7 @@ split
 {
 
 //	Run this code only if we're actually in Case 1.
-	if (current.frankWatchTime >= 11100 & current.frankWatchTime <= 11700)
+	if (current.frankWatchTime >= 11100 && current.frankWatchTime <= 11700)
 	{
 		// Prologue
 		if (current.campaignProgress == 65 && current.loadingRoomValue == 288 && current.currentRoomValue != 288 && vars.splitsTick == 0)
@@ -80,7 +80,7 @@ split
 				return true;
 			}	
 		}
-		if (current.caseFileOpen == 0 & old.caseFileOpen == 2)
+		if (current.caseFileOpen == 0 && old.caseFileOpen == 2)
 		{
 			//	Case 1-1
 			if (current.campaignProgress == 80 && vars.splitsTick == 1)
@@ -112,16 +112,16 @@ split
 	//	Run this code only if we're actually in Case 2.
 	if (current.frankWatchTime >= 20400 && current.frankWatchTime <= 21200)
 	{
-		if (current.caseFileOpen == 0 & old.caseFileOpen == 2)
+		if (current.caseFileOpen == 0 && old.caseFileOpen == 2)
 		{
 			//	Case 2-2
-			if (current.campaignProgress == 180 & vars.splitsTick == 0)
+			if (current.campaignProgress == 180 && vars.splitsTick == 0)
 			{
 				vars.splitsTick++;
 				return true;
 			}
 			//	Case 2-3
-			if (current.campaignProgress == 215 & current.currentRoomValue == 288 & vars.splitsTick == 2)
+			if (current.campaignProgress == 215 && current.currentRoomValue == 288 && vars.splitsTick == 2)
 			{
 				vars.splitsTick = 0;
 				return true;
@@ -210,31 +210,31 @@ split
 	if (current.frankWatchTime >= 41215)
 	{
 		// Supplies
-		if (current.currentRoomValue == 1025 && current.loadingRoomValue != 1024 && current.inCutsceneOrLoad == true & vars.splitsTick == 0)
+		if (current.currentRoomValue == 1025 && current.loadingRoomValue != 1024 && current.inCutsceneOrLoad == true && vars.splitsTick == 0)
 		{
 			vars.splitsTick++;
 			return true;
 		}
 		// Queens
-		if (current.currentRoomValue == 1025 & current.loadingRoomValue == 2816 & current.inCutsceneOrLoad == true & vars.splitsTick == 1)
+		if (current.currentRoomValue == 1025 && current.loadingRoomValue == 2816 && current.inCutsceneOrLoad == true && vars.splitsTick == 1)
 		{
 			vars.splitsTick++;
 			return true;
 		}
 		// Tunnel
-		if (current.currentRoomValue == 2818 & current.loadingRoomValue != 2817 & current.inCutsceneOrLoad == true & vars.splitsTick == 2)
+		if (current.currentRoomValue == 2818 && current.loadingRoomValue != 2817 && current.inCutsceneOrLoad == true && vars.splitsTick == 2)
 		{
 			vars.splitsTick++;
 			return true;
 		}
 		// Tank
-		if (current.currentRoomValue == 2819 & current.brockHealth == 0 & current.inCutsceneOrLoad == true & vars.splitsTick == 3)
+		if (current.currentRoomValue == 2819 && current.brockHealth == 0 && current.inCutsceneOrLoad == true && vars.splitsTick == 3)
 		{
 			vars.splitsTick++;
 			return true; 
 		}
 		// Brock
-		if (current.brockHealth == 0 & current.inCutsceneOrLoad == false & vars.splitsTick == 4)
+		if (current.brockHealth == 0 && current.inCutsceneOrLoad == false && vars.splitsTick == 4)
 		{
 			vars.splitsTick = 0;
 		//	vars.confetti.launch();
