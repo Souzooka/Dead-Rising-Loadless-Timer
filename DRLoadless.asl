@@ -136,31 +136,31 @@ split
 	if (current.frankWatchTime >= 41215)
 	{
 		// Supplies
-		if (current.currentRoomValue == 1025 & current.loadingRoomValue != 1024 & current.inCutsceneOrLoad == true & vars.splitsTick == 0 & vars.resetCheck == 1)
+		if (current.currentRoomValue == 1025 & current.loadingRoomValue != 1024 & current.inCutsceneOrLoad == true & vars.splitsTick == 0)
 		{
 			vars.splitsTick++;
 			return true;
 		}
 		// Queens
-		if (current.currentRoomValue == 1025 & current.loadingRoomValue == 2816 & current.inCutsceneOrLoad == true & vars.splitsTick == 1 & vars.resetCheck == 1)
+		if (current.currentRoomValue == 1025 & current.loadingRoomValue == 2816 & current.inCutsceneOrLoad == true & vars.splitsTick == 1)
 		{
 			vars.splitsTick++;
 			return true;
 		}
 		// Tunnel
-		if (current.currentRoomValue == 2818 & current.loadingRoomValue != 2817 & current.inCutsceneOrLoad == true & vars.splitsTick == 2 & vars.resetCheck == 1)
+		if (current.currentRoomValue == 2818 & current.loadingRoomValue != 2817 & current.inCutsceneOrLoad == true & vars.splitsTick == 2)
 		{
 			vars.splitsTick++;
 			return true;
 		}
 		// Tank
-		if (current.currentRoomValue == 2819 & current.brockHealth == 0 & current.inCutsceneOrLoad == true & vars.splitsTick == 3 & vars.resetCheck == 1)
+		if (current.currentRoomValue == 2819 & current.brockHealth == 0 & current.inCutsceneOrLoad == true & vars.splitsTick == 3)
 		{
 			vars.splitsTick++;
 			return true; 
 		}
 		// Brock
-		if (current.brockHealth == 0 & current.inCutsceneOrLoad == false & vars.splitsTick == 4 & vars.resetCheck == 1)
+		if (current.brockHealth == 0 & current.inCutsceneOrLoad == false & vars.splitsTick == 4)
 		{
 			vars.splitsTick = 0;
 		//	vars.confetti.launch();
