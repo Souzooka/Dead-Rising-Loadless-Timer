@@ -2,7 +2,7 @@
 
 /*
 
-Load removal and autosplitting, 72 Hour (all cases)/all achievements/etc. not supported.
+Load removal and autosplitting. 72 Hour (all cases)/all achievements/etc. not supported.
 Overtime splits: 	5 splits: 	Supplies, Queens, Tunnel, Tank, Brock
 Prologue% splits: 	1 split: 	Prologue
 Case 1 splits: 	5 splits: 	Prologue, Case 1-1, Case 1-2, Case 1-3, Case 1-4
@@ -86,7 +86,7 @@ split
 		}
 	}
 	
-	return current.caseFileOpen == 0 && old.caseFileOpen == 2;
+	return current.caseMenuOpen == 0 && old.caseMenuOpen == 2;
 	
 	// Run this code only if we're actually in Overtime.
 	if (current.frankWatchTime >= 41215)
