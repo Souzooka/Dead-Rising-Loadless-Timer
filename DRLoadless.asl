@@ -35,16 +35,6 @@ startup
 	vars.stopWatch = new Stopwatch();
 }
 
-
-update
-{
-	// Checks if we hit a cutscene and sets vars.resetCheck to 1 if we have. vars.resetCheck is set back to 0 when the title menu is enetered. This prevents false starts as the lastCutsceneSeen's value persists until a new cutscene is seen. For example, if the timer starts after viewing 2-1's cutscene and the player resets, the timer will falsely start immediately after a reset.
-	if (current.inCutscene == 65537)
-	{
-		vars.resetCheck = 1;
-	}
-}
-
 reset
 {
 //	Resets when the title menu is entered.
@@ -79,9 +69,6 @@ isLoading
 split
 {
 
-//	All splits (except for Overtime and Prologue) check if a particular cutscene has been hit, waits 2 seconds (because there is a quarter second of control immediately after a cutscene before the case file appears) and then constantly checks if the in-game time is advancing. When this happens, a split occurs.
-
-//	Prologue% + Case 1 splits
 //	Run this code only if we're actually in Case 1.
 	if (current.frankWatchTime >= 11100 & current.frankWatchTime <= 11700)
 	{
