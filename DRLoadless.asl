@@ -86,7 +86,7 @@ split
 		}
 	}
 	
-	return current.caseMenuOpen == 0 && old.caseMenuOpen == 2;
+	return current.caseMenuOpen == 0 && old.caseMenuOpen == 2 && current.campaignProgress != 280;
 	
 	// Run this code only if we're actually in Overtime.
 	if (current.frankWatchTime >= 41215)
