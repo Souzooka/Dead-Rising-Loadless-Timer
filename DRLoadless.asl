@@ -1,14 +1,14 @@
 // Pointers found and code written by Souzooka.
 
-// This script contains load removal and autosplitters (some of which not currently functional) which will become active completely automatically, no editing of this script needed. Simply have the right number of splits for the run category you are doing. 72 Hour (all cases)/all achievements/etc. not supported.
-// Overtime splits: 	5 splits: 	Supplies, Queens, Tunnel, Tank, Brock
-// Prologue% splits: 	1 split: 	Prologue
-// Case 1 splits: 	5 splits: 	Prologue, Case 1-1, Case 1-2, Case 1-3, Case 1-4
-// Case 2 splits:	3 splits:	Case 2-2, First-Aid Acquired, Case 2-3
-// Case 4 splits: 	1 split:	Case 4-2
-// Case 5 splits: 	1 split:	Case 5-2
-// Case 7 splits:	1 split:	Case 7-2
-// Case 8 splits: 	3 splits:	Case 8-2, Case 8-3, Case 8-4
+Load removal and autosplitting, 72 Hour (all cases)/all achievements/etc. not supported.
+Overtime splits: 	5 splits: 	Supplies, Queens, Tunnel, Tank, Brock
+Prologue% splits: 	1 split: 	Prologue
+Case 1 splits: 	5 splits: 	Prologue, Case 1-1, Case 1-2, Case 1-3, Case 1-4
+Case 2 splits:	3 splits:	Case 2-2, First-Aid Acquired, Case 2-3
+Case 4 splits: 	1 split:	Case 4-2
+Case 5 splits: 	1 split:	Case 5-2
+Case 7 splits:	1 split:	Case 7-2
+Case 8 splits: 	3 splits:	Case 8-2, Case 8-3, Case 8-4
 
 state("DeadRising", "SteamPatch3")
 {
@@ -70,12 +70,13 @@ split
 	if (current.frankWatchTime >= 11100 && current.frankWatchTime <= 11700)
 	{
 		// Prologue
-		if (current.campaignProgress == 65 && current.loadingRoomValue == 288 && current.currentRoomValue != 288)
+		if (current.campaignProgress == 65 && current.loadingRoomValue == 288 && current.currentRoomValue != 288 && vars.splitsTick == 0)
 		{
 			vars.stopWatch.Start();
 			if (vars.stopWatch.ElapsedMilliseconds >= 1000)
 			{
 				vars.stopWatch.Reset();
+				vars.splitsTick++;
 				return true;
 			}	
 		}
