@@ -1,5 +1,7 @@
 // Pointers found and code written by Souzooka.
 
+/*
+
 Load removal and autosplitting, 72 Hour (all cases)/all achievements/etc. not supported.
 Overtime splits: 	5 splits: 	Supplies, Queens, Tunnel, Tank, Brock
 Prologue% splits: 	1 split: 	Prologue
@@ -9,6 +11,8 @@ Case 4 splits: 	1 split:	Case 4-2
 Case 5 splits: 	1 split:	Case 5-2
 Case 7 splits:	1 split:	Case 7-2
 Case 8 splits: 	3 splits:	Case 8-2, Case 8-3, Case 8-4
+
+*/
 
 state("DeadRising", "SteamPatch3")
 {
