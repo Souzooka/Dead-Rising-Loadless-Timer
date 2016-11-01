@@ -40,8 +40,11 @@ startup
 reset
 {
 //	Resets when the title menu is entered.
-	return current.mainMenuID == 264;
-
+	if (current.mainMenuID == 264)
+	{
+		vars.splitsTick = 0;
+		return true;
+	}
 }
 
 start
@@ -52,7 +55,6 @@ start
 		return current.inGameTimer == 3888000 || current.inGameTimer == 12528000;
 	}
 
-	
 //	Case 2 Start
 	if (current.campaignProgress == 160 & current.caseFileOpen == 0 & old.caseFileOpen == 2 & old.caseMenuOpen == 19)
 		return true;
@@ -80,40 +82,52 @@ split
 				return true;
 			}	
 		}
-		//	Case 1-1
-		if (current.campaignProgress == 80 & vars.splitsTick == 1 & current.caseFileOpen == 0 & old.caseFileOpen == 2)
+		if (current.caseFileOpen == 0 & old.caseFileOpen == 2)
 		{
-			vars.splitsTick++;
-			return true;
-		}
-		//	Case 1-2
-		if (current.campaignProgress == 110 & vars.splitsTick == 2 & current.caseFileOpen == 0 & old.caseFileOpen == 2)
-		{
-			vars.splitsTick++;
-			return true;
-		}
-		//	Case 1-3
-		if (current.campaignProgress == 130 & vars.splitsTick == 3 & current.caseFileOpen == 0 & old.caseFileOpen == 2)
-		{
-			vars.splitsTick++;
-			return true;
-		}
-		//	Case 1-4
-		if (current.campaignProgress == 140 & vars.splitsTick == 4 & current.caseFileOpen == 0 & old.caseFileOpen == 2)
-		{
-			vars.splitsTick = 0;
-			return true;
+			//	Case 1-1
+			if (current.campaignProgress == 80 & vars.splitsTick == 1)
+			{
+				vars.splitsTick++;
+				return true;
+			}
+			//	Case 1-2
+			if (current.campaignProgress == 110 & vars.splitsTick == 2)
+			{
+				vars.splitsTick++;
+				return true;
+			}
+			//	Case 1-3
+			if (current.campaignProgress == 130 & vars.splitsTick == 3)
+			{
+				vars.splitsTick++;
+				return true;
+			}
+			//	Case 1-4
+			if (current.campaignProgress == 140 & vars.splitsTick == 4)
+			{
+				vars.splitsTick = 0;
+				return true;
+			}
 		}
 	}
 
 	//	Run this code only if we're actually in Case 2.
 	if (current.frankWatchTime >= 20400 & current.frankWatchTime <= 21200)
 	{
-		//	Case 2-2
-		if (current.campaignProgress == 180 & vars.splitsTick == 0 & current.caseFileOpen == 0 & old.caseFileOpen == 2)
+		if (current.caseFileOpen == 0 & old.caseFileOpen == 2)
 		{
-			vars.splitsTick++;
-			return true;
+			//	Case 2-2
+			if (current.campaignProgress == 180 & vars.splitsTick == 0)
+			{
+				vars.splitsTick++;
+				return true;
+			}
+			//	Case 2-3
+			if (current.campaignProgress == 215 & current.currentRoomValue == 288 & vars.splitsTick == 2)
+			{
+				vars.splitsTick = 0;
+				return true;
+			}
 		}
 		//	First Aid Acquired
 		if (current.campaignProgress == 215 & vars.splitsTick == 1)
@@ -121,12 +135,7 @@ split
 			vars.splitsTick++;
 			return true;
 		}
-		//	Case 2-3
-		if (current.campaignProgress == 215 & current.currentRoomValue == 288 & vars.splitsTick == 2 & current.caseFileOpen == 0 & old.caseFileOpen == 2)
-		{
-			vars.splitsTick = 0;
-			return true;
-		}
+		
 	}
 	
 	// Run this code only if we're actually in Overtime.
