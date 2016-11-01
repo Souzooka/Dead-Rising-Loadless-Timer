@@ -115,7 +115,7 @@ split
 			return true; 
 		}
 		// Brock
-		if (current.brockHealth == 0 & current.gameStatus == 687 & vars.splitsTick == 4)
+		if (current.brockHealth == 0 & old.brockHealth != 0 & current.gameStatus == 687 & vars.splitsTick == 4)
 		{
 			vars.splitsTick = 0;
 		//	vars.confetti.launch();
