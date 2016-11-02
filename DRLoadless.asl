@@ -124,7 +124,7 @@ split
 	}
 	
 	// First-Aid
-	if current.campaignProgress == 215 & old.campaignProgress == 210
+	if (current.campaignProgress == 215 & old.campaignProgress == 210)
 		{return true;}
 	
 	// Always running, will return true ONLY when closing case file (exception being start of case 5)
