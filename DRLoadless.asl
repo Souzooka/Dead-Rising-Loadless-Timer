@@ -123,6 +123,10 @@ split
 		}
 	}
 	
+	// First-Aid
+	if current.campaignProgress == 215 & old.campaignProgress == 210
+		{return true;}
+	
 	// Always running, will return true ONLY when closing case file (exception being start of case 5)
 	return current.caseMenuOpen == 0 && old.caseMenuOpen == 2 && current.campaignProgress != 280;
 
