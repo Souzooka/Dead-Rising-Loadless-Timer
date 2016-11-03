@@ -80,9 +80,8 @@ split
 	if (current.frankWatchTime >= 41215)
 	{
 		// Supplies
-		if (current.currentRoomValue == 1025 && current.loadingRoomValue != 1024 && current.inCutsceneOrLoad != old.inCutsceneOrLoad)
+		if (current.currentRoomValue == 1025 && current.gameStatus == 652 && current.loadingRoomValue != 1024 && current.inCutsceneOrLoad != old.inCutsceneOrLoad)
 			{return true;}
-		
 		// Queens
 		if (current.currentRoomValue == 1025 && current.loadingRoomValue == 2816 && old.loadingRoomValue != 2816)
 			{return true;}
