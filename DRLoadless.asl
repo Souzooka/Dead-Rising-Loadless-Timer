@@ -67,7 +67,7 @@ split
 	{
 		// Prologue
 		if (current.campaignProgress == 65 && current.inCutsceneOrLoad == true && old.inCutsceneOrLoad == false)
-		{vars.stopWatch.Start();}
+			{vars.stopWatch.Start();}
 		
 		if (vars.stopWatch.ElapsedMilliseconds >= 1000)
 		{
@@ -81,15 +81,15 @@ split
 	{
 		// Supplies
 		if (current.currentRoomValue == 1025 && current.loadingRoomValue != 1024 && current.inCutsceneOrLoad != old.inCutsceneOrLoad)
-		{return true;}
+			{return true;}
 		
 		// Queens
 		if (current.currentRoomValue == 1025 && current.loadingRoomValue == 2816 && old.loadingRoomValue != 2816)
-		{return true;}
+			{return true;}
 		
 		// Tunnel
 		if (current.loadingRoomValue == 2819 && old.loadingRoomValue != 2819)
-		{return true;}
+			{return true;}
 		
 		// Tank & Brock
 		if (current.currentRoomValue == 2819 && current.brockHealth == 0 && old.brockHealth != 0)
