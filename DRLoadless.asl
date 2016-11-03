@@ -47,7 +47,7 @@ start
 {
 //	For runs starting from the main menu, starts on new game. Also starts Case 5 (which doesn't start with a case file screen)
 	if (current.inGameTimer == 3888000 || current.inGameTimer == 12528000 || current.campaignProgress == 270)
-		{return !current.inCutsceneOrLoad && current.mainMenuID == 3;}
+		{return current.mainMenuID == 3;}
 
 //	Case 2, 4, 7, 8 Start
 	if (current.caseMenuOpen == 0 && old.caseMenuOpen == 19)
@@ -84,12 +84,10 @@ split
 			{return true;}
 		// Queens
 		if (current.currentRoomValue == 1025 && current.loadingRoomValue == 2816 && old.loadingRoomValue != 2816)
-			{return true;}
-		
+			{return true;}	
 		// Tunnel
 		if (current.loadingRoomValue == 2819 && old.loadingRoomValue != 2819)
 			{return true;}
-		
 		// Tank & Brock
 		if (current.currentRoomValue == 2819 && current.brockHealth == 0 && old.brockHealth != 0)
 			{return true;}
