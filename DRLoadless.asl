@@ -66,7 +66,7 @@ split
 	if (current.frankWatchTime >= 11100 && current.frankWatchTime <= 11700)
 	{
 		// Prologue
-		if (current.campaignProgress > 50 && current.inCutsceneOrLoad == true && old.inCutsceneOrLoad == false)
+		if (current.campaignProgress == 65 && current.inCutsceneOrLoad == true && old.inCutsceneOrLoad == false)
 		{vars.stopWatch.Start();}
 		
 		if (vars.stopWatch.ElapsedMilliseconds >= 1000)
