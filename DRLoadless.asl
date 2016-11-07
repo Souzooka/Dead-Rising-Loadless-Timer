@@ -1,6 +1,6 @@
 /* Pointers found and code written by Souzooka.
 
-Load removal and autosplitting. 72 Hour (all cases)/all achievements/etc. not supported.
+Load removal and autosplitting. All achievements/etc. not supported.
 General purpose splits:	2 splits:	Shortcut (WP to PP), Shortcut (PP to WP)
 Overtime splits: 	5 splits: 	Supplies, Queens, Tunnel, Tank, Brock
 Prologue% splits: 	1 split: 	Prologue
@@ -62,6 +62,8 @@ startup
 	settings.Add("bomb4", true, "Fourth Bomb", "allBombs");
 	settings.Add("bomb5", true, "Fifth Bomb", "allBombs");
 	
+	settings.Add("72HourEnd", true, "72 Hour Mode End", "72Hour");
+	
 	settings.Add("overtime", true, "Overtime Splits", "splits");
 	settings.Add("supplies", true, "Supplies", "overtime");
 	settings.Add("queens", true, "Queens", "overtime");
@@ -89,6 +91,8 @@ startup
 	settings.SetToolTip("bomb3", "Splits after collecting third bomb.");
 	settings.SetToolTip("bomb4", "Splits after collecting fourth bomb.");
 	settings.SetToolTip("bomb5", "Splits after collecting fifth bomb.");
+	
+	settings.SetToolTip("72HourEnd", "Splits when entering the hideout after finishing Case 8.");
 	
 	settings.SetToolTip("supplies", "Splits after giving Isabella supplies.");
 	settings.SetToolTip("queens", "Splits after giving Isabella 10 queens.");
