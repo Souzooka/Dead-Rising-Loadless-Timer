@@ -20,6 +20,7 @@ state("DeadRising", "SteamPatch3")
 	ushort gameStatus : 0x01945F70, 0x88;
 
 	uint brockHealth : 0x01CF2620, 0x118, 0x12EC;
+	float frankX : 0x01CF2620, 0xC8, 0x40;
 
 	ushort frankWatchTime : 0x01D18C80, 0x1f94;
 	bool inCutsceneOrLoad : 0x01D18C80, 0x2338;
@@ -134,14 +135,13 @@ isLoading
 split
 {
 // Shortcut (PP to WP)
-	if (settings["shortcutpw"] && current.currentRoomValue == 512 && current.loadingRoomValue == 768 && old.loadingRoomValue != 768)
-		{return true;}	
+	if (settings["shortcutpw"] && current.currentRoomValue == 512 && current.loadingRoomValue == 768 && old.loadingRoomValue != 768) return true;
 // Shortcut (WP to PP)
 	if (settings["shortcutwp"] && current.currentRoomValue == 768 && current.loadingRoomValue == 512 && old.loadingRoomValue != 512)
 		{return true;}
 // Case Splits
-	if (settings["caseSplits"])
-	return old.caseMenuOpen == 2 && current.caseMenuOpen == 0 && current.campaignProgress != 280;
+	if (settings["caseSplits"] && old.caseMenuOpen == 2 && current.caseMenuOpen == 0 && current.campaignProgress != 280)
+	return true;
 //	Prologue
 	if (settings["prologue"] && current.frankWatchTime >= 11100 && current.frankWatchTime <= 11700)
 	{
@@ -162,9 +162,9 @@ split
 	if (settings["firstaid"] && current.campaignProgress == 215 && old.campaignProgress == 210)
 		{return true;}	
 // Bombs
-	if (settings["allBombs"] && current.bombsCollected != old.bombsCollected && current.campaignProgress == 320)
+if (current.bombsCollected != old.bombsCollected)
 	{
-		switch ((int)current.bombsCollected)
+		switch ((byte)current.bombsCollected)
 		{
 			case 1:
 				if (settings["bomb1"])
@@ -198,7 +198,7 @@ split
 	if (settings["overtime"] && current.frankWatchTime >= 41215)
 	{
 		// Supplies
-		if (settings["supplies"] && current.currentRoomValue == 1025 && current.gameStatus == 652 && current.loadingRoomValue != 1024 && current.inCutsceneOrLoad != old.inCutsceneOrLoad)
+		if (settings["supplies"] && current.currentRoomValue == 1025 && current.frankX > 1000 && current.campaignProgress <= 600 && current.inCutsceneOrLoad != old.inCutsceneOrLoad)
 			{return true;}
 		// Queens
 		if (settings["queens"] && current.currentRoomValue == 1025 && current.loadingRoomValue == 2816 && old.loadingRoomValue != 2816)
@@ -207,10 +207,10 @@ split
 		if (settings["tunnel"] && current.loadingRoomValue == 2819 && old.loadingRoomValue != 2819)
 			{return true;}
 		// Tank
-		if (settings["tank"] && current.currentRoomValue == 2819 && current.gameStatus == 652 && current.brockHealth == 0 && old.brockHealth != 0)
+		if (settings["tank"] && current.currentRoomValue == 2819 && current.brockHealth == 0 && old.brockHealth % 500 == 0 && old.brockHealth != 0)
 			{return true;}
 		// Brock
-		if (settings["brock"] && current.currentRoomValue == 2819 && current.gameStatus == 687 && current.brockHealth == 0 && old.brockHealth != 0)
+		if (settings["brock"] && current.currentRoomValue == 2819 && current.brockHealth == 0 && old.brockHealth % 500 != 0 && old.brockHealth != 0)
 			{return true;}
 	}
 }
