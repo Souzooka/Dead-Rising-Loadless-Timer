@@ -45,13 +45,28 @@ startup
 	settings.Add("steven", true, "Steven", "case2");
 	settings.Add("firstaid", false, "First Aid", "case2");
 	
+	settings.Add("case4", false, "Case 4 Splits", "72Hour");
+	settings.Add("elevator4", false, "Elevator", "case4");
+	settings.Add("warehouse", false, "Warehouse", "case4");
+	settings.Add("wonderlandPlaza", false, "Wonderland Plaza", "case4");
+	
+	settings.Add("case5", false, "Case 5 Splits", "72Hour");
+	settings.Add("northPlaza", false, "North Plaza", "case5");
+	settings.Add("leisurePark", false, "Leisure Park", "case5");
+	settings.Add("paradisePlaza5", false, "Paradise Plaza", "case5");
+	settings.Add("elevator5", false, "Elevator", "case5");
+	
 	settings.Add("case7", true, "Case 7 Splits", "72Hour");
+	settings.Add("paradisePlaza7", false, "Paradise Plaza", "case7");
 	settings.Add("allBombs", true, "Bombs", "case7");
 	settings.Add("bomb1", true, "First Bomb", "allBombs");
 	settings.Add("bomb2", true, "Second Bomb", "allBombs");
 	settings.Add("bomb3", true, "Third Bomb", "allBombs");
 	settings.Add("bomb4", true, "Fourth Bomb", "allBombs");
 	settings.Add("bomb5", true, "Fifth Bomb", "allBombs");
+	
+	settings.Add("case8", false, "Case 8 Splits", "72Hour");
+	settings.Add("paradisePlaza8", false, "Paradise Plaza", "case8");
 	
 	settings.Add("72HourEnd", true, "72 Hour Mode End", "72Hour");
 	
@@ -77,11 +92,23 @@ startup
 	settings.SetToolTip("steven", "Splits after killing Steven.");
 	settings.SetToolTip("firstaid", "Splits after collecting first aid.");
 	
+	settings.SetToolTip("elevator4", "Splits after entering the Warehouse in Case 4.");
+	settings.SetToolTip("warehouse", "Splits after entering Paradise Plaza in Case 4.");
+	settings.SetToolTip("wonderlandPlaza", "Splits after entering North Plaza in Case 4.");
+	
+	settings.SetToolTip("northPlaza", "Splits after entering Leisure Park in Case 5.");
+	settings.SetToolTip("leisurePark", "Splits after entering Paradise Plaza in Case 5.");
+	settings.SetToolTip("paradisePlaza5", "Splits after entering the Warehouse in Case 5.");
+	settings.SetToolTip("elevator5", "Splits after entering the Rooftop in Case 5.");
+	
+	settings.SetToolTip("paradisePlaza7", "Splits after entering the Maintenance Tunnels in Case 7.");
 	settings.SetToolTip("bomb1", "Splits after collecting first bomb.");
 	settings.SetToolTip("bomb2", "Splits after collecting second bomb.");
 	settings.SetToolTip("bomb3", "Splits after collecting third bomb.");
 	settings.SetToolTip("bomb4", "Splits after collecting fourth bomb.");
 	settings.SetToolTip("bomb5", "Splits after collecting fifth bomb.");
+	
+	settings.SetToolTip("paradisePlaza8", "Splits after entering Leisure Park in Case 8.");
 	
 	settings.SetToolTip("72HourEnd", "Splits when entering the hideout after finishing Case 8.");
 	
@@ -155,18 +182,20 @@ isLoading
 split
 {
 // Shortcut (PP to WP)
-	if (settings["shortcutpw"] && current.currentRoomValue == 512 && current.loadingRoomValue == 768 && old.loadingRoomValue != 768) return true;
+	if (settings["shortcutpw"] && current.currentRoomValue == 512 && current.loadingRoomValue == 768 && old.loadingRoomValue != 768) {
+		return true;
+	}
 // Shortcut (WP to PP)
-	if (settings["shortcutwp"] && current.currentRoomValue == 768 && current.loadingRoomValue == 512 && old.loadingRoomValue != 512)
-		{return true;}
-// Case Splits
+	if (settings["shortcutwp"] && current.currentRoomValue == 768 && current.loadingRoomValue == 512 && old.loadingRoomValue != 512) {
+		return true;
+	}
+// Case Splits (All cases)
 	if (settings["caseSplits"] && old.caseMenuOpen == 2 && current.caseMenuOpen == 0 && current.campaignProgress != 280 && current.campaignProgress != 160 && current.campaignProgress != 230 && current.campaignProgress != 320 && current.campaignProgress != 350) {
 		return true;
 	}
-//	Prologue
+//	Prologue (Case 1)
 	if (settings["prologue"] && current.frankWatchTime >= 11100 && current.frankWatchTime <= 11700)
 	{
-		// Prologue
 		if (current.campaignProgress == 65 && current.inCutsceneOrLoad == true && old.inCutsceneOrLoad == false)
 			{vars.stopWatch.Start();}
 		
@@ -176,13 +205,45 @@ split
 			return true;
 		}	
 	}
-// Steven
+// Steven (Case 2)
 	if (settings["steven"] && current.campaignProgress == 190 && current.brockHealth == 0 && old.brockHealth != 0)
 		{return true;}
-// First-Aid
+// First-Aid (Case 2)
 	if (settings["firstaid"] && current.campaignProgress == 215 && old.campaignProgress == 210)
 		{return true;}	
-// Bombs
+// Elevator (Case 4)
+	if (settings["elevator4"] && current.currentRoomValue == 535 && current.loadingRoomValue == 534 && old.loadingRoomValue != 534 && current.campaignProgress >= 230 && current.campaignProgress < 270) {
+		return true;
+	}
+// Warehouse (Case 4)
+	if (settings["warehouse"] && current.currentRoomValue == 534 && current.loadingRoomValue == 512 && old.loadingRoomValue != 512 && current.campaignProgress >= 230 && current.campaignProgress < 270) {
+		return true;
+	}
+// Wonderland Plaza (Case 4)
+	if (settings["wonderlandPlaza"] && current.currentRoomValue == 768 && current.loadingRoomValue == 1024 && old.loadingRoomValue != 1024 && current.campaignProgress >= 230 && current.campaignProgress < 270) {
+		return true;
+	}
+// North Plaza (Case 5)
+	if (settings["northPlaza"] && current.currentRoomValue == 1024 && current.loadingRoomValue == 1792 && old.loadingRoomValue != 1792 && current.campaignProgress >= 270 && current.campaignProgress < 320) {
+		return true;
+	}
+// Leisure Park (Case 5)
+	if (settings["leisurePark"] && current.currentRoomValue == 1792 && current.loadingRoomValue == 512 && old.loadingRoomValue != 512 && current.campaignProgress >= 320 && current.campaignProgress < 320) {
+		return true;
+	}
+// Paradise Plaza (Case 5)
+	if (settings["paradisePlaza5"] && current.currentRoomValue == 512 && current.loadingRoomValue == 534 && old.loadingRoomValue != 534 && current.campaignProgress >= 270 && current.campaignProgress < 320) {
+		return true;
+	}
+// Elevator (Case 5)
+	if (settings["elevator5"] && current.currentRoomValue == 534 && current.loadingRoomValue == 535 && old.loadingRoomValue != 535 && current.campaignProgress >= 270 && current.campaignProgress < 320) {
+		return true;
+	}
+// Paradise Plaza (Case 7)
+	if (settings["paradisePlaza7"] && current.currentRoomValue == 512 && current.loadingRoomValue == 1536 && old.loadingRoomValue != 1536 && current.campaignProgress >= 320 && current.campaignProgress < 350) {
+		return true;
+	}
+// Bombs (Case 7)
 if (current.bombsCollected != old.bombsCollected)
 	{
 		switch ((byte)current.bombsCollected)
@@ -211,6 +272,10 @@ if (current.bombsCollected != old.bombsCollected)
 				print("SOMETHING IS WRONG. AMOUNT OF BOMBS COLLECTED IS " + current.bombsCollected + "?");
 				break;
 		}
+	}
+// Paradise Plaza (Case 8)
+	if (settings["paradisePlaza8"] && current.currentRoomValue == 512 && current.loadingRoomValue == 1536 && old.loadingRoomValue != 1536 && current.campaignProgress >= 350 && current.campaignProgress < 500) {
+		return true;
 	}
 // 72 Hour Mode Run End
 	if (settings["72HourEnd"] && current.campaignProgress == 390 && current.loadingRoomValue == 1025 && old.loadingRoomValue != 1025)
