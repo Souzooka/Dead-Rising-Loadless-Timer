@@ -37,6 +37,7 @@ state("DeadRising", "SteamPatch3")
 startup
 {
 	vars.stopWatch = new Stopwatch();
+	vars.getRunStarted = 0;
 	
 	settings.Add("splits", true, "All Splits");
 	
@@ -103,13 +104,22 @@ startup
 	
 	settings.SetToolTip("loadless1", "Legal official timing method which pauses the timer during loads and cutscene.");
 	settings.SetToolTip("loadless2", "Unofficial timing method which, along with pausing during loads and cutscenes, also pauses during menus (not the pause menu).");
+	
 }
 
 reset
 {
 //	Resets when the title menu is entered.
-	if (current.mainMenuID == 264)
-		{return true;}		
+	if (current.mainMenuID == 264){
+		vars.getRunStarted = 0;
+		return true;
+	}		
+}
+
+exit
+{
+	// Just in case
+	vars.getRunStarted = 0;
 }
 
 start
@@ -119,17 +129,38 @@ start
 		{return current.mainMenuID == 3;}
 
 //	Case 2, 4, 7, 8 Start
-	if (current.caseMenuOpen == 0 && old.caseMenuOpen == 19)
-		{return true;}		
+	if ((current.campaignProgress == 160 || current.campaignProgress == 230 || current.campaignProgress == 320 || current.campaignProgress == 350) && current.inCutsceneOrLoad == false && current.mainMenuID == 3 && vars.getRunStarted == 0) {
+		vars.getRunStarted = 1;
+		return true;
+	}
+}
+
+update
+{
+	// In case of manual reset by runner
+	if (current.mainMenuID == 264 && vars.getRunStarted == 1) {
+	vars.getRunStarted = 0;
+	}
 }
 
 isLoading
 {
-	if (settings["loadless1"])
-	return current.inCutsceneOrLoad;
+
+	if (settings["loadless1"]) {
+		if (current.inCutsceneOrLoad == true) {
+			return true;
+		}
+		else if ((current.caseMenuOpen == 2 || current.caseMenuOpen == 19) && (current.campaignProgress == 160 || current.campaignProgress == 230 || current.campaignProgress == 320 || current.campaignProgress == 350)) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 	
-	if (settings["loadless2"])
-	return current.inCutsceneOrLoad || current.caseMenuOpen > 1;
+	if (settings["loadless2"] && (current.inCutsceneOrLoad || current.caseMenuOpen > 1)) {
+	return true;
+	}
 }
 
 split
@@ -140,8 +171,9 @@ split
 	if (settings["shortcutwp"] && current.currentRoomValue == 768 && current.loadingRoomValue == 512 && old.loadingRoomValue != 512)
 		{return true;}
 // Case Splits
-	if (settings["caseSplits"] && old.caseMenuOpen == 2 && current.caseMenuOpen == 0 && current.campaignProgress != 280)
-	return true;
+	if (settings["caseSplits"] && old.caseMenuOpen == 2 && current.caseMenuOpen == 0 && current.campaignProgress != 280 && current.campaignProgress != 160 && current.campaignProgress != 230 && current.campaignProgress != 320 && current.campaignProgress != 350) {
+		return true;
+	}
 //	Prologue
 	if (settings["prologue"] && current.frankWatchTime >= 11100 && current.frankWatchTime <= 11700)
 	{
