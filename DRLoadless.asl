@@ -228,7 +228,7 @@ split
 		return true;
 	}
 // Leisure Park (Case 5)
-	if (settings["leisurePark"] && current.currentRoomValue == 1792 && current.loadingRoomValue == 512 && old.loadingRoomValue != 512 && current.campaignProgress >= 320 && current.campaignProgress < 320) {
+	if (settings["leisurePark"] && current.currentRoomValue == 1792 && current.loadingRoomValue == 512 && old.loadingRoomValue != 512 && current.campaignProgress >= 270 && current.campaignProgress < 320) {
 		return true;
 	}
 // Paradise Plaza (Case 5)
