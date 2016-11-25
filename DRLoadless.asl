@@ -1,16 +1,5 @@
 /* Pointers found and code written by Souzooka.
-
 Load removal and autosplitting. All achievements/etc. not supported.
-General purpose splits:	2 splits:	Shortcut (WP to PP), Shortcut (PP to WP)
-Overtime splits: 	5 splits: 	Supplies, Queens, Tunnel, Tank, Brock
-Prologue% splits: 	1 split: 	Prologue
-Case 1 splits: 	5 splits: 	Prologue, Case 1-1, Case 1-2, Case 1-3, Case 1-4
-Case 2 splits:	4 splits:	Case 2-2, Steven, First-Aid, Case 2-3
-Case 4 splits: 	1 split:	Case 4-2
-Case 5 splits: 	1 split:	Case 5-2
-Case 7 splits:	1 split:	Case 7-2
-Case 8 splits: 	3 splits:	Case 8-2, Case 8-3, Case 8-4
-
 */
 
 state("DeadRising", "SteamPatch3")
