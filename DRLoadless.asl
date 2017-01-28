@@ -25,9 +25,7 @@ state("DeadRising", "SteamPatch3")
 	
 startup
 {
-	vars.stopWatch = new Stopwatch();
 	vars.getRunStarted = 0;
-	vars.paradisePlaza8Split = 0;
 	
 	settings.Add("splits", true, "All Splits");
 	
@@ -143,10 +141,8 @@ exit
 start
 {
 //	For runs starting from the main menu, starts on new game. Also starts Case 5 (which doesn't start with a case file screen)
-	if (current.inGameTimer == 3888000 || current.inGameTimer == 12528000 || current.campaignProgress == 270) {
-		vars.getRunStarted = 1;
-		return current.mainMenuID == 3;
-	}
+	if (current.inGameTimer == 3888000 || current.inGameTimer == 12528000 || current.campaignProgress == 270)
+		{return current.mainMenuID == 3;}
 
 //	Case 2, 4, 7, 8 Start
 	if ((current.campaignProgress == 160 || current.campaignProgress == 230 || current.campaignProgress == 320 || current.campaignProgress == 350) && current.inCutsceneOrLoad == false && current.mainMenuID == 3 && vars.getRunStarted == 0) {
@@ -199,14 +195,8 @@ split
 		return true;
 	}
 //	Prologue (Case 1)
-	if (settings["prologue"] && current.frankWatchTime >= 11100 && current.frankWatchTime <= 11700)
-	{
-		if (current.campaignProgress == 65 && current.inCutsceneOrLoad == true && old.inCutsceneOrLoad == false)
-			{vars.stopWatch.Start();}
-		
-		if (vars.stopWatch.ElapsedMilliseconds >= 1000)
-		{
-			vars.stopWatch.Reset();
+	if (settings["prologue"] && current.frankWatchTime >= 11100 && current.frankWatchTime <= 11700) {
+		if (current.campaignProgress == 65 && current.inCutsceneOrLoad == true && old.inCutsceneOrLoad == false) {
 			return true;
 		}	
 	}
@@ -279,7 +269,7 @@ if (current.bombsCollected != old.bombsCollected)
 		}
 	}
 // Paradise Plaza (Case 8)
-	if (settings["paradisePlaza8"] && vars.paradisePlaza8Split == 0 && current.currentRoomValue == 512 && current.loadingRoomValue == 1792 && old.loadingRoomValue != 1792 && current.campaignProgress >= 350 && current.campaignProgress < 500) {
+	if (settings["paradisePlaza8"] && current.currentRoomValue == 512 && current.loadingRoomValue == 1536 && old.loadingRoomValue != 1536 && current.campaignProgress >= 350 && current.campaignProgress < 500) {
 		vars.paradisePlaza8Split = 1;
 		return true;
 	}
