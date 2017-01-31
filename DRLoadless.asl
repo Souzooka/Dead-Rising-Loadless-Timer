@@ -211,6 +211,8 @@ isLoading
 	if (settings["loadless2"] && (current.inCutsceneOrLoad || current.caseMenuOpen > 1)) {
 	return true;
 	}
+
+	return false;
 }
 
 split
