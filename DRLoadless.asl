@@ -200,11 +200,11 @@ isLoading
 		if (current.inCutsceneOrLoad == true && current.mainMenuID != 197383 && current.mainMenuID != 519 && current.mainMenuID != 262919) {
 			return true;
 		}
-		else if ((current.caseMenuOpen == 2 || current.caseMenuOpen == 19) && (current.campaignProgress == 160 || current.campaignProgress == 230 || current.campaignProgress == 320 || current.campaignProgress == 350)) {
+	}
+
+	if (settings["loadless1"] && !(settings["maxLevel"])) {
+		if ((current.caseMenuOpen == 2 || current.caseMenuOpen == 19) && (current.campaignProgress == 160 || current.campaignProgress == 230 || current.campaignProgress == 320 || current.campaignProgress == 350)) {
 			return true;
-		}
-		else {
-			return false;
 		}
 	}
 	
