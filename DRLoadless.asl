@@ -24,6 +24,9 @@ state("DeadRising", "SteamPatch3")
 
 	//Zombie Genocider
 	uint kills : 0x1959EA0, 0x3B0;
+
+	//Max Level
+	uint level : 0x1946950, 0x68;
 }
 	
 startup
@@ -91,6 +94,20 @@ startup
 	settings.Add("kills80%", false, "42,876 kills", "genocider");
 	settings.Add("kills50k", false, "50,000 kills", "genocider");
 	settings.Add("killsFinal", false, "53,594 kills", "genocider");
+
+	settings.Add("maxLevel", false, "Max Level", "splits");
+
+	settings.Add("level5", false, "Level 5", "maxLevel");
+	settings.Add("level10", false, "Level 10", "maxLevel");
+	settings.Add("level15", false, "Level 15", "maxLevel");
+	settings.Add("level20", false, "Level 20", "maxLevel");
+	settings.Add("level25", false, "Level 25", "maxLevel");
+	settings.Add("level30", false, "Level 30", "maxLevel");
+	settings.Add("level35", false, "Level 35", "maxLevel");
+	settings.Add("level40", false, "Level 40", "maxLevel");
+	settings.Add("level45", false, "Level 45", "maxLevel");
+	settings.Add("level50", false, "Level 50", "maxLevel");
+
 	
 	settings.Add("timingMethods", true, "Timing Method");
 	
@@ -365,7 +382,63 @@ if (current.bombsCollected != old.bombsCollected)
 				}
 				break;
 			default:
-			break;
+				break;
+		}
+	}
+
+	// Max Level
+	if (current.level != old.level) {
+		switch ((uint)current.level) {
+			case 5:
+				if (settings["level5"]) {
+					return true;
+				}
+				break;
+			case 10:
+				if (settings["level10"]) {
+					return true;
+				}
+				break;
+			case 15:
+				if (settings["level15"]) {
+					return true;
+				}
+				break;
+			case 20:
+				if (settings["level20"]) {
+					return true;
+				}
+				break;
+			case 25:
+				if (settings["level25"]) {
+					return true;
+				}
+				break;
+			case 30:
+				if (settings["level30"]) {
+					return true;
+				}
+				break;
+			case 35:
+				if (settings["level35"]) {
+					return true;
+				}
+				break;
+			case 40:
+				if (settings["level40"]) {
+					return true;
+				}
+				break;
+			case 45:
+				if (settings["level45"]) {
+					return true;
+				}
+				break;
+			case 50:
+				if (settings["level50"]) {
+					return true;
+				}
+				break;
 		}
 	}
 }
