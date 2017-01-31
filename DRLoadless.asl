@@ -335,59 +335,35 @@ if (current.bombsCollected != old.bombsCollected)
 	}
 // Zombie Genocider
 	if (current.kills != old.kills) {
-		switch ((uint)current.kills) {
-			case 10000:
-				if (settings["kills10k"]) {
-					return true;
-				}
-				break;
-			case 10719:
-				if (settings["kills20%"]) {
-					return true;
-				}
-				break;
-			case 20000:
-				if (settings["kills20k"]) {
-					return true;
-				}
-				break;
-			case 21438:
-				if (settings["kills40%"]) {
-					return true;
-				}
-				break;
-			case 30000:
-				if (settings["kills30k"]) {
-					return true;
-				}
-				break;
-			case 32157:
-				if (settings["kills60%"]) {
-					return true;
-				}
-				break;
-			case 40000:
-				if (settings["kills40k"]) {
-					return true;
-				}
-				break;
-			case 42876:
-				if (settings["kills80%"]) {
-					return true;
-				}
-				break;
-			case 50000:
-				if (settings["kills50k"]) {
-					return true;
-				}
-				break;
-			case 53594:
-				if (settings["killsFinal"]) {
-					return true;
-				}
-				break;
-			default:
-				break;
+		if (old.kills < 10000 && current.kills >= 10000) {
+			return settings["kills10k"];
+		}
+		if (old.kills < 10719 && current.kills >= 10719) {
+			return settings["kills20%"];
+		}
+		if (old.kills < 20000 && current.kills >= 20000) {
+			return settings["kills20k"];
+		}
+		if (old.kills < 21438 && current.kills >= 21438) {
+			return settings["kills40%"];
+		}
+		if (old.kills < 30000 && current.kills >= 30000) {
+			return settings["kills30k"];
+		}
+		if (old.kills < 32157 && current.kills >= 32157) {
+			return settings["kills60%"];
+		}
+		if (old.kills < 40000 && current.kills >= 40000) {
+			return settings["kills40k"];
+		}
+		if (old.kills < 42876 && current.kills >= 42876) {
+			return settings["kills80%"];
+		}
+		if (old.kills < 50000 && current.kills >= 50000) {
+			return settings["kills50k"];
+		}
+		if (old.kills < 53594 && current.kills >= 53594) {
+			return settings["killsFinal"];
 		}
 	}
 
