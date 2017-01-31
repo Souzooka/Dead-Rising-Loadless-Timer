@@ -202,7 +202,7 @@ isLoading
 		}
 	}
 
-	if (settings["loadless1"] && (current.level != 50 || !(settings["maxLevel"]))) {
+	if (settings["loadless1"] && (current.level == 50 || !(settings["maxLevel"]))) {
 		if ((current.caseMenuOpen == 2 || current.caseMenuOpen == 19) && (current.campaignProgress == 160 || current.campaignProgress == 230 || current.campaignProgress == 320 || current.campaignProgress == 350)) {
 			return true;
 		}
