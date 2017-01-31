@@ -27,6 +27,9 @@ state("DeadRising", "SteamPatch3")
 
 	//Max Level
 	uint level : 0x1946950, 0x68;
+
+	//Check to see if Kent is ruining load times
+	ushort fuckKent : 0x19468D8, 0x38;
 }
 	
 startup
@@ -197,7 +200,7 @@ isLoading
 {
 
 	if (settings["loadless1"]) {
-		if (current.inCutsceneOrLoad == true && current.mainMenuID != 197383 && current.mainMenuID != 519 && current.mainMenuID != 262919) {
+		if (current.inCutsceneOrLoad == true && current.fuckKent != 1793) {
 			return true;
 		}
 	}
