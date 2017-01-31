@@ -177,8 +177,9 @@ exit
 start
 {
 //	For runs starting from the main menu, starts on new game. Also starts Case 5 (which doesn't start with a case file screen)
-	if (current.inGameTimer == 3888000 || current.inGameTimer == 12528000 || current.campaignProgress == 270)
-		{return current.mainMenuID == 3;}
+	if (current.inGameTimer == 3888000 || current.inGameTimer == 12528000 || current.campaignProgress == 270) {
+		return current.mainMenuID == 3;
+	}
 
 //	Case 2, 4, 7, 8 Start
 	if ((current.campaignProgress == 160 || current.campaignProgress == 230 || current.campaignProgress == 320 || current.campaignProgress == 350) && current.inCutsceneOrLoad == false && current.mainMenuID == 3 && vars.getRunStarted == 0) {
@@ -212,7 +213,7 @@ isLoading
 	}
 	
 	if (settings["loadless2"] && (current.inCutsceneOrLoad || current.caseMenuOpen > 1)) {
-	return true;
+		return true;
 	}
 
 	return false;
@@ -239,11 +240,13 @@ split
 		}	
 	}
 // Steven (Case 2)
-	if (settings["steven"] && current.campaignProgress == 190 && current.brockHealth == 0 && old.brockHealth != 0)
-		{return true;}
+	if (settings["steven"] && current.campaignProgress == 190 && current.brockHealth == 0 && old.brockHealth != 0) {
+		return true;
+	}
 // First-Aid (Case 2)
-	if (settings["firstaid"] && current.campaignProgress == 215 && old.campaignProgress == 210)
-		{return true;}	
+	if (settings["firstaid"] && current.campaignProgress == 215 && old.campaignProgress == 210) {
+		return true;
+	}
 // Elevator (Case 4)
 	if (settings["elevator4"] && current.currentRoomValue == 535 && current.loadingRoomValue == 534 && old.loadingRoomValue != 534 && current.campaignProgress >= 230 && current.campaignProgress < 270) {
 		return true;
@@ -282,24 +285,29 @@ if (current.bombsCollected != old.bombsCollected)
 		switch ((byte)current.bombsCollected)
 		{
 			case 1:
-				if (settings["bomb1"])
-				{return true;}
+				if (settings["bomb1"]) {
+					return true;
+				}
 				break;
 			case 2:
-				if (settings["bomb2"])
-				{return true;}
+				if (settings["bomb2"]) {
+					return true;
+				}
 				break;
 			case 3:
-				if (settings["bomb3"])
-				{return true;}
+				if (settings["bomb3"]) {
+					return true;
+				}
 				break;
 			case 4:
-				if (settings["bomb4"])
-				{return true;}
+				if (settings["bomb4"]) {
+					return true;
+				}
 				break;
 			case 5:
-				if (settings["bomb5"])
-				{return true;}
+				if (settings["bomb5"]) {
+					return true;
+				}
 				break;
 			default:
 				print("SOMETHING IS WRONG. AMOUNT OF BOMBS COLLECTED IS " + current.bombsCollected + "?");
@@ -312,58 +320,64 @@ if (current.bombsCollected != old.bombsCollected)
 		return true;
 	}
 // 72 Hour Mode Run End
-	if (settings["72HourEnd"] && current.campaignProgress == 390 && current.loadingRoomValue == 1025 && old.loadingRoomValue != 1025)
-		{return true;}
+	if (settings["72HourEnd"] && current.campaignProgress == 390 && current.loadingRoomValue == 1025 && old.loadingRoomValue != 1025) {
+		return true;
+	}
 // Overtime
 	if (settings["overtime"] && current.frankWatchTime >= 41215)
 	{
 		// Supplies
-		if (settings["supplies"] && current.currentRoomValue == 1025 && current.frankX > 1000 && current.campaignProgress <= 600 && current.inCutsceneOrLoad != old.inCutsceneOrLoad)
-			{return true;}
+		if (settings["supplies"] && current.currentRoomValue == 1025 && current.frankX > 1000 && current.campaignProgress <= 600 && current.inCutsceneOrLoad != old.inCutsceneOrLoad) {
+			return true;
+		}
 		// Queens
-		if (settings["queens"] && current.currentRoomValue == 1025 && current.loadingRoomValue == 2816 && old.loadingRoomValue != 2816)
-			{return true;}	
+		if (settings["queens"] && current.currentRoomValue == 1025 && current.loadingRoomValue == 2816 && old.loadingRoomValue != 2816) {
+			return true;
+		}
 		// Tunnel
-		if (settings["tunnel"] && current.loadingRoomValue == 2819 && old.loadingRoomValue != 2819)
-			{return true;}
+		if (settings["tunnel"] && current.loadingRoomValue == 2819 && old.loadingRoomValue != 2819) {
+			return true;
+		}
 		// Tank
-		if (settings["tank"] && current.currentRoomValue == 2819 && current.brockHealth == 0 && old.brockHealth % 500 == 0 && old.brockHealth != 0)
-			{return true;}
+		if (settings["tank"] && current.currentRoomValue == 2819 && current.brockHealth == 0 && old.brockHealth % 500 == 0 && old.brockHealth != 0) {
+			return true;
+		}
 		// Brock
-		if (settings["brock"] && current.currentRoomValue == 2819 && current.brockHealth == 0 && old.brockHealth % 500 != 0 && old.brockHealth != 0)
-			{return true;}
+		if (settings["brock"] && current.currentRoomValue == 2819 && current.brockHealth == 0 && old.brockHealth % 500 != 0 && old.brockHealth != 0) {
+			return true;
+		}
 	}
 // Zombie Genocider
 	if (current.kills != old.kills) {
-		if (old.kills < 10000 && current.kills >= 10000) {
-			return settings["kills10k"];
+		if (settings["kills10k"] && old.kills < 10000 && current.kills >= 10000) {
+			return true;
 		}
-		if (old.kills < 10719 && current.kills >= 10719) {
-			return settings["kills20%"];
+		if (settings["kills20%"] && old.kills < 10719 && current.kills >= 10719) {
+			return true;
 		}
-		if (old.kills < 20000 && current.kills >= 20000) {
-			return settings["kills20k"];
+		if (settings["kills20k"] && old.kills < 20000 && current.kills >= 20000) {
+			return true;
 		}
-		if (old.kills < 21438 && current.kills >= 21438) {
-			return settings["kills40%"];
+		if (settings["kills40%"] && old.kills < 21438 && current.kills >= 21438) {
+			return true;
 		}
-		if (old.kills < 30000 && current.kills >= 30000) {
-			return settings["kills30k"];
+		if (settings["kills30k"] && old.kills < 30000 && current.kills >= 30000) {
+			return true;
 		}
-		if (old.kills < 32157 && current.kills >= 32157) {
-			return settings["kills60%"];
+		if (settings["kills60%"] && old.kills < 32157 && current.kills >= 32157) {
+			return true;
 		}
-		if (old.kills < 40000 && current.kills >= 40000) {
-			return settings["kills40k"];
+		if (settings["kills40k"] && old.kills < 40000 && current.kills >= 40000) {
+			return true;
 		}
-		if (old.kills < 42876 && current.kills >= 42876) {
-			return settings["kills80%"];
+		if (settings["kills80%"] && old.kills < 42876 && current.kills >= 42876) {
+			return true;
 		}
-		if (old.kills < 50000 && current.kills >= 50000) {
-			return settings["kills50k"];
+		if (settings["kills50k"] && old.kills < 50000 && current.kills >= 50000) {
+			return true;
 		}
-		if (old.kills < 53594 && current.kills >= 53594) {
-			return settings["killsFinal"];
+		if (settings["killsFinal"] && old.kills < 53594 && current.kills >= 53594) {
+			return true;
 		}
 	}
 
@@ -419,6 +433,8 @@ if (current.bombsCollected != old.bombsCollected)
 				if (settings["level50"]) {
 					return true;
 				}
+				break;
+			default:
 				break;
 		}
 	}
