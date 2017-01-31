@@ -21,6 +21,9 @@ state("DeadRising", "SteamPatch3")
 	byte caseFileOpen : 0x1946FC0, 0x2F058, 0x184;
 	byte caseMenuOpen : 0x1946FC0, 0x2F058, 0x182;
 	uint mainMenuID : 0x1946FC0, 0x2F058, 0x38;
+
+	//Zombie Genocider
+	uint kills : 0x1959EA0, 0x3B0;
 }
 	
 startup
@@ -75,6 +78,19 @@ startup
 	settings.Add("tunnel", true, "Tunnel", "overtime");
 	settings.Add("tank", true, "Tank", "overtime");
 	settings.Add("brock", true, "Brock", "overtime");
+
+	settings.Add("genocider", false, "Zombie Genocider", "splits");
+
+	settings.Add("kills10k", false, "10,000 kills", "genocider");
+	settings.Add("kills20%", false, "10,719 kills", "genocider");
+	settings.Add("kills20k", false, "20,000 kills", "genocider");
+	settings.Add("kills40%", false, "21,438 kills", "genocider");
+	settings.Add("kills30k", false, "30,000 kills", "genocider");
+	settings.Add("kills60%", false, "32,157 kills", "genocider");
+	settings.Add("kills40k", false, "40,000 kills", "genocider");
+	settings.Add("kills80%", false, "42,876 kills", "genocider");
+	settings.Add("kills50k", false, "50,000 kills", "genocider");
+	settings.Add("killsFinal", false, "53,594 kills", "genocider");
 	
 	settings.Add("timingMethods", true, "Timing Method");
 	
@@ -294,5 +310,62 @@ if (current.bombsCollected != old.bombsCollected)
 		// Brock
 		if (settings["brock"] && current.currentRoomValue == 2819 && current.brockHealth == 0 && old.brockHealth % 500 != 0 && old.brockHealth != 0)
 			{return true;}
+	}
+// Zombie Genocider
+	if (current.kills != old.kills) {
+		switch ((uint)current.kills) {
+			case 10000:
+				if (settings["kills10k"]) {
+					return true;
+				}
+				break;
+			case 10719:
+				if (settings["kills20%"]) {
+					return true;
+				}
+				break;
+			case 20000:
+				if (settings["kills20k"]) {
+					return true;
+				}
+				break;
+			case 21438:
+				if (settings["kills40%"]) {
+					return true;
+				}
+				break;
+			case 30000:
+				if (settings["kills30k"]) {
+					return true;
+				}
+				break;
+			case 32157:
+				if (settings["kills60%"]) {
+					return true;
+				}
+				break;
+			case 40000:
+				if (settings["kills40k"]) {
+					return true;
+				}
+				break;
+			case 42876:
+				if (settings["kills80%"]) {
+					return true;
+				}
+				break;
+			case 50000:
+				if (settings["kills50k"]) {
+					return true;
+				}
+				break;
+			case 53594:
+				if (settings["killsFinal"]) {
+					return true;
+				}
+				break;
+			default:
+			break;
+		}
 	}
 }
