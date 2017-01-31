@@ -33,21 +33,21 @@ startup
 {
 	vars.getRunStarted = 0;
 	
-	settings.Add("splits", true, "All Splits");
+	settings.Add("splits", false, "All Splits");
 	
-	settings.Add("misc", true, "Miscellaneous Splits", "splits");
+	settings.Add("misc", false, "Miscellaneous Splits", "splits");
 	settings.Add("shortcutpw", false, "Shortcut (PP to WP)", "misc");
 	settings.Add("shortcutwp", false, "Shortcut (WP to PP)", "misc");
 	
-	settings.Add("72Hour", true, "72 Hour Splits", "splits");
+	settings.Add("72Hour", false, "72 Hour Splits", "splits");
 	
-	settings.Add("caseSplits", true, "Split on Case End (all cases)", "72Hour");
+	settings.Add("caseSplits", false, "Split on Case End (all cases)", "72Hour");
 	
-	settings.Add("case1", true, "Case 1 Splits", "72Hour");
+	settings.Add("case1", false, "Case 1 Splits", "72Hour");
 	settings.Add("prologue", false, "Prologue", "case1");
 	
-	settings.Add("case2", true, "Case 2 Splits", "72Hour");
-	settings.Add("steven", true, "Steven", "case2");
+	settings.Add("case2", false, "Case 2 Splits", "72Hour");
+	settings.Add("steven", false, "Steven", "case2");
 	settings.Add("firstaid", false, "First Aid", "case2");
 	
 	settings.Add("case4", false, "Case 4 Splits", "72Hour");
@@ -61,26 +61,26 @@ startup
 	settings.Add("paradisePlaza5", false, "Paradise Plaza", "case5");
 	settings.Add("elevator5", false, "Elevator", "case5");
 	
-	settings.Add("case7", true, "Case 7 Splits", "72Hour");
+	settings.Add("case7", false, "Case 7 Splits", "72Hour");
 	settings.Add("paradisePlaza7", false, "Paradise Plaza", "case7");
-	settings.Add("allBombs", true, "Bombs", "case7");
-	settings.Add("bomb1", true, "First Bomb", "allBombs");
-	settings.Add("bomb2", true, "Second Bomb", "allBombs");
-	settings.Add("bomb3", true, "Third Bomb", "allBombs");
-	settings.Add("bomb4", true, "Fourth Bomb", "allBombs");
-	settings.Add("bomb5", true, "Fifth Bomb", "allBombs");
+	settings.Add("allBombs", false, "Bombs", "case7");
+	settings.Add("bomb1", false, "First Bomb", "allBombs");
+	settings.Add("bomb2", false, "Second Bomb", "allBombs");
+	settings.Add("bomb3", false, "Third Bomb", "allBombs");
+	settings.Add("bomb4", false, "Fourth Bomb", "allBombs");
+	settings.Add("bomb5", false, "Fifth Bomb", "allBombs");
 	
 	settings.Add("case8", false, "Case 8 Splits", "72Hour");
 	settings.Add("paradisePlaza8", false, "Paradise Plaza", "case8");
 	
-	settings.Add("72HourEnd", true, "72 Hour Mode End", "72Hour");
+	settings.Add("72HourEnd", false, "72 Hour Mode End", "72Hour");
 	
-	settings.Add("overtime", true, "Overtime Splits", "splits");
-	settings.Add("supplies", true, "Supplies", "overtime");
-	settings.Add("queens", true, "Queens", "overtime");
-	settings.Add("tunnel", true, "Tunnel", "overtime");
-	settings.Add("tank", true, "Tank", "overtime");
-	settings.Add("brock", true, "Brock", "overtime");
+	settings.Add("overtime", false, "Overtime Splits", "splits");
+	settings.Add("supplies", false, "Supplies", "overtime");
+	settings.Add("queens", false, "Queens", "overtime");
+	settings.Add("tunnel", false, "Tunnel", "overtime");
+	settings.Add("tank", false, "Tank", "overtime");
+	settings.Add("brock", false, "Brock", "overtime");
 
 	settings.Add("genocider", false, "Zombie Genocider", "splits");
 
@@ -202,7 +202,7 @@ isLoading
 		}
 	}
 
-	if (settings["loadless1"] && !(settings["maxLevel"])) {
+	if (settings["loadless1"] && (current.level != 50 || !(settings["maxLevel"]))) {
 		if ((current.caseMenuOpen == 2 || current.caseMenuOpen == 19) && (current.campaignProgress == 160 || current.campaignProgress == 230 || current.campaignProgress == 320 || current.campaignProgress == 350)) {
 			return true;
 		}
