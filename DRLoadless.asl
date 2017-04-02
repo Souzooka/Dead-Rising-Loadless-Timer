@@ -315,7 +315,7 @@ if (current.bombsCollected != old.bombsCollected)
 		}
 	}
 // Paradise Plaza (Case 8)
-	if (settings["paradisePlaza8"] && current.currentRoomValue == 512 && current.loadingRoomValue == 1536 && old.loadingRoomValue != 1536 && current.campaignProgress >= 350 && current.campaignProgress < 500) {
+	if (settings["paradisePlaza8"] && current.currentRoomValue == 512 && current.loadingRoomValue == 1792 && old.loadingRoomValue != 1792 && current.campaignProgress >= 350 && current.campaignProgress < 500) {
 		vars.paradisePlaza8Split = 1;
 		return true;
 	}
