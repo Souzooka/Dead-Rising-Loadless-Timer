@@ -142,15 +142,15 @@ reset
 start
 {
 //	For runs starting from the main menu, starts on new game. Also starts Case 5 (which doesn't start with a case file screen)
-    if (current.inGameTimer == 3888000 	|| 	// Starting time for new game
-        current.inGameTimer == 12528000 || 	// Starting time for overtime
-        current.campaignProgress == 270) {	// Starting progress for case 5
+    if (current.inGameTimer == 3888000  ||  // Starting time for new game
+        current.inGameTimer == 12528000 ||  // Starting time for overtime
+        current.campaignProgress == 270) {  // Starting progress for case 5
         return current.mainMenuID == 3;     // TODO: What does current.mainMenuID == 3 represent?
     }
 
     //	Case 2, 4, 7, 8 Start
-    else if (current.campaignProgress in {160, 230, 320, 350} && 	
-        current.inCutsceneOrLoad == false 	                  && 
+    else if (current.campaignProgress in {160, 230, 320, 350} && 
+        current.inCutsceneOrLoad == false                     && 
         current.mainMenuID == 3                               && 
         vars.getRunStarted == 0) {                              // TODO: a getRunStarted check isn't necessary, we can refactor to access timer state directly
             vars.getRunStarted = 1;	                            // TODO: a getRunStarted check isn't necessary, we can refactor to access timer state directly
@@ -188,7 +188,7 @@ isLoading
 
     // Pauses during loads and all menus, except for the pause menu (caseMenuOpen == 1)
     else if (settings["loadless2"] && 
-        (current.inCutsceneOrLoad || 
+        (current.inCutsceneOrLoad  || 
         current.caseMenuOpen > 1)) return true;
 
     return false;
@@ -197,12 +197,12 @@ isLoading
 split
 {
 // Shortcut (PP to WP)
-    if (settings["shortcutpw"] 			&& 
+    if (settings["shortcutpw"]          && 
         current.currentRoomValue == 512 &&  // Paradise Plaza
         current.loadingRoomValue == 768 &&  // Wonderland Plaza
         old.loadingRoomValue != 768) return true;
 // Shortcut (WP to PP)
-    else if (settings["shortcutwp"]		&& 
+    else if (settings["shortcutwp"]     && 
         current.currentRoomValue == 768 &&  // Wonderland Plaza
         current.loadingRoomValue == 512 &&  // Paradise Plaza
         old.loadingRoomValue != 512) return true;
@@ -304,13 +304,13 @@ split
         old.loadingRoomValue != 1025) return true;
 // Overtime
     // Supplies
-    else if (settings["supplies"] 		    && 
-        current.currentRoomValue == 1025 	&& 
+    else if (settings["supplies"]           && 
+        current.currentRoomValue == 1025    && 
         current.frankX > 1000 				&& 
         current.campaignProgress <= 600 	&& 
         current.inCutsceneOrLoad != old.inCutsceneOrLoad) return true;
     // Queens
-    else if (settings["queens"] 		 && 
+    else if (settings["queens"]          && 
         current.currentRoomValue == 1025 && 
         current.loadingRoomValue == 2816 && 
         old.loadingRoomValue != 2816) return true;
