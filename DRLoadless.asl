@@ -24,29 +24,29 @@ startup
 {
     vars.getRunStarted = 0; // TODO: Unnecessary var, access timer state directly
 
-    // Settings
+// Settings
     settings.Add("splits", false, "All Splits");
-    // Misc splits
+// Misc splits
     settings.Add("misc", false, "Miscellaneous Splits", "splits");
     settings.Add("shortcutpw", false, "Shortcut (PP to WP)", "misc");
     settings.Add("shortcutwp", false, "Shortcut (WP to PP)", "misc");
     settings.SetToolTip("shortcutpw", "Splits when traveling to Wonderland Plaza from Paradise Plaza.");
     settings.SetToolTip("shortcutwp", "Splits when traveling to Paradise Plaza from Wonderland Plaza.");
-    // Split after every case
+// Split after every case
     settings.Add("72Hour", false, "72 Hour Splits", "splits");
     settings.Add("caseSplits", false, "Split on Case End (all cases)", "72Hour");
     settings.SetToolTip("caseSplits", "Splits after a case has been filled into the case file.");
-    // Case 1
+// Case 1
     settings.Add("case1", false, "Case 1 Splits", "72Hour");
     settings.Add("prologue", false, "Prologue", "case1");
     settings.SetToolTip("prologue", "Splits after escaping Entrance Plaza.");
-    // Case 2
+// Case 2
     settings.Add("case2", false, "Case 2 Splits", "72Hour");
     settings.Add("steven", false, "Steven", "case2");
     settings.Add("firstaid", false, "First Aid", "case2");
     settings.SetToolTip("steven", "Splits after killing Steven.");
     settings.SetToolTip("firstaid", "Splits after collecting first aid.");
-    // Case 4
+// Case 4
     settings.Add("case4", false, "Case 4 Splits", "72Hour");
     settings.Add("elevator4", false, "Elevator", "case4");
     settings.Add("warehouse", false, "Warehouse", "case4");
@@ -54,7 +54,7 @@ startup
     settings.SetToolTip("elevator4", "Splits after entering the Warehouse in Case 4.");
     settings.SetToolTip("warehouse", "Splits after entering Paradise Plaza in Case 4.");
     settings.SetToolTip("wonderlandPlaza", "Splits after entering North Plaza in Case 4.");
-    // Case 5
+// Case 5
     settings.Add("case5", false, "Case 5 Splits", "72Hour");
     settings.Add("northPlaza", false, "North Plaza", "case5");
     settings.Add("leisurePark", false, "Leisure Park", "case5");
@@ -64,11 +64,11 @@ startup
     settings.SetToolTip("leisurePark", "Splits after entering Paradise Plaza in Case 5.");
     settings.SetToolTip("paradisePlaza5", "Splits after entering the Warehouse in Case 5.");
     settings.SetToolTip("elevator5", "Splits after entering the Rooftop in Case 5.");
-    // Case 7
+// Case 7
     settings.Add("case7", false, "Case 7 Splits", "72Hour");
     settings.Add("paradisePlaza7", false, "Paradise Plaza", "case7");
     settings.SetToolTip("paradisePlaza7", "Splits after entering the Maintenance Tunnels in Case 7.");
-        // Bombs
+    // Bombs
     settings.Add("allBombs", false, "Bombs", "case7");
     settings.Add("bomb1", false, "First Bomb", "allBombs");
     settings.Add("bomb2", false, "Second Bomb", "allBombs");
@@ -80,13 +80,13 @@ startup
     settings.SetToolTip("bomb3", "Splits after collecting third bomb.");
     settings.SetToolTip("bomb4", "Splits after collecting fourth bomb.");
     settings.SetToolTip("bomb5", "Splits after collecting fifth bomb.");
-    // Case 8
+// Case 8
     settings.Add("case8", false, "Case 8 Splits", "72Hour");
     settings.Add("paradisePlaza8", false, "Paradise Plaza", "case8");
     settings.Add("72HourEnd", false, "72 Hour Mode End", "72Hour");
     settings.SetToolTip("paradisePlaza8", "Splits after entering Leisure Park in Case 8.");
     settings.SetToolTip("72HourEnd", "Splits when entering the hideout after finishing Case 8.");
-    // Overtime
+// Overtime
     settings.Add("overtime", false, "Overtime Splits", "splits");
     settings.Add("supplies", false, "Supplies", "overtime");
     settings.Add("queens", false, "Queens", "overtime");
@@ -98,7 +98,7 @@ startup
     settings.SetToolTip("tunnel", "Splits after entering jeep at the end of tunnel.");
     settings.SetToolTip("tank", "Splits when tank's HP is 0.");
     settings.SetToolTip("brock", "Splits when Brock's HP is 0.");
-    // Levels
+// Levels
     settings.Add("maxLevel", false, "Max Level", "splits");
     settings.Add("level5", false, "Level 5", "maxLevel");
     settings.Add("level10", false, "Level 10", "maxLevel");
@@ -110,7 +110,7 @@ startup
     settings.Add("level40", false, "Level 40", "maxLevel");
     settings.Add("level45", false, "Level 45", "maxLevel");
     settings.Add("level50", false, "Level 50", "maxLevel");
-    // Zombie Genocider
+// Zombie Genocider
     settings.Add("genocider", false, "Zombie Genocider", "splits");
     settings.Add("kills10k", false, "10,000 kills", "genocider");
     settings.Add("kills20%", false, "10,719 kills", "genocider");
@@ -122,7 +122,7 @@ startup
     settings.Add("kills80%", false, "42,876 kills", "genocider");
     settings.Add("kills50k", false, "50,000 kills", "genocider");
     settings.Add("killsFinal", false, "53,594 kills", "genocider");
-    // Timing methods
+// Timing methods
     settings.Add("timingMethods", true, "Timing Method");
     settings.Add("loadless1", true, "Loadless", "timingMethods");
     settings.Add("loadless2", false, "Loadless + Menuless", "timingMethods");
@@ -149,11 +149,15 @@ start
     }
 
     //	Case 2, 4, 7, 8 Start
-    else if (current.campaignProgress in {160, 230, 320, 350} && 
-        current.inCutsceneOrLoad == false                     && 
-        current.mainMenuID == 3                               && 
-        vars.getRunStarted == 0) {                              // TODO: a getRunStarted check isn't necessary, we can refactor to access timer state directly
-            vars.getRunStarted = 1;	                            // TODO: a getRunStarted check isn't necessary, we can refactor to access timer state directly
+
+    else if ((current.campaignProgress == 160 ||
+        current.campaignProgress == 230       ||
+        current.campaignProgress == 320       ||
+        current.campaignProgress == 350)      && 
+        current.inCutsceneOrLoad == false     && 
+        current.mainMenuID == 3               && 
+        vars.getRunStarted == 0) {              // TODO: a getRunStarted check isn't necessary, we can refactor to access timer state directly
+            vars.getRunStarted = 1;             // TODO: a getRunStarted check isn't necessary, we can refactor to access timer state directly
             return true;
     }
 }
@@ -178,13 +182,13 @@ isLoading
 
     // TODO: What does this represent?
     else if (settings["loadless1"]          && 
-        !settings["maxLevel"])              &&          // As per community discretion, the timer does not pause on case menus for Max Level runs.
+        !settings["maxLevel"]               &&          // As per community discretion, the timer does not pause on case menus for Max Level runs.
         ((current.caseMenuOpen == 2         ||          // TODO: What does this represent?
         current.caseMenuOpen == 19)         &&          // TODO: What does this represent?
         (current.campaignProgress == 160    ||          // TODO: What does this represent?
         current.campaignProgress == 230     ||          // TODO: What does this represent?
         current.campaignProgress == 320     ||          // TODO: What does this represent?
-        current.campaignProgress == 350)) return true;  // TODO: What does this represent?
+        current.campaignProgress == 350))) return true; // TODO: What does this represent?
 
     // Pauses during loads and all menus, except for the pause menu (caseMenuOpen == 1)
     else if (settings["loadless2"] && 
@@ -286,7 +290,7 @@ split
         current.campaignProgress < 350) return true;
 // Bombs (Case 7)
     else if (current.bombsCollected != old.bombsCollected) 
-        return {settings["bomb1"], settings["bomb2"], settings["bomb3"], settings["bomb4"], settings["bomb5"]}[current.bombsCollected - 1] || false;
+        return new bool[5]{settings["bomb1"], settings["bomb2"], settings["bomb3"], settings["bomb4"], settings["bomb5"]}[current.bombsCollected - 1] || false;
 // Paradise Plaza (Case 8)
     else if (settings["paradisePlaza8"]  && 
         current.currentRoomValue == 512  && 
@@ -306,8 +310,8 @@ split
     // Supplies
     else if (settings["supplies"]           && 
         current.currentRoomValue == 1025    && 
-        current.frankX > 1000 				&& 
-        current.campaignProgress <= 600 	&& 
+        current.frankX > 1000               && 
+        current.campaignProgress <= 600     && 
         current.inCutsceneOrLoad != old.inCutsceneOrLoad) return true;
     // Queens
     else if (settings["queens"]          && 
