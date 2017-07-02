@@ -20,6 +20,8 @@ state("DeadRising", "SteamPatch3")
     ushort kentMenu : 0x19468D8, 0x38;                      // bool inCutsceneOrLoad thinks the game is in a cutscene when picking a picture for Kent, we can check this to disable that behavior
 }
 
+
+
 startup
 {
     vars.getRunStarted = 0; // TODO: Unnecessary var, access timer state directly
@@ -128,6 +130,14 @@ startup
     settings.Add("loadless2", false, "Loadless + Menuless", "timingMethods");
     settings.SetToolTip("loadless1", "Legal official timing method which pauses the timer during loads and cutscene.");
     settings.SetToolTip("loadless2", "Unofficial timing method which, along with pausing during loads and cutscenes, also pauses during menus (not the pause menu).");
+// TimeSkip%
+    settings.Add("timeskip", false, "Enable time skipping script");
+    settings.SetToolTip("timeskip", "Used for timeskip%");
+}
+
+init {
+
+    vars.inGameTimerAddr = 0;
 }
 
 reset
@@ -169,6 +179,50 @@ update
     if (current.mainMenuID == 264 && vars.getRunStarted == 1) {
         vars.paradisePlaza8Split = 0;
         vars.getRunStarted = 0;
+    }
+
+    // Timeskip%
+    if (settings["timeskip"]  && ((old.caseMenuOpen == 2 || old.caseMenuOpen == 19) && current.caseMenuOpen == 0) || (old.campaignProgress != 415 && current.campaignProgress == 415)) {
+        if (current.campaignProgress == 140) {
+          // Case 2 (Day 2, 06:00)
+          game.WriteBytes((IntPtr)memory.ReadValue<int>((IntPtr)memory.ReadValue<int>(IntPtr.Add(modules.First().BaseAddress, 0x1946FC0)) + 0x2F058) + 0x198, BitConverter.GetBytes(5832000));
+        }
+        else if (current.campaignProgress == 215) {
+          // Case 3 (Day 2, 11:00)
+          game.WriteBytes((IntPtr)memory.ReadValue<int>((IntPtr)memory.ReadValue<int>(IntPtr.Add(modules.First().BaseAddress, 0x1946FC0)) + 0x2F058) + 0x198, BitConverter.GetBytes(6372000));
+        }
+        else if (current.campaignProgress == 220) {
+          // Case 4 (Day 2, 15:00)
+          game.WriteBytes((IntPtr)memory.ReadValue<int>((IntPtr)memory.ReadValue<int>(IntPtr.Add(modules.First().BaseAddress, 0x1946FC0)) + 0x2F058) + 0x198, BitConverter.GetBytes(6804000));
+        }
+        else if (current.campaignProgress == 250) {
+          // Case 5 (Day 3, 00:00)
+          game.WriteBytes((IntPtr)memory.ReadValue<int>((IntPtr)memory.ReadValue<int>(IntPtr.Add(modules.First().BaseAddress, 0x1946FC0)) + 0x2F058) + 0x198, BitConverter.GetBytes(7776000));
+        }
+        else if (current.campaignProgress == 290) {
+          // Case 6 (Day 3, 03:00)
+          game.WriteBytes((IntPtr)memory.ReadValue<int>((IntPtr)memory.ReadValue<int>(IntPtr.Add(modules.First().BaseAddress, 0x1946FC0)) + 0x2F058) + 0x198, BitConverter.GetBytes(8100000));
+        }
+        else if (current.campaignProgress == 300) {
+          // Case 7 (Day 3, 11:00)
+          game.WriteBytes((IntPtr)memory.ReadValue<int>((IntPtr)memory.ReadValue<int>(IntPtr.Add(modules.First().BaseAddress, 0x1946FC0)) + 0x2F058) + 0x198, BitConverter.GetBytes(8964000));
+        }
+        else if (current.campaignProgress == 340) {
+          // Case 8 (Day 3, 17:00)
+          game.WriteBytes((IntPtr)memory.ReadValue<int>((IntPtr)memory.ReadValue<int>(IntPtr.Add(modules.First().BaseAddress, 0x1946FC0)) + 0x2F058) + 0x198, BitConverter.GetBytes(9612000));
+        }
+        else if (current.campaignProgress == 390) {
+          // The Facts: Memories (Day 3, 22:00)
+          game.WriteBytes((IntPtr)memory.ReadValue<int>((IntPtr)memory.ReadValue<int>(IntPtr.Add(modules.First().BaseAddress, 0x1946FC0)) + 0x2F058) + 0x198, BitConverter.GetBytes(10152000));
+        }
+        else if (current.campaignProgress == 400) {
+          // Midnight (cutscene) (Day 3, 00:00)
+          game.WriteBytes((IntPtr)memory.ReadValue<int>((IntPtr)memory.ReadValue<int>(IntPtr.Add(modules.First().BaseAddress, 0x1946FC0)) + 0x2F058) + 0x198, BitConverter.GetBytes(10368000));
+        }
+        else if (current.campaignProgress == 415) {
+          // Midnight (Day 3, 00:00)
+          game.WriteBytes((IntPtr)memory.ReadValue<int>((IntPtr)memory.ReadValue<int>(IntPtr.Add(modules.First().BaseAddress, 0x1946FC0)) + 0x2F058) + 0x198, BitConverter.GetBytes(11610000));
+        }
     }
 }
 
