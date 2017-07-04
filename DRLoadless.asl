@@ -12,6 +12,7 @@ state("DeadRising", "SteamPatch3")
     ushort campaignProgress : 0x01944DD8, 0x20DC0, 0x150;   // Represents the current campaign progress
     byte bombsCollected : 0x1944DD8, 0x20DC0, 0x848D;       // Represents the number of bombs collected
     uint inGameTimer : 0x1946FC0, 0x2F058, 0x198;           // Represents the current game timer (108000 per in-game hour, starting at 3888000)
+    uint inGameTimerPtr : 0x1946FC0, 0x2F058;
     byte caseFileOpen : 0x1946FC0, 0x2F058, 0x184;          // TODO: Needs more explanation
     byte caseMenuOpen : 0x1946FC0, 0x2F058, 0x182;          // TODO: Tracks HUD menu state, not only case menu, needs more explanation
     uint mainMenuID : 0x1946FC0, 0x2F058, 0x38;             // Tracks menu state of the main menu, needs more documentation
@@ -183,45 +184,46 @@ update
 
     // Timeskip%
     if (settings["timeskip"]  && ((old.caseMenuOpen == 2 || old.caseMenuOpen == 19) && current.caseMenuOpen == 0) || (old.campaignProgress != 415 && current.campaignProgress == 415)) {
+
         if (current.campaignProgress == 140) {
           // Case 2 (Day 2, 06:00)
-          game.WriteBytes((IntPtr)memory.ReadValue<int>((IntPtr)memory.ReadValue<int>(IntPtr.Add(modules.First().BaseAddress, 0x1946FC0)) + 0x2F058) + 0x198, BitConverter.GetBytes(5832000));
+          game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(5832000));
         }
         else if (current.campaignProgress == 215) {
           // Case 3 (Day 2, 11:00)
-          game.WriteBytes((IntPtr)memory.ReadValue<int>((IntPtr)memory.ReadValue<int>(IntPtr.Add(modules.First().BaseAddress, 0x1946FC0)) + 0x2F058) + 0x198, BitConverter.GetBytes(6372000));
+          game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(6372000));
         }
         else if (current.campaignProgress == 220) {
           // Case 4 (Day 2, 15:00)
-          game.WriteBytes((IntPtr)memory.ReadValue<int>((IntPtr)memory.ReadValue<int>(IntPtr.Add(modules.First().BaseAddress, 0x1946FC0)) + 0x2F058) + 0x198, BitConverter.GetBytes(6804000));
+          game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(6804000));
         }
         else if (current.campaignProgress == 250) {
           // Case 5 (Day 3, 00:00)
-          game.WriteBytes((IntPtr)memory.ReadValue<int>((IntPtr)memory.ReadValue<int>(IntPtr.Add(modules.First().BaseAddress, 0x1946FC0)) + 0x2F058) + 0x198, BitConverter.GetBytes(7776000));
+          game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(7776000));
         }
         else if (current.campaignProgress == 290) {
           // Case 6 (Day 3, 03:00)
-          game.WriteBytes((IntPtr)memory.ReadValue<int>((IntPtr)memory.ReadValue<int>(IntPtr.Add(modules.First().BaseAddress, 0x1946FC0)) + 0x2F058) + 0x198, BitConverter.GetBytes(8100000));
+          game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(8100000));
         }
         else if (current.campaignProgress == 300) {
           // Case 7 (Day 3, 11:00)
-          game.WriteBytes((IntPtr)memory.ReadValue<int>((IntPtr)memory.ReadValue<int>(IntPtr.Add(modules.First().BaseAddress, 0x1946FC0)) + 0x2F058) + 0x198, BitConverter.GetBytes(8964000));
+          game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(8964000));
         }
         else if (current.campaignProgress == 340) {
           // Case 8 (Day 3, 17:00)
-          game.WriteBytes((IntPtr)memory.ReadValue<int>((IntPtr)memory.ReadValue<int>(IntPtr.Add(modules.First().BaseAddress, 0x1946FC0)) + 0x2F058) + 0x198, BitConverter.GetBytes(9612000));
+          game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(9612000));
         }
         else if (current.campaignProgress == 390) {
           // The Facts: Memories (Day 3, 22:00)
-          game.WriteBytes((IntPtr)memory.ReadValue<int>((IntPtr)memory.ReadValue<int>(IntPtr.Add(modules.First().BaseAddress, 0x1946FC0)) + 0x2F058) + 0x198, BitConverter.GetBytes(10152000));
+          game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(10152000));
         }
         else if (current.campaignProgress == 400) {
-          // Midnight (cutscene) (Day 3, 00:00)
-          game.WriteBytes((IntPtr)memory.ReadValue<int>((IntPtr)memory.ReadValue<int>(IntPtr.Add(modules.First().BaseAddress, 0x1946FC0)) + 0x2F058) + 0x198, BitConverter.GetBytes(10368000));
+          // Midnight (cutscene) (Day 4, 00:00)
+          game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(10368000));
         }
         else if (current.campaignProgress == 415) {
-          // Midnight (Day 3, 00:00)
-          game.WriteBytes((IntPtr)memory.ReadValue<int>((IntPtr)memory.ReadValue<int>(IntPtr.Add(modules.First().BaseAddress, 0x1946FC0)) + 0x2F058) + 0x198, BitConverter.GetBytes(11610000));
+          // Half-hour before Helicopter (Day 4, 11:30)
+          game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(11610000));
         }
     }
 }
