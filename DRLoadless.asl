@@ -183,7 +183,7 @@ update
     }
 
     // Timeskip%
-    if (settings["timeskip"]  && ((old.caseMenuOpen == 2 || old.caseMenuOpen == 19) && current.caseMenuOpen == 0) || (old.campaignProgress != 415 && current.campaignProgress == 415)) {
+    if (settings["timeskip"]  && ((old.caseMenuOpen == 2 || old.caseMenuOpen == 19) && current.caseMenuOpen == 0) || (old.campaignProgress != 415 && current.campaignProgress == 415) || (old.campaignProgress != 402 && current.campaignProgress == 402)) {
 
         if (current.campaignProgress == 140) {
           // Case 2 (Day 2, 06:00)
@@ -221,7 +221,7 @@ update
           // Midnight (cutscene) (Day 4, 00:00)
           game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(10368000));
         }
-        else if (current.campaignProgress == 415) {
+        else if (current.campaignProgress == 415 || current.campaignProgress == 402) {
           // Half-hour before Helicopter (Day 4, 11:30)
           game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(11610000));
         }
