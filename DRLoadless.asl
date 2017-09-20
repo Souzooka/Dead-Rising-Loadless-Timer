@@ -103,16 +103,10 @@ startup
     settings.SetToolTip("brock", "Splits when Brock's HP is 0.");
 // Levels
     settings.Add("maxLevel", false, "Max Level", "splits");
-    settings.Add("level5", false, "Level 5", "maxLevel");
-    settings.Add("level10", false, "Level 10", "maxLevel");
-    settings.Add("level15", false, "Level 15", "maxLevel");
-    settings.Add("level20", false, "Level 20", "maxLevel");
-    settings.Add("level25", false, "Level 25", "maxLevel");
-    settings.Add("level30", false, "Level 30", "maxLevel");
-    settings.Add("level35", false, "Level 35", "maxLevel");
-    settings.Add("level40", false, "Level 40", "maxLevel");
-    settings.Add("level45", false, "Level 45", "maxLevel");
-    settings.Add("level50", false, "Level 50", "maxLevel");
+    for (int level = 5; level <= 50; level += 5)
+    {
+        settings.Add("level" + level.ToString(), false, "Level " + level.ToString(), "maxLevel");
+    }
 // Zombie Genocider
     settings.Add("genocider", false, "Zombie Genocider", "splits");
     settings.Add("kills10k", false, "10,000 kills", "genocider");
@@ -183,48 +177,40 @@ update
     }
 
     // Timeskip%
-    if (settings["timeskip"]  && ((old.caseMenuOpen == 2 || old.caseMenuOpen == 19) && current.caseMenuOpen == 0) || (old.campaignProgress != 415 && current.campaignProgress == 415) || (old.campaignProgress != 402 && current.campaignProgress == 402)) {
+    // TODO: Permissions error on Win10?
+    if (settings["timeskip"]  && ((old.caseMenuOpen == 2 || old.caseMenuOpen == 19) && current.caseMenuOpen == 0) || 
+        (old.campaignProgress != 415 && current.campaignProgress == 415) || 
+        (old.campaignProgress != 406 && current.campaignProgress == 406)) {
 
-        if (current.campaignProgress == 140) {
-          // Case 2 (Day 2, 06:00)
-          game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(5832000));
+        switch ((int)current.campaignProgress)
+        {
+            case 140: return game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(5832000));  // Case 2 (Day 2, 06:00)
+            case 215: return game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(6372000));  // Case 3 (Day 2, 11:00)
+            case 220: return game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(6804000));  // Case 4 (Day 2, 15:00)
+            case 250: return game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(7776000));  // Case 5 (Day 3, 00.00)
+            case 290: return game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(8100000));  // Case 6 (Day 3, 03:00)
+            case 300: return game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(8964000));  // Case 7 (Day 3, 11:00)
+            case 340: return game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(9612000));  // Case 8 (Day 3, 17:00)
+            case 390: return game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(10152000)); // The Facts: Memories (Day 3, 22:00)
+            case 400: return game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(10260000)); // Cutscene: Jessie calls Frank (Day 3, 23:00)
+            case 406: return game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(10368000)); // Cutscene: Military Arrives (Day 4, 00:00)
+            case 415: return game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(11448000)); // Cutscene: Military leaves (Day 4, 10:00)
         }
-        else if (current.campaignProgress == 215) {
-          // Case 3 (Day 2, 11:00)
-          game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(6372000));
-        }
-        else if (current.campaignProgress == 220) {
-          // Case 4 (Day 2, 15:00)
-          game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(6804000));
-        }
-        else if (current.campaignProgress == 250) {
-          // Case 5 (Day 3, 00:00)
-          game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(7776000));
-        }
-        else if (current.campaignProgress == 290) {
-          // Case 6 (Day 3, 03:00)
-          game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(8100000));
-        }
-        else if (current.campaignProgress == 300) {
-          // Case 7 (Day 3, 11:00)
-          game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(8964000));
-        }
-        else if (current.campaignProgress == 340) {
-          // Case 8 (Day 3, 17:00)
-          game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(9612000));
-        }
-        else if (current.campaignProgress == 390) {
-          // The Facts: Memories (Day 3, 22:00)
-          game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(10152000));
-        }
-        else if (current.campaignProgress == 400) {
-          // Midnight (cutscene) (Day 4, 00:00)
-          game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(10368000));
-        }
-        else if (current.campaignProgress == 415 || current.campaignProgress == 402) {
-          // Half-hour before Helicopter (Day 4, 11:30)
-          game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(11610000));
-        }
+    }
+
+    if (settings["timeskip"] && current.campaignProgress == 402 && !current.inCutsceneOrLoad && current.loadingRoomValue == 1025)
+    {
+        game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(10314000)); // Jessie calls Frank again (needs 10 minutes after last cutscene so wait until we return)
+    }
+
+    if (settings["timeskip"] && current.campaignProgress == 404 && !current.inCutsceneOrLoad && current.loadingRoomValue == 1025)
+    {
+        game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(10360000)); // Jessie and Spec Ops (needs 10 minutes after last cutscene so wait until we return)
+    }
+
+    if (settings["timeskip"] && current.campaignProgress == 420 && !current.inCutsceneOrLoad && current.loadingRoomValue == 288)
+    {
+        game.WriteBytes((IntPtr)(current.inGameTimerPtr + 0x198), BitConverter.GetBytes(11664500)); // Ed shows up and crashes like a wuss (Day 4, 12:00)
     }
 }
 
