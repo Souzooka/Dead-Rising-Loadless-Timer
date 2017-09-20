@@ -137,7 +137,7 @@ init {
 
 reset
 {
-//	Resets when the title menu is entered.
+//  Resets when the title menu is entered.
     if (current.mainMenuID == 264){
         vars.getRunStarted = 0;     // TODO: a getRunStarted check isn't necessary, we can refactor to access timer state directly
         return true;                // TODO: After refactoring, just return current.mainMenuID == 264
@@ -146,14 +146,14 @@ reset
 
 start
 {
-//	For runs starting from the main menu, starts on new game. Also starts Case 5 (which doesn't start with a case file screen)
+//  For runs starting from the main menu, starts on new game. Also starts Case 5 (which doesn't start with a case file screen)
     if (current.inGameTimer == 3888000  ||  // Starting time for new game
         current.inGameTimer == 12528000 ||  // Starting time for overtime
         current.campaignProgress == 270) {  // Starting progress for case 5
         return current.mainMenuID == 3;     // TODO: What does current.mainMenuID == 3 represent?
     }
 
-    //	Case 2, 4, 7, 8 Start
+    //  Case 2, 4, 7, 8 Start
 
     else if ((current.campaignProgress == 160 ||
         current.campaignProgress == 230       ||
@@ -261,7 +261,7 @@ split
         current.campaignProgress != 280 &&            // TODO: What does this represent?
         current.campaignProgress != 320 &&            // TODO: What does this represent?
         current.campaignProgress != 350) return true; // TODO: What does this represent?
-//	Prologue (Case 1)
+//  Prologue (Case 1)
     else if (settings["prologue"]       && 
         current.campaignProgress == 65  && 
         old.inCutsceneOrLoad == false) return true;
