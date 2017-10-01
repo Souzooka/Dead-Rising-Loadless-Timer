@@ -51,12 +51,12 @@ update
 
 start 
 {
-    return current.InGameTime != 0;
+    return current.InGameTime != 0 && old.InGameTime == 0;
 }
 
 reset 
 {
-    return current.InGameTime == 0;
+    return current.InGameTime == 0 && old.InGameTime != 0;
 }
 
 isLoading
