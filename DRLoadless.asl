@@ -189,7 +189,7 @@ split
         {
             if (old.PlayerKills < count && count <= current.PlayerKills)
             {
-                return true;
+                return settings["kills" + count.ToString()];
             }
         };
     }
