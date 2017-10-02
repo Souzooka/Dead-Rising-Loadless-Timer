@@ -9,6 +9,7 @@ state("DeadRising", "SteamPatch3")
     int CampaignProgress : 0x1944DD8, 0x20DC0, 0x150;
     int CutsceneId : 0x1944DD8, 0x8, 0xC8, 0x38, 0xC80, 0x8308;
     int InGameTime : 0x1946FC0, 0x2F058, 0x198;
+    int PlayerKills : 0x1959EA0, 0x3B0;
     int PlayerLevel : 0x1946950, 0x68;
     float BossHealth : 0x1CF2620, 0x118, 0x12EC;
 }
@@ -36,10 +37,18 @@ startup
 
         // Max Level
         settings.Add("maxLevel", false, "Max Level", "splits");
-        for (int level = 5; level <= 50; level += 5)
-        {
-            settings.Add("level" + level.ToString(), false, "Level " + level.ToString(), "maxLevel");
-        }
+            for (int level = 5; level <= 50; level += 5)
+            {
+                settings.Add("level" + level.ToString(), false, "Level " + level.ToString(), "maxLevel");
+            }
+
+        // Zombie Genocider
+        settings.Add("zombieGenocider", false, "Zombie Genocider", "splits");
+            vars.GenociderKills = new List<int> {10000, 10719, 20000, 21438, 30000, 32157, 40000, 42876, 50000, 53594};
+            foreach(int count in vars.GenociderKills)
+            {
+                settings.Add("kills" + count.ToString(), false, String.Format("{0:n0}", count) + " kills", "zombieGenocider");
+            };
 }
 
 init 
@@ -85,6 +94,7 @@ update
 
 start 
 {
+    // Starts when player gains control
     if (vars.WillStart)
     {
         vars.PrimeStart = false;
@@ -131,5 +141,17 @@ split
     if (current.PlayerLevel != old.PlayerLevel)
     {
         return settings["level" + current.PlayerLevel.ToString()];
+    }
+
+    // Zombie Genocider
+    if (current.PlayerKills != old.PlayerKills)
+    {
+        foreach(int count in vars.GenociderKills)
+        {
+            if (old.PlayerKills < count && count <= current.PlayerKills)
+            {
+                return true;
+            }
+        };
     }
 }
