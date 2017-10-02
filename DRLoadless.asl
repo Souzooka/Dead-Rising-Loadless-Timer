@@ -6,6 +6,7 @@ state("DeadRising", "SteamPatch3")
     byte CaseMenuState : 0x1946FC0, 0x2F058, 0x182;
     
     // Various split variables
+    byte Bombs : 0x1944DD8, 0x20DC0, 0x848D;
     int CampaignProgress : 0x1944DD8, 0x20DC0, 0x150;
     int CutsceneId : 0x1944DD8, 0x8, 0xC8, 0x38, 0xC80, 0x8308;
     int InGameTime : 0x1946FC0, 0x2F058, 0x198;
@@ -110,6 +111,9 @@ init
     {
         {2, new HashSet<int>(Enumerable.Range(160, 56))},
         {4, new HashSet<int>(Enumerable.Range(230, 21))},
+        {5, new HashSet<int>(Enumerable.Range(270, 21))},
+        {7, new HashSet<int>(Enumerable.Range(320, 21))},
+        {8, new HashSet<int>(Enumerable.Range(350, 150))},
     };
 
     // Represents the progress level at the starts of cases. Provided so that we don't split on them.
@@ -122,7 +126,7 @@ init
         {535,  "Roof"},
         {768,  "WP"},
         {1024, "NP"},
-        {1536, "Tunnels"},
+        {1536, "Tunnels"}, // Maintenance tunnels
         {1792, "LP"},
     };
 
@@ -234,6 +238,12 @@ split
             vars.Splits.Add("case2FirstAid");
             return settings["case2FirstAid"];
         }
+    }
+
+    // Bombs
+    if (current.Bombs > old.Bombs)
+    {
+        return settings["case7Bomb" + current.Bombs.ToString()];
     }
 
     // Brock
