@@ -11,6 +11,7 @@ state("DeadRising", "SteamPatch3")
     int InGameTime : 0x1946FC0, 0x2F058, 0x198;
     int PlayerKills : 0x1959EA0, 0x3B0;
     int PlayerLevel : 0x1946950, 0x68;
+    int RoomId : 0x1945F70, 0x48;
     float BossHealth : 0x1CF2620, 0x118, 0x12EC;
 }
 
@@ -105,12 +106,31 @@ init
         {144, "otTank"},
     };
 
+    vars.CaseProgress = new Dictionary<int, HashSet<int>>
+    {
+        {2, new HashSet<int>(Enumerable.Range(160, 56))},
+        {4, new HashSet<int>(Enumerable.Range(230, 21))},
+    };
+
+    // Represents the progress level at the starts of cases. Provided so that we don't split on them.
+    vars.CaseStarts = new HashSet<int> {160, 230, 280, 320, 350};
+
+    vars.Rooms = new Dictionary<int, string>
+    {
+        {512,  "PP"},
+        {534,  "Ware"},
+        {535,  "Roof"},
+        {768,  "WP"},
+        {1024, "NP"},
+        {1536, "Tunnels"},
+        {1792, "LP"},
+    };
+
     // For starting on player control
     vars.PrimeStart = false;
     vars.WillStart = false;
 }
 
-exit {}
 update 
 {
     // Clear any hit splits if timer stops
@@ -155,7 +175,7 @@ isLoading
 split
 {
     // Generic Case Split
-    if (old.CaseMenuState == 2 && current.CaseMenuState == 0)
+    if (old.CaseMenuState == 2 && current.CaseMenuState == 0 && !vars.CaseStarts.Contains(current.CampaignProgress))
     {
         return settings["caseSplits"];
     }
@@ -167,6 +187,52 @@ split
         {
             vars.Splits.Add(vars.Cutscenes[current.CutsceneId]);
             return settings[vars.Cutscenes[current.CutsceneId]];
+        }
+    }
+
+    // Splitting on room transitions
+    if (current.RoomId != old.RoomId)
+    {
+        if (vars.Rooms.ContainsKey(current.RoomId) && vars.Rooms.ContainsKey(old.RoomId))
+        {
+            int chapter = 0;
+            foreach (int key in vars.CaseProgress.Keys)
+            {
+                if (vars.CaseProgress[key].Contains(current.CampaignProgress))
+                {
+                    chapter = key;
+                    break;
+                }
+            }
+
+            string settingsKey = "case" + chapter.ToString() + vars.Rooms[old.RoomId] + "->" + vars.Rooms[current.RoomId];
+            if (vars.Splits.Contains(settingsKey))
+            {
+                return false;
+            }
+
+            // Special handlers
+            // Case 2
+            if (current.CampaignProgress < 215)
+            {
+                if (settingsKey == "case2WP->PP" || settingsKey == "case2LP->PP")
+                {
+                    return false;
+                }
+            }
+
+            vars.Splits.Add(settingsKey);
+            return settings[settingsKey];
+        }
+    }
+
+    // First Aid
+    if (current.CampaignProgress == 215 && old.CampaignProgress != 215)
+    {
+        if (!vars.Splits.Contains("case2FirstAid"))
+        {
+            vars.Splits.Add("case2FirstAid");
+            return settings["case2FirstAid"];
         }
     }
 
