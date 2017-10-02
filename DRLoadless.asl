@@ -25,15 +25,54 @@ startup
 
             // Case 1
             settings.Add("case1", false, "Case 1 Splits", "72Hour");
-                settings.Add("prologue", false, "Prologue", "case1");
+                settings.Add("case1Prologue", false, "Prologue", "case1");
+
+            // Case 2
+            settings.Add("case2", false, "Case 2 Splits", "72Hour");
+                settings.Add("case2PP->WP", false, "PP->WP (Any%)", "case2");
+                settings.Add("case2PP->LP", false, "PP->LP (Low%)", "case2");
+                settings.Add("case2FirstAid", false, "First Aid", "case2");
+                settings.Add("case2WP->PP", false, "WP->PP (Any%)", "case2");
+                settings.Add("case2LP->PP", false, "LP->PP (Low%)", "case2");
+
+            // Case 4
+            settings.Add("case4", false, "Case 4 Splits", "72Hour");
+                settings.Add("case4Roof->Ware", false, "Roof->Warehouse", "case4");
+                settings.Add("case4Ware->PP", false, "Warehouse->PP", "case4");
+                settings.Add("case4PP->WP", false, "PP->WP (Any%)", "case4");
+                settings.Add("case4PP->LP", false, "PP->LP (Low%)", "case4");
+                settings.Add("case4WP->NP", false, "WP->NP (Any%)", "case4");
+                settings.Add("case4LP->NP", false, "LP->NP (Low%)", "case4");
+
+            // Case 5
+            settings.Add("case5", false, "Case 5 Splits", "72Hour");
+                settings.Add("case5NP->LP", false, "NP->LP", "case5");
+                settings.Add("case5LP->PP", false, "LP->PP", "case5");
+                settings.Add("case5PP->Ware", false, "PP->Warehouse", "case5");
+                settings.Add("case5Ware->Roof", false, "Warehouse->Roof", "case5");
+
+            // Case 7
+            settings.Add("case7", false, "Case 7 Splits", "72Hour");
+                settings.Add("case7PP->Tunnels", false, "PP->Tunnels (Any%)", "case7");
+                settings.Add("case7PP->LP", false, "PP->LP (Low%)", "case7");
+                for (int i = 1; i <= 5; ++i)
+                {
+                    settings.Add("case7Bomb" + i.ToString(), false, "Bomb #" + i.ToString(), "case7");
+                }
+
+            // Case 8
+            settings.Add("case8", false, "Case 8 Splits", "72Hour");
+                settings.Add("case8PP->LP", false, "PP->LP", "case8");
+                settings.Add("case8WP->PP", false, "WP->PP (Any%)", "case8");
+                settings.Add("case8LP->PP", false, "LP->PP (Low%)", "case8");
 
         // Overtime splits
         settings.Add("overtime", false, "Overtime", "splits");
-            settings.Add("supplies", false, "Supplies", "overtime");
-            settings.Add("queens", false, "Queens", "overtime");
-            settings.Add("tunnel", false, "Tunnel", "overtime");
-            settings.Add("tank", false, "Tank", "overtime");
-            settings.Add("brock", false, "Brock", "overtime");
+            settings.Add("otSupplies", false, "Supplies", "overtime");
+            settings.Add("otQueens", false, "Queens", "overtime");
+            settings.Add("otTunnel", false, "Tunnel", "overtime");
+            settings.Add("otTank", false, "Tank", "overtime");
+            settings.Add("otBrock", false, "Brock", "overtime");
 
         // Max Level
         settings.Add("maxLevel", false, "Max Level", "splits");
@@ -59,11 +98,11 @@ init
     // For splitting when hitting a cutscene
     vars.Cutscenes = new Dictionary<int, string>
     {
-        {4,   "prologue"},
-        {126, "queens"},
-        {131, "supplies"},
-        {136, "tunnel"},
-        {144, "tank"},
+        {4,   "case1Prologue"},
+        {126, "otQueens"},
+        {131, "otSupplies"},
+        {136, "otTunnel"},
+        {144, "otTank"},
     };
 
     // For starting on player control
@@ -134,7 +173,7 @@ split
     // Brock
     if (current.CutsceneId == 144 && current.BossHealth == 0 && old.BossHealth != 0)
     {
-        return settings["brock"];
+        return settings["otBrock"];
     }
 
     // Max Level
