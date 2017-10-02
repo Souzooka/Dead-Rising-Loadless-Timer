@@ -28,7 +28,7 @@ startup
 
         // Overtime splits
         settings.Add("overtime", false, "Overtime", "splits");
-            settings.Add("supples", false, "Supplies", "overtime");
+            settings.Add("supplies", false, "Supplies", "overtime");
             settings.Add("queens", false, "Queens", "overtime");
             settings.Add("tunnel", false, "Tunnel", "overtime");
             settings.Add("tank", false, "Tank", "overtime");
