@@ -56,6 +56,10 @@ init
         {136, "tunnel"},
         {144, "tank"},
     };
+
+    // For starting on player control
+    vars.PrimeStart = false;
+    vars.WillStart = false;
 }
 
 exit {}
@@ -66,11 +70,27 @@ update
     {
         vars.Splits.Clear();
     }
+
+    // For starting on player control
+    if (current.InGameTime != 0 && old.InGameTime == 0)
+    {
+        vars.PrimeStart = true;
+    }
+
+    if (vars.PrimeStart && !current.IsLoading)
+    {
+        vars.WillStart = true;
+    }
 }
 
 start 
 {
-    return current.InGameTime != 0 && old.InGameTime == 0;
+    if (vars.WillStart)
+    {
+        vars.PrimeStart = false;
+        vars.WillStart = false;
+        return true;
+    }
 }
 
 reset 
