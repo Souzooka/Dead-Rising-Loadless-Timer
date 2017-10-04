@@ -28,53 +28,148 @@ startup
             // Case 1
             settings.Add("case1", false, "Case 1 Splits", "72Hour");
                 settings.Add("case1Prologue", false, "Prologue", "case1");
+                settings.Add("case1Transitions", false, "Room Transitions", "case1");
+	                settings.Add("case1HP->SR", false, "Helipad->Security Room", "case1Transitions");
+	                settings.Add("case1SR->EP", false, "Security Room->Entrance Plaza", "case1Transitions");
+	                settings.Add("case1EP->SR", false, "Entrance Plaza->Security Room", "case1Transitions");
+	                settings.Add("case1SR->RT", false, "Security Room>->Rooftop", "case1Transitions");
+	                settings.Add("case1RT->WH", false, "Rooftop->Warehouse", "case1Transitions");
+	                settings.Add("case1WH->PP", false, "Warehouse->Paradise Plaza", "case1Transitions");
+	                settings.Add("case1PP->LP", false, "Paradise Plaza->Leisure Park", "case1Transitions");
+	                settings.Add("case1LP->FC", false, "Lesiure Park->Food Court", "case1Transitions");
+	                settings.Add("case1FC->AP", false, "Food Court->Al Fresca Plaza", "case1Transitions");
+	                settings.Add("case1AP->EP", false, "Al Fresca Plaza->Entrance Plaza", "case1Transitions");
+	                settings.Add("case1EP->AP", false, "Entrance Plaza->Al Fresca Plaza", "case1Transitions");
+	                settings.Add("case1AP->FC", false, "Al Fresca Plaza->Food Court", "case1Transitions");
+	                settings.Add("case1FC->LP", false, "Food Court->Leisure Park", "case1Transitions");
+	                settings.Add("case1LP->PP", false, "Lesiure Park->Paradise Plaza", "case1Transitions");
+	                settings.Add("case1PP->WH", false, "Paradise Plaza->Warehouse", "case1Transitions");
+	                settings.Add("case1WH->RT", false, "Warehouse->Rooftop", "case1Transitions");
+	                settings.Add("case1RT->SR", false, "Rooftop->Security Room", "case1Transitions");
 
             // Case 2
             settings.Add("case2", false, "Case 2 Splits", "72Hour");
-                settings.Add("case2PP->WP", false, "PP->WP (Any%)", "case2");
-                settings.Add("case2PP->LP", false, "PP->LP (Low%)", "case2");
                 settings.Add("case2FirstAid", false, "First Aid", "case2");
-                settings.Add("case2WP->PP", false, "WP->PP (Any%)", "case2");
-                settings.Add("case2LP->PP", false, "LP->PP (Low%)", "case2");
+            	settings.Add("case2Transitions", false, "Room Transitions", "case2");
+	                settings.Add("case2SR->RT", false, "Security Room->Rooftop", "case2Transitions"); // first time
+	                settings.Add("case2RT->WH", false, "Rooftop->Warehouse", "case2Transitions"); // first time
+	                settings.Add("case2WH->PP", false, "Warehouse->Paradise Plaza", "case2Transitions"); // first time
+	                settings.Add("case2PP->EP", false, "Paradise Plaza->Entrance Plaza", "case2Transitions");
+	                settings.Add("case2EP->SR", false, "Entrance Plaza->Security Room", "case2Transitions");
+	                settings.Add("case2.1SR->RT", false, "Security Room->Rooftop (After saving Barnaby)", "case2Transitions"); // second time
+	                settings.Add("case2.1RT->WH", false, "Rooftop->Warehouse (After saving Barnaby)", "case2Transitions"); // second time
+	                settings.Add("case2.1WH->PP", false, "Warehouse->Paradise Plaza (After saving Barnaby)", "case2Transitions"); // second time
+	                settings.Add("case2.1PP->WP", false, "Paradise Plaza->Wonderland Plaza (Any%)", "case2Transitions");
+	                settings.Add("case2.1WP->NP", false, "Wonderland Plaza->North Plaza (Any%)", "case2Transitions");
+	                settings.Add("case2.1PP->LP", false, "Paradise Plaza->Leisure Park (Low%)", "case2Transitions");
+	                settings.Add("case2.1LP->NP", false, "Lesiure Park->North Plaza (Low%)", "case2Transitions");
+	                settings.Add("case2.1NP->SFS", false, "North Plaza->Seon's Food & Stuff", "case2Transitions");
+	                settings.Add("case2.2SFS->NP", false, "Seon's Food & Stuff->North Plaza", "case2Transitions");
+	                settings.Add("case2.2NP->WP", false, "North Plaza->Wonderland Plaza (Any%)", "case2Transitions");
+	                settings.Add("case2.2WP->PP", false, "Wonderland Plaza->Paradise Plaza (Any%)", "case2Transitions");
+	                settings.Add("case2.2NP->LP", false, "North Plaza->Leisure Park (Low%)", "case2Transitions");
+	                settings.Add("case2.2LP->PP", false, "Lesiure Park->Paradise Plaza (Low%)", "case2Transitions");
+	                settings.Add("case2.2PP->WH", false, "Paradise Plaza->Warehouse", "case2Transitions");
+	                settings.Add("case2.2WH->RT", false, "Warehouse->Rooftop", "case2Transitions");
+	                settings.Add("case2.2RT->SR", false, "Rooftop->Security Room", "case2Transitions");
+
 
             // Case 4
             settings.Add("case4", false, "Case 4 Splits", "72Hour");
-                settings.Add("case4Roof->Ware", false, "Roof->Warehouse", "case4");
-                settings.Add("case4Ware->PP", false, "Warehouse->PP", "case4");
-                settings.Add("case4PP->WP", false, "PP->WP (Any%)", "case4");
-                settings.Add("case4PP->LP", false, "PP->LP (Low%)", "case4");
-                settings.Add("case4WP->NP", false, "WP->NP (Any%)", "case4");
-                settings.Add("case4LP->NP", false, "LP->NP (Low%)", "case4");
+            	settings.Add("case4Transitions", false, "Room Transitions", "case4");
+	                settings.Add("case4SR->RT", false, "Security Room->Rooftop", "case4Transitions");
+	                settings.Add("case4RT->WH", false, "Rooftop->Warehouse", "case4Transitions");
+	                settings.Add("case4WH->PP", false, "Warehouse->Paradise Plaza", "case4Transitions");
+	                settings.Add("case4PP->WP", false, "Paradise Plaza->Wonderland Plaza (Any%)", "case4Transitions");
+	                settings.Add("case4WP->NP", false, "Wonderland Plaza->North Plaza (Any%)", "case4Transitions");
+	                settings.Add("case4PP->LP", false, "Paradise Plaza->Leisure Park (Low%)", "case4Transitions");
+	                settings.Add("case4LP->NP", false, "Lesiure Park->North Plaza (Low%)", "case4Transitions");
 
             // Case 5
             settings.Add("case5", false, "Case 5 Splits", "72Hour");
-                settings.Add("case5NP->LP", false, "NP->LP", "case5");
-                settings.Add("case5LP->PP", false, "LP->PP", "case5");
-                settings.Add("case5PP->Ware", false, "PP->Warehouse", "case5");
-                settings.Add("case5Ware->Roof", false, "Warehouse->Roof", "case5");
+            	settings.Add("case5Transitions", false, "Room Transitions", "case5");
+	                settings.Add("case5NP->LP", false, "North Plaza->Leisure Park", "case5Transitions");
+	                settings.Add("case5LP->PP", false, "Lesiure Park->Paradise Plaza", "case5Transitions");
+	                settings.Add("case5PP->WH", false, "Paradise Plaza->Warehouse", "case5Transitions");
+	                settings.Add("case5WH->RT", false, "Warehouse->Rooftop", "case5Transitions");
+	                settings.Add("case5RT->SR", false, "Rooftop->Security Room", "case5Transitions");
 
             // Case 7
             settings.Add("case7", false, "Case 7 Splits", "72Hour");
-                settings.Add("case7PP->Tunnels", false, "PP->Tunnels (Any%)", "case7");
-                settings.Add("case7PP->LP", false, "PP->LP (Low%)", "case7");
                 for (int i = 1; i <= 5; ++i)
                 {
                     settings.Add("case7Bomb" + i.ToString(), false, "Bomb #" + i.ToString(), "case7");
                 }
+                settings.Add("case7Transitions", false, "Room Transitions", "case7");
+	                settings.Add("case7SR->RT", false, "Security Room->Rooftop", "case7Transitions");
+	                settings.Add("case7RT->WH", false, "Rooftop->Warehouse", "case7Transitions");
+	                settings.Add("case7WH->PP", false, "Warehouse->Paradise Plaza", "case7Transitions");
+	                settings.Add("case7PP->MT", false, "Paradise Plaza->Maintenance Tunnels (Any%)", "case7Transitions");
+	                settings.Add("case7PP->LP", false, "Paradise Plaza->Leisure Park (Low%)", "case7Transitions");
+	                settings.Add("case7LP->MT", false, "Lesiure Park->Maintenance Tunnels (Low%)", "case7Transitions");
+	                settings.Add("case7MT->LP", false, "Maintenance Tunnels->Leisure Park", "case7Transitions");
 
             // Case 8
             settings.Add("case8", false, "Case 8 Splits", "72Hour");
-                settings.Add("case8PP->LP", false, "PP->LP", "case8");
-                settings.Add("case8WP->PP", false, "WP->PP (Any%)", "case8");
-                settings.Add("case8LP->PP", false, "LP->PP (Low%)", "case8");
+            settings.Add("case8Transitions", false, "Room Transitions", "case8");
+                settings.Add("case8SR->RT", false, "Security Room->Rooftop", "case8Transitions"); // First time
+                settings.Add("case8RT->WH", false, "Rooftop->Warehouse", "case8Transitions"); // First time
+                settings.Add("case8WH->PP", false, "Warehouse->Paradise Plaza", "case8Transitions"); // First time
+                settings.Add("case8PP->LP", false, "Paradise Plaza->Leisure Park", "case8Transitions");
+                settings.Add("case8LP->NP", false, "Lesiure Park->North Plaza", "case8Transitions");
+                settings.Add("case8NP->CH", false, "North Plaza->Carlito's Hideout", "case8Transitions");
+                settings.Add("case8CH->NP", false, "Carlito's Hideout->North Plaza", "case8Transitions");
+                settings.Add("case8NP->WP", false, "North Plaza->Wonderland Plaza (Any%)", "case8Transitions");
+                settings.Add("case8WP->PP", false, "Wonderland Plaza->Paradise Plaza (Any%)", "case8Transitions");
+                settings.Add("case8NP->LP", false, "North Plaza->Leisure Park (Low%)", "case8Transitions");
+                settings.Add("case8LP->PP", false, "Lesiure Park->Paradise Plaza (Low%)", "case8Transitions");
+                settings.Add("case8PP->WH", false, "Paradise Plaza->Warehouse", "case8Transitions");
+                settings.Add("case8WH->RT", false, "Warehouse->Rooftop", "case8Transitions");
+                settings.Add("case8RT->SR", false, "Rooftop->Security Room", "case8Transitions");
+                settings.Add("case8.1SR->RT", false, "Security Room->Rooftop (After Jessie)", "case8Transitions"); // Second time
+                settings.Add("case8.1RT->WH", false, "Rooftop->Warehouse (After Jessie)", "case8Transitions"); // Second time
+                settings.Add("case8.1WH->PP", false, "Warehouse->Paradise Plaza (After Jessie)", "case8Transitions"); // Second time
+                settings.Add("case8.1PP->MT", false, "Paradise Plaza->Maintenance Tunnels (Any%)", "case8Transitions");
+                settings.Add("case8.1PP->LP", false, "Paradise Plaza->Leisure Park (Low%)", "case8Transitions");
+                settings.Add("case8.1LP->MT", false, "Lesiure Park->Maintenance Tunnels (Low%)", "case8Transitions");
+                settings.Add("case8.1MT->MPA", false, "Maintenance Tunnels->Meat Processing Area", "case8Transitions");
 
         // Overtime splits
         settings.Add("overtime", false, "Overtime", "splits");
-            settings.Add("otSupplies", false, "Supplies", "overtime");
-            settings.Add("otQueens", false, "Queens", "overtime");
-            settings.Add("otTunnel", false, "Tunnel", "overtime");
-            settings.Add("otTank", false, "Tank", "overtime");
-            settings.Add("otBrock", false, "Brock", "overtime");
+        	settings.Add("otSupplies", false, "Supplies", "overtime");
+        	settings.Add("otQueens", false, "Queens", "overtime");
+        	settings.Add("otTunnel", false, "Tunnel", "overtime");
+        	settings.Add("otTank", false, "Tank", "overtime");
+        	settings.Add("otBrock", false, "Brock", "overtime");
+        	settings.Add("overtimeTransitions", false, "Room Transitions", "overtime");
+	            settings.Add("case9CH->NP", false, "Carlito's Hideout->North Plaza", "overtimeTransitions");
+	            settings.Add("case9NP->WP", false, "North Plaza->Wonderland Plaza (Any%)", "overtimeTransitions");
+	            settings.Add("case9WP->PP", false, "Wonderland Plaza->Paradise Plaza (Any%)", "overtimeTransitions");
+	            settings.Add("case9NP->LP", false, "North Plaza->Leisure Park (Low%)", "overtimeTransitions");
+	            settings.Add("case9LP->PP", false, "Lesiure Park->Paradise Plaza (Low%)", "overtimeTransitions");
+	            settings.Add("case9PP->WH", false, "Paradise Plaza->Warehouse", "overtimeTransitions");
+	            settings.Add("case9WH->RT", false, "Warehouse->Rooftop", "overtimeTransitions");
+	            settings.Add("case9RT->SR", false, "Rooftop->Security Room", "overtimeTransitions");
+	            settings.Add("case9SR->EP", false, "Security Room->Entrace Plaza", "overtimeTransitions");
+	            settings.Add("case9EP->PP", false, "Entrance Plaza->Paradise Plaza", "overtimeTransitions");
+	            settings.Add("case9PP->WP", false, "Paradise Plaza->Wonderland Plaza (Any%)", "overtimeTransitions");
+	            settings.Add("case9PP->CM", false, "Paradise Plaza->Colby's Movieland (Low%)", "overtimeTransitions");
+	            settings.Add("case9CM->PP", false, "Colby's Movieland->Paradise Plaza (Low%)", "overtimeTransitions");
+	            settings.Add("case9PP->LP", false, "Paradise Plaza->Leisure Park (Low%)", "overtimeTransitions");
+	            settings.Add("case9LP->FC", false, "Lesiure Park->Food Court (Low%)", "overtimeTransitions");
+	            settings.Add("case9FC->WP", false, "Food Court->Wonderland Plaza (Low%)", "overtimeTransitions");
+	            settings.Add("case9WP->NP", false, "Wonderland Plaza->North Plaza", "overtimeTransitions");
+	            settings.Add("case9NP->SFS", false, "North Plaza->Seon's Food & Stuff", "overtimeTransitions");
+	            settings.Add("case9SFS->NP", false, "Seon's Food & Stuff->North Plaza", "overtimeTransitions");
+	            settings.Add("case9NP->CH", false, "North Plaza->Carlito's Hideout", "overtimeTransitions");
+	            settings.Add("case9.1CH->NP", false, "Carlito's Hideout->North Plaza (Queens)", "overtimeTransitions");
+	            settings.Add("case9.1NP->LP", false, "North Plaza->Leisure Park (Queens)", "overtimeTransitions");
+	            settings.Add("case9.1LP->NP", false, "Lesiure Park->North Plaza (Queens)", "overtimeTransitions");
+	            settings.Add("case9.1NP->CH", false, "North Plaza->Carlito's Hideout (Queens)", "overtimeTransitions");
+	            settings.Add("case9.1CH->T1", false, "Carlito's Hideout->Tunnels 1", "overtimeTransitions");
+	            settings.Add("case9.1T1->T2", false, "Tunnels 1->Tunnels 2", "overtimeTransitions");
+	            settings.Add("case9.1T2->T3", false, "Tunnels 2->Tunnels 3", "overtimeTransitions");
+
 
         // Max Level
         settings.Add("maxLevel", false, "Max Level", "splits");
@@ -107,13 +202,19 @@ init
         {144, "otTank"},
     };
 
-    vars.CaseProgress = new Dictionary<int, HashSet<int>>
+    vars.CaseProgress = new Dictionary<double, HashSet<int>>
     {
-        {2, new HashSet<int>(Enumerable.Range(160, 56))},
-        {4, new HashSet<int>(Enumerable.Range(230, 21))},
-        {5, new HashSet<int>(Enumerable.Range(270, 21))},
-        {7, new HashSet<int>(Enumerable.Range(320, 21))},
-        {8, new HashSet<int>(Enumerable.Range(350, 150))},
+    	{1,   new HashSet<int>(Enumerable.Range(10, 150))},
+        {2,   new HashSet<int>(Enumerable.Range(160, 20))},
+        {2.1, new HashSet<int>(Enumerable.Range(180, 25))},  // Case 2 after saving Barnaby
+        {2.2, new HashSet<int>(Enumerable.Range(215, 1))},   // Case 2 after picking up first-aid
+        {4,   new HashSet<int>(Enumerable.Range(230, 21))},
+        {5,   new HashSet<int>(Enumerable.Range(270, 21))},
+        {7,   new HashSet<int>(Enumerable.Range(320, 21))},
+        {8,   new HashSet<int>(Enumerable.Range(350, 20))},
+        {8.1, new HashSet<int>(Enumerable.Range(370, 20))},
+        {9,   new HashSet<int>(Enumerable.Range(500, 150))}, // Overtime
+        {9.1, new HashSet<int>(Enumerable.Range(650, 999))}, // Overtime after supplies
     };
 
     // Represents the progress level at the starts of cases. Provided so that we don't split on them.
@@ -121,13 +222,25 @@ init
 
     vars.Rooms = new Dictionary<int, string>
     {
-        {512,  "PP"},
-        {534,  "Ware"},
-        {535,  "Roof"},
-        {768,  "WP"},
-        {1024, "NP"},
-        {1536, "Tunnels"}, // Maintenance tunnels
-        {1792, "LP"},
+        {256,  "EP"},  // Entrance Plaza
+        {287,  "HP"},  // Helipad
+        {288,  "SR"},  // Security Room
+        {512,  "PP"},  // Paradise Plaza
+        {534,  "WH"},  // Warehouse
+        {535,  "RT"},  // Rooftop
+        {768,  "WP"},  // Wonderland Plaza
+        {1024, "NP"},  // North Plaza
+        {1025, "CH"},  // Carlito's Hideout
+        {1280, "SFS"}, // Seon's Food & Stuff
+        {1283, "CM"},  // Colby's Movieland
+        {1536, "MT"},  // Maintenance Tunnels
+        {1537, "MPA"}, // Meat Processing Area
+        {1792, "LP"},  // Leisure Park
+        {2304, "AP"},  // Al Fresca Plaza
+        {2560, "FC"},  // Food Court
+        {2816, "T1"},  // Tunnels 1
+        {2817, "T2"},  // Tunnels 2
+        {2818, "T3"},  // Tunnels 3
     };
 
     // For starting on player control
@@ -199,8 +312,8 @@ split
     {
         if (vars.Rooms.ContainsKey(current.RoomId) && vars.Rooms.ContainsKey(old.RoomId))
         {
-            int chapter = 0;
-            foreach (int key in vars.CaseProgress.Keys)
+            double chapter = 0;
+            foreach (double key in vars.CaseProgress.Keys)
             {
                 if (vars.CaseProgress[key].Contains(current.CampaignProgress))
                 {
@@ -213,16 +326,6 @@ split
             if (vars.Splits.Contains(settingsKey))
             {
                 return false;
-            }
-
-            // Special handlers
-            // Case 2
-            if (current.CampaignProgress < 215)
-            {
-                if (settingsKey == "case2WP->PP" || settingsKey == "case2LP->PP")
-                {
-                    return false;
-                }
             }
 
             vars.Splits.Add(settingsKey);
