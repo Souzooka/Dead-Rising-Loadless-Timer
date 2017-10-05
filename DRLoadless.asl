@@ -87,6 +87,7 @@ startup
 
             // Case 5
             settings.Add("case5", false, "Case 5 Splits", "72Hour");
+            	settings.Add("case5Zombie", false, "Killed First Zombie", "case5");
             	settings.Add("case5Transitions", false, "Room Transitions", "case5");
 	                settings.Add("case5NP->LP", false, "North Plaza->Leisure Park", "case5Transitions");
 	                settings.Add("case5LP->PP", false, "Lesiure Park->Paradise Plaza", "case5Transitions");
@@ -196,6 +197,7 @@ init
     vars.Cutscenes = new Dictionary<int, string>
     {
         {4,   "case1Prologue"},
+        {31,  "case5Zombie"},
         {126, "otQueens"},
         {131, "otSupplies"},
         {136, "otTunnel"},
