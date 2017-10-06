@@ -8,7 +8,7 @@ state("DeadRising", "SteamPatch3")
     // Various split variables
     byte Bombs : 0x1944DD8, 0x20DC0, 0x848D;
     int CampaignProgress : 0x1944DD8, 0x20DC0, 0x150;
-    int CutsceneId : 0x1944DD8, 0x8, 0xC8, 0x38, 0xC80, 0x8308;
+    int CutsceneId : 0x1D1A6B8, 0xA98, 0x22F0, 0x420, 0x20, 0x508, 0x38, 0xC10, 0x8308;
     int InGameTime : 0x1946FC0, 0x2F058, 0x198;
     int PlayerKills : 0x1959EA0, 0x3B0;
     int PlayerLevel : 0x1946950, 0x68;
@@ -137,6 +137,7 @@ startup
 
         // Overtime splits
         settings.Add("overtime", false, "Overtime", "splits");
+            settings.Add("otDrone", false, "Frank sees a sick RC Drone", "overtime");
         	settings.Add("otSupplies", false, "Supplies", "overtime");
         	settings.Add("otQueens", false, "Queens", "overtime");
         	settings.Add("otTunnel", false, "Tunnel", "overtime");
@@ -201,6 +202,7 @@ init
         {126, "otQueens"},
         {131, "otSupplies"},
         {136, "otTunnel"},
+        {140, "otDrone"},
         {144, "otTank"},
     };
 
@@ -252,6 +254,7 @@ init
 
 update 
 {
+    print(current.CutsceneId.ToString());
     // Clear any hit splits if timer stops
     if (timer.CurrentPhase == TimerPhase.NotRunning)
     {
