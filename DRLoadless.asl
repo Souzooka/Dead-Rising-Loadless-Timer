@@ -331,7 +331,12 @@ split
             }
 
             vars.Splits.Add(settingsKey);
-            return settings[settingsKey];
+
+            // ONLY return if the setting is enabled, as some transitions are duplicates
+            if (settings[settingsKey])
+            {
+                return true;
+            };
         }
     }
 
