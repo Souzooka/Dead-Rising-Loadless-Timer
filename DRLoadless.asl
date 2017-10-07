@@ -200,7 +200,7 @@ init
     vars.Cutscenes = new Dictionary<int, string>
     {
         {4,   "case1Prologue"},
-        {26,  "case4IsabelaStart"}
+        {26,  "case4IsabelaStart"},
         {31,  "case5Zombie"},
         {125, "otClockTower"},
         {126, "otQueens"},
