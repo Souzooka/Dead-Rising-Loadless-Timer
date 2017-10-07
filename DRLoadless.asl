@@ -139,6 +139,7 @@ startup
         settings.Add("overtime", false, "Overtime", "splits");
             settings.Add("otDrone", false, "Frank sees a sick RC Drone", "overtime");
         	settings.Add("otSupplies", false, "Supplies", "overtime");
+            settings.Add("otClockTower", false, "Clock Tower", "overtime");
         	settings.Add("otQueens", false, "Queens", "overtime");
         	settings.Add("otTunnel", false, "Tunnel", "overtime");
         	settings.Add("otTank", false, "Tank", "overtime");
@@ -199,6 +200,7 @@ init
     {
         {4,   "case1Prologue"},
         {31,  "case5Zombie"},
+        {125, "otClockTower"},
         {126, "otQueens"},
         {131, "otSupplies"},
         {136, "otTunnel"},
