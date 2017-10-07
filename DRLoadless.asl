@@ -76,6 +76,7 @@ startup
 
             // Case 4
             settings.Add("case4", false, "Case 4 Splits", "72Hour");
+                settings.Add("case4IsabelaStart", false, "Start Isabela Fight", "case4");
             	settings.Add("case4Transitions", false, "Room Transitions", "case4");
 	                settings.Add("case4SR->RT", false, "Security Room->Rooftop", "case4Transitions");
 	                settings.Add("case4RT->WH", false, "Rooftop->Warehouse", "case4Transitions");
@@ -199,6 +200,7 @@ init
     vars.Cutscenes = new Dictionary<int, string>
     {
         {4,   "case1Prologue"},
+        {26,  "case4IsabelaStart"}
         {31,  "case5Zombie"},
         {125, "otClockTower"},
         {126, "otQueens"},
