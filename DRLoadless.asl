@@ -136,6 +136,10 @@ startup
                 settings.Add("case8.1LP->MT", false, "Lesiure Park->Maintenance Tunnels (Low%)", "case8Transitions");
                 settings.Add("case8.1MT->MPA", false, "Maintenance Tunnels->Meat Processing Area", "case8Transitions");
 
+            // Endings
+            settings.Add("endings", false, "Endings", "72Hour");
+                settings.Add("endingA", false, "Ending A", "endings");
+
         // Overtime splits
         settings.Add("overtime", false, "Overtime", "splits");
             settings.Add("otDrone", false, "Frank sees a sick RC Drone", "overtime");
@@ -202,6 +206,7 @@ init
         {4,   "case1Prologue"},
         {26,  "case4IsabelaStart"},
         {31,  "case5Zombie"},
+        {53,  "endingA"},
         {125, "otClockTower"},
         {126, "otQueens"},
         {131, "otSupplies"},
