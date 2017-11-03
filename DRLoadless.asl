@@ -1,6 +1,6 @@
 state("DeadRising", "SteamPatch3")
 {
-    bool IsLoading : 0x1D18C80, 0x2338;
+    bool IsLoading : 0x1945F70, 0x70;
 
     // Used for subcase splitting
     byte CaseMenuState : 0x1946FC0, 0x2F058, 0x182;
@@ -263,7 +263,6 @@ init
 
 update 
 {
-    print(current.CutsceneId.ToString());
     // Clear any hit splits if timer stops
     if (timer.CurrentPhase == TimerPhase.NotRunning)
     {
@@ -276,7 +275,7 @@ update
         vars.PrimeStart = true;
     }
 
-    if (vars.PrimeStart && !current.IsLoading)
+    if (vars.PrimeStart && !current.IsLoading && current.CampaignProgress > 0)
     {
         vars.WillStart = true;
     }
