@@ -26,6 +26,7 @@ startup
 
             // Case 1
             settings.Add("case1", false, "Case 1 Splits", "72Hour");
+                settings.Add("case1Barnaby", false, "Met Barnaby", "case1");
                 settings.Add("case1Prologue", false, "Prologue", "case1");
                 settings.Add("case1.1", false, "Case 1-1", "case1");
                 settings.Add("case1.2", false, "Case 1-2", "case1");
@@ -229,6 +230,7 @@ init
     // For splitting when hitting a cutscene
     vars.Cutscenes = new Dictionary<int, string>
     {
+        {3,   "case1Barnaby"},
         {4,   "case1Prologue"},
         {26,  "case4IsabelaStart"},
         {31,  "case5Zombie"},
