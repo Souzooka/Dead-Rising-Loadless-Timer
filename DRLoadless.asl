@@ -269,28 +269,28 @@ init
     };
 
     // Represents the progress level at the starts of cases for splits.
-    vars.CaseStarts = new Dictionary<int, double>
+    vars.CaseStarts = new Dictionary<int, string>
     {
-        {80,  1.1},
-        {110, 1.2},
-        {130, 1.3},
-        {140, 1.4},
-        {160, 2.1},
-        {180, 2.2},
-        {215, 2.3},
-        {220, 3.1},
-        {230, 4.1},
-        {250, 4.2},
-        {280, 5.1},
-        {290, 5.2},
-        {300, 6.1},
-        {320, 7.1},
-        {340, 7.2},
-        {350, 8.1},
-        {360, 8.2},
-        {370, 8.3},
-        {390, 8.4},
-        {400, 9.1}
+        {80,  "1.1"},
+        {110, "1.2"},
+        {130, "1.3"},
+        {140, "1.4"},
+        {160, "2.1"},
+        {180, "2.2"},
+        {215, "2.3"},
+        {220, "3.1"},
+        {230, "4.1"},
+        {250, "4.2"},
+        {280, "5.1"},
+        {290, "5.2"},
+        {300, "6.1"},
+        {320, "7.1"},
+        {340, "7.2"},
+        {350, "8.1"},
+        {360, "8.2"},
+        {370, "8.3"},
+        {390, "8.4"},
+        {400, "9.1"}
     };
 
     vars.Rooms = new Dictionary<int, string>
@@ -393,7 +393,7 @@ split
     {
         if (vars.CaseStarts.ContainsKey(current.CampaignProgress))
         {
-            return settings["case" + vars.CaseStarts[current.CampaignProgress].ToString()];
+            return settings["case" + vars.CaseStarts[current.CampaignProgress]];
         }
     }
 
