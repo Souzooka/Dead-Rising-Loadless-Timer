@@ -14,6 +14,7 @@ state("DeadRising", "SteamPatch3")
     int PlayerLevel : 0x1946950, 0x68;
     int RoomId : 0x1945F70, 0x48;
     float BossHealth : 0x1CF2620, 0x118, 0x12EC;
+    uint PhotoStatsPtr : 0x1959EA0, 0xA8;
 }
 
 startup
@@ -220,10 +221,18 @@ startup
             {
                 settings.Add("kills" + count.ToString(), false, String.Format("{0:n0}", count) + " kills", "zombieGenocider");
             };
+
+        // PP stickers
+        settings.Add("ppStickers", false, "PP Stickers", "splits");
+            settings.Add("ppStickers1", false, "Split on every sticker", "ppStickers");
+            settings.Add("ppStickers2", false, "Split on every photo which includes PP stickers", "ppStickers");
 }
 
 init 
 {
+    // Pending splits (for PP collector mostly)
+    vars.PendingSplits = 0;
+
     // Keep track of hit splits
     vars.Splits = new HashSet<string>();
 
@@ -307,6 +316,10 @@ init
         {2818, "T3"},  // Tunnels 3
     };
 
+    // Track PP stickers array
+    uint ptr = current.PhotoStatsPtr;
+    current.PPStickers = new int[100].Select((_, i) => memory.ReadValue<int>((IntPtr)(4 * i + ptr + 0x2A8))).ToArray();
+
     // For starting on player control
     vars.PrimeStart = false;
     vars.WillStart = false;
@@ -314,6 +327,10 @@ init
 
 update 
 {
+    // Update PP stickers
+    uint ptr = current.PhotoStatsPtr;
+    current.PPStickers = new int[100].Select((_, i) => memory.ReadValue<int>((IntPtr)(4 * i + ptr + 0x2A8))).ToArray();
+
     // Clear any hit splits if timer stops
     if (timer.CurrentPhase == TimerPhase.NotRunning)
     {
@@ -355,6 +372,22 @@ isLoading
 
 split
 {
+    // Any pending splits (only used if you get multiple PP stickers in one shot)
+    if (vars.PendingSplits-- > 0) { return true; }
+
+    // PP Stickers
+    int[] currentPPStickers = (current.PPStickers as int[]);
+    int[] oldPPStickers = (old.PPStickers as int[]);
+    if (!currentPPStickers.SequenceEqual(oldPPStickers)) 
+    {
+        if (settings["ppStickers1"])
+        {
+            vars.PendingSplits = currentPPStickers.Sum() - oldPPStickers.Sum() - 1;
+            return true;
+        }
+        return settings["ppStickers2"];
+    }
+
     // Generic Case Split
     if (old.CaseMenuState == 2 && current.CaseMenuState == 0)
     {
