@@ -253,19 +253,19 @@ init
     };
 
     // Used for room transition splits
-    vars.CaseProgress = new Dictionary<double, HashSet<int>>
+    vars.CaseProgress = new Dictionary<string, HashSet<int>>
     {
-        {1,   new HashSet<int>(Enumerable.Range(10, 150))},
-        {2,   new HashSet<int>(Enumerable.Range(160, 20))},
-        {2.1, new HashSet<int>(Enumerable.Range(180, 25))},  // Case 2 after saving Barnaby
-        {2.2, new HashSet<int>(Enumerable.Range(215, 1))},   // Case 2 after picking up first-aid
-        {4,   new HashSet<int>(Enumerable.Range(230, 21))},
-        {5,   new HashSet<int>(Enumerable.Range(270, 21))},
-        {7,   new HashSet<int>(Enumerable.Range(320, 21))},
-        {8,   new HashSet<int>(Enumerable.Range(350, 20))},
-        {8.1, new HashSet<int>(Enumerable.Range(370, 20))},
-        {9,   new HashSet<int>(Enumerable.Range(500, 150))}, // Overtime
-        {9.1, new HashSet<int>(Enumerable.Range(650, 999))}, // Overtime after supplies
+        {"1",   new HashSet<int>(Enumerable.Range(10, 150))},
+        {"2",   new HashSet<int>(Enumerable.Range(160, 20))},
+        {"2.1", new HashSet<int>(Enumerable.Range(180, 25))},  // Case 2 after saving Barnaby
+        {"2.2", new HashSet<int>(Enumerable.Range(215, 1))},   // Case 2 after picking up first-aid
+        {"4",   new HashSet<int>(Enumerable.Range(230, 21))},
+        {"5",   new HashSet<int>(Enumerable.Range(270, 21))},
+        {"7",   new HashSet<int>(Enumerable.Range(320, 21))},
+        {"8",   new HashSet<int>(Enumerable.Range(350, 20))},
+        {"8.1", new HashSet<int>(Enumerable.Range(370, 20))},
+        {"9",   new HashSet<int>(Enumerable.Range(500, 150))}, // Overtime
+        {"9.1", new HashSet<int>(Enumerable.Range(650, 999))}, // Overtime after supplies
     };
 
     // Represents the progress level at the starts of cases for splits.
@@ -412,8 +412,8 @@ split
     {
         if (vars.Rooms.ContainsKey(current.RoomId) && vars.Rooms.ContainsKey(old.RoomId))
         {
-            double chapter = 0;
-            foreach (double key in vars.CaseProgress.Keys)
+            string chapter = "0";
+            foreach (string key in vars.CaseProgress.Keys)
             {
                 if (vars.CaseProgress[key].Contains(current.CampaignProgress))
                 {
@@ -422,7 +422,7 @@ split
                 }
             }
 
-            string settingsKey = "case" + chapter.ToString() + vars.Rooms[old.RoomId] + "->" + vars.Rooms[current.RoomId];
+            string settingsKey = "case" + chapter + vars.Rooms[old.RoomId] + "->" + vars.Rooms[current.RoomId];
             if (vars.Splits.Contains(settingsKey))
             {
                 return false;
