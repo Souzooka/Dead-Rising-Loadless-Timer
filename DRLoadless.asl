@@ -14,6 +14,8 @@ state("DeadRising", "SteamPatch3")
     int PlayerLevel : 0x1946950, 0x68;
     int RoomId : 0x1945F70, 0x48;
     float BossHealth : 0x1CF2620, 0x118, 0x12EC;
+    float Boss2Health : 0x1CF2620, 0x118, 0x10, 0x12EC;
+    float Boss3Health : 0x1CF2620, 0x118, 0x10, 0x10, 0x12EC;
     uint PhotoStatsPtr : 0x1959EA0, 0xA8;
 }
 
@@ -206,6 +208,18 @@ startup
                 settings.Add("case9.1T1->T2", false, "Tunnels 1->Tunnels 2", "overtimeTransitions");
                 settings.Add("case9.1T2->T3", false, "Tunnels 2->Tunnels 3", "overtimeTransitions");
 
+        settings.Add("psycho", false, "Psychopaths", "splits");
+            settings.Add("psychoKent1", false, "Kent First Encounter", "psycho");
+            settings.Add("psychoCliff", false, "Cliff", "psycho");
+            settings.Add("psychoCletus", false, "Cletus", "psycho");
+            settings.Add("psychoAdam", false, "Adam", "psycho");
+            settings.Add("psychoKent2", false, "Kent Second Encounter", "psycho");
+            settings.Add("psychoJo", false, "Jo", "psycho");
+            settings.Add("psychoBrad", false, "Brad", "psycho");
+            settings.Add("psychoSnipers", false, "Snipers", "psycho");
+            settings.Add("psychoSean", false, "Sean", "psycho");
+            settings.Add("psychoPaul", false, "Paul", "psycho");
+            settings.Add("psychoKent3", false, "Kent Third Encounter", "psycho");
 
         // Max Level
         settings.Add("maxLevel", false, "Max Level", "splits");
@@ -244,6 +258,15 @@ init
         {26,  "case4IsabelaStart"},
         {31,  "case5Zombie"},
         {53,  "endingA"},
+        {70,  "psychoKent3"},
+        {71,  "psychoCliff"},
+        {72,  "psychoCletus"},
+        {73,  "psychoSean"},
+        {74,  "psychoAdam"},
+        {75,  "psychoJo"},
+        {76,  "psychoPaul"},
+        {112, "psychoKent1"},
+        {117, "psychoKent2"},
         {125, "otClockTower"},
         {126, "otQueens"},
         {131, "otSupplies"},
@@ -476,5 +499,24 @@ split
                 return settings["kills" + count.ToString()];
             }
         };
+    }
+
+    // Psycho Brad
+    if (old.CaseMenuState == 0 && current.CaseMenuState == 2 && current.CutsceneId == 9)
+    {
+        // The truth vanished
+        if (current.CampaignProgress == 1100)
+        {
+            return settings["psychoBrad"];
+        }
+    }
+
+    // Psycho Snipers
+    if (current.CutsceneId == 64 && current.RoomId == 256 && 
+        ((current.BossHealth == 0 && old.BossHealth != 0 && current.Boss2Health == 0 && current.Boss3Health == 0) || 
+        (current.Boss2Health == 0 && old.Boss2Health != 0 && current.BossHealth == 0 && current.Boss3Health == 0) ||
+        (current.Boss3Health == 0 && old.Boss3Health != 0 && current.Boss2Health == 0 && current.BossHealth == 0)))
+    {
+        return settings["psychoSnipers"];
     }
 }
