@@ -17,6 +17,7 @@ state("DeadRising", "SteamPatch3")
     float Boss2Health : 0x1CF2620, 0x118, 0x10, 0x12EC;
     float Boss3Health : 0x1CF2620, 0x118, 0x10, 0x10, 0x12EC;
     uint PhotoStatsPtr : 0x1959EA0, 0xA8;
+    int safeSurvivorsCount : 0x19464F0, 0x38;
 }
 
 startup
@@ -221,6 +222,8 @@ startup
             settings.Add("psychoPaul", false, "Paul", "psycho");
             settings.Add("psychoKent3", false, "Kent Third Encounter", "psycho");
 
+        settings.Add("survivor", false, "Survivors", "splits");
+
         // Max Level
         settings.Add("maxLevel", false, "Max Level", "splits");
             for (int level = 5; level <= 50; level += 5)
@@ -246,6 +249,8 @@ init
 {
     // Pending splits (for PP collector mostly)
     vars.PendingSplits = 0;
+
+    vars.SurvivorCount = 0;
 
     // Keep track of hit splits
     vars.Splits = new HashSet<string>();
@@ -499,6 +504,16 @@ split
                 return settings["kills" + count.ToString()];
             }
         };
+    }
+
+    // Generic Survivor
+    if (old.safeSurvivorsCount != 0)
+    {
+        if (vars.SurvivorCount < current.safeSurvivorsCount)
+        {
+            vars.SurvivorCount = current.safeSurvivorsCount;
+            return settings["survivor"];
+        }
     }
 
     // Psycho Brad
