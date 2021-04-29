@@ -61,6 +61,7 @@ startup
             // Case 2
             settings.Add("case2", false, "Case 2 Splits", "72Hour");
                 settings.Add("case2.1", false, "Case 2-1", "case2");
+                settings.Add("case2Steven", false, "Steven", "case2");
                 settings.Add("case2FirstAid", false, "First Aid", "case2");
                 settings.Add("case2.2", false, "Case 2-2", "case2");
                 settings.Add("case2.3", false, "Case 2-3", "case2");
@@ -265,6 +266,7 @@ init
     {
         {3,   "case1Barnaby"},
         {4,   "case1Prologue"},
+        {22,  "case2Steven"},
         {26,  "case4IsabelaStart"},
         {31,  "case5Zombie"},
         {53,  "endingA"},
