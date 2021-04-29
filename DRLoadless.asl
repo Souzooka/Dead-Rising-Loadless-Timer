@@ -16,6 +16,9 @@ state("DeadRising", "SteamPatch3")
     float BossHealth : 0x1CF2620, 0x118, 0x12EC;
     float Boss2Health : 0x1CF2620, 0x118, 0x10, 0x12EC;
     float Boss3Health : 0x1CF2620, 0x118, 0x10, 0x10, 0x12EC;
+    float Convict1Health : 0x1CF2620, 0xA0, 0x1220, 0x1C0, 0x12EC;
+    float Convict2Health : 0x1CF2620, 0xA0, 0x1220, 0x1A0, 0x12EC;
+    float Convict3Health : 0x1CF2620, 0xA0, 0x1220, 0x1A0, 0x12EC;
     uint PhotoStatsPtr : 0x1959EA0, 0xA8;
     int safeSurvivorsCount : 0x19464F0, 0x38;
 }
@@ -209,8 +212,9 @@ startup
                 settings.Add("case9.1T1->T2", false, "Tunnels 1->Tunnels 2", "overtimeTransitions");
                 settings.Add("case9.1T2->T3", false, "Tunnels 2->Tunnels 3", "overtimeTransitions");
 
-        settings.Add("psycho", false, "Psychopaths", "splits");
+        settings.Add("psycho", false, "PsychoSkip", "splits");
             settings.Add("psychoKent1", false, "Kent First Encounter", "psycho");
+            settings.Add("psychoConvicts1", false, "Convicts First Encounter", "psycho");
             settings.Add("psychoCliff", false, "Cliff", "psycho");
             settings.Add("psychoCletus", false, "Cletus", "psycho");
             settings.Add("psychoAdam", false, "Adam", "psycho");
@@ -218,6 +222,7 @@ startup
             settings.Add("psychoJo", false, "Jo", "psycho");
             settings.Add("psychoBrad", false, "Brad", "psycho");
             settings.Add("psychoSnipers", false, "Snipers", "psycho");
+            settings.Add("psychoConvicts2", false, "Convicts Second Encounter", "psycho");
             settings.Add("psychoSean", false, "Sean", "psycho");
             settings.Add("psychoPaul", false, "Paul", "psycho");
             settings.Add("psychoKent3", false, "Kent Third Encounter", "psycho");
@@ -526,12 +531,30 @@ split
         }
     }
 
-    // Psycho Snipers
+    // Snipers
     if (current.CutsceneId == 64 && current.RoomId == 256 && 
         ((current.BossHealth == 0 && old.BossHealth != 0 && current.Boss2Health == 0 && current.Boss3Health == 0) || 
         (current.Boss2Health == 0 && old.Boss2Health != 0 && current.BossHealth == 0 && current.Boss3Health == 0) ||
         (current.Boss3Health == 0 && old.Boss3Health != 0 && current.Boss2Health == 0 && current.BossHealth == 0)))
     {
         return settings["psychoSnipers"];
+    }
+
+    // Convicts First Encounter
+    if (current.RoomId == 1792 && current.CutsceneId == 63 &&
+        ((current.Convict1Health == 0 && old.Convict1Health != 0 && current.Convict2Health == 0 && current.Convict3Health == 0) || 
+        (current.Convict2Health == 0 && old.Convict2Health != 0 && current.Convict1Health == 0 && current.Convict3Health == 0) ||
+        (current.Convict3Health == 0 && old.Convict3Health != 0 && current.Convict2Health == 0 && current.Convict1Health == 0)))
+    {
+        return settings["psychoConvicts1"];
+    }
+
+    // Convicts Second Encounter
+    if (current.RoomId == 1792 && current.CutsceneId != 63 &&
+        ((current.Convict1Health == 0 && old.Convict1Health != 0 && current.Convict2Health == 0 && current.Convict3Health == 0) || 
+        (current.Convict2Health == 0 && old.Convict2Health != 0 && current.Convict1Health == 0 && current.Convict3Health == 0) ||
+        (current.Convict3Health == 0 && old.Convict3Health != 0 && current.Convict2Health == 0 && current.Convict1Health == 0)))
+    {
+        return settings["psychoConvicts2"];
     }
 }
