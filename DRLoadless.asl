@@ -20,7 +20,6 @@ state("DeadRising", "SteamPatch3")
     float Convict2Health : 0x1CF2620, 0xA0, 0x1220, 0x1A0, 0x12EC;
     float Convict3Health : 0x1CF2620, 0xA0, 0x1220, 0x1A0, 0x12EC;
     uint PhotoStatsPtr : 0x1959EA0, 0xA8;
-    int safeSurvivorsCount : 0x19464F0, 0x38;
 }
 
 startup
@@ -230,7 +229,57 @@ startup
             settings.Add("psychoPaul", false, "Paul", "psycho");
             settings.Add("psychoKent3", false, "Kent Third Encounter", "psycho");
 
-        settings.Add("survivor", false, "Survivors", "splits");
+        settings.Add("survivor", false, "SurvivorSkip", "splits"); 
+            settings.Add("uNpc00", false, "Burt Thompson", "survivor");
+            settings.Add("uNpc01", false, "Heather Tompkins", "survivor");
+            settings.Add("uNpc02", false, "Nathalie Meyer", "survivor");
+            settings.Add("uNpc03", false, "Gordon Stalworth", "survivor");
+            settings.Add("uNpc04", false, "Aaron Swoop", "survivor");
+            settings.Add("uNpc05", false, "Jeff Meyer", "survivor");
+            settings.Add("uNpc06", false, "Pamela Tompkins", "survivor");
+            settings.Add("uNpc07", false, "Kindell Johnson", "survivor");
+            settings.Add("uNpc08", false, "Jolie Wu", "survivor");
+            settings.Add("uNpc09", false, "Rachel Decker", "survivor");
+            settings.Add("uNpc0a", false, "Susan Walsh", "survivor");
+            settings.Add("uNpc0b", false, "Ronald Shiner", "survivor");
+            settings.Add("uNpc0c", false, "Leah Stein", "survivor");
+            settings.Add("uNpc0d", false, "David Bailey", "survivor");
+            settings.Add("uNpc0e", false, "Floyd Sanders", "survivor"); 
+            settings.Add("uNpc0f", false, "Yuu Tanaka", "survivor");
+            settings.Add("uNpc10", false, "Shinji Kitano", "survivor");
+            settings.Add("uNpc11", false, "Tonya Waters", "survivor");
+            settings.Add("uNpc12", false, "Ross Folk", "survivor");
+            settings.Add("uNpc13", false, "Wayne Blackwell", "survivor");
+            settings.Add("uNpc14", false, "Bill Brenton", "survivor");
+            settings.Add("uNpc15", false, "Sally Mills", "survivor");
+            settings.Add("uNpc16", false, "Nick Evans", "survivor");
+            settings.Add("uNpc17", false, "Leroy McKenna", "survivor");
+            settings.Add("uNpc18", false, "Simone Ravendark", "survivor");
+            settings.Add("uNpc19", false, "Gil Jimenez", "survivor");
+            settings.Add("uNpc1a", false, "Brett Styles", "survivor");
+            settings.Add("uNpc1b", false, "Jonathan Picardsen", "survivor"); 
+            settings.Add("uNpc1d", false, "Alyssa Laurent", "survivor");
+            settings.Add("uNpc1e", false, "Paul Carson", "survivor");
+            settings.Add("uNpc1f", false, "Sophie Richards", "survivor");
+            settings.Add("uNpc20", false, "Jennifer Gorman", "survivor");
+            settings.Add("uNpc21", false, "Kent Swanson", "survivor");
+            settings.Add("uNpc40", false, "Ray Mathison", "survivor");
+            settings.Add("uNpc42", false, "Nathan Crabbe", "survivor");
+            settings.Add("uNpc44", false, "Michelle Feltz", "survivor");
+            settings.Add("uNpc45", false, "Cheryl Jones", "survivor");
+            settings.Add("uNpc46", false, "Beth Shrake", "survivor");
+            settings.Add("uNpc4c", false, "Josh Manning", "survivor");
+            settings.Add("uNpc4d", false, "Barbara Patterson", "survivor");
+            settings.Add("uNpc4e", false, "Rich Atkins", "survivor");
+            settings.Add("uNpc4f", false, "Mindy Baker", "survivor");
+            settings.Add("uNpc50", false, "Debbie Willet", "survivor");
+            settings.Add("uNpc52", false, "Tad Hawthorne", "survivor");
+            settings.Add("uNpc54", false, "Greg Simpson", "survivor");
+            settings.Add("uNpc56", false, "Kay Nelson", "survivor");
+            settings.Add("uNpc57", false, "Lilly Deacon", "survivor");
+            settings.Add("uNpc59", false, "Kelly Carpenter", "survivor");
+            settings.Add("uNpc5a", false, "Janet Star", "survivor");
+            settings.Add("survivorEscape", false, "Ending B", "survivor");
 
         // Max Level
         settings.Add("maxLevel", false, "Max Level", "splits");
@@ -258,8 +307,6 @@ init
     // Pending splits (for PP collector mostly)
     vars.PendingSplits = 0;
 
-    vars.SurvivorCount = 0;
-
     // Keep track of hit splits
     vars.Splits = new HashSet<string>();
 
@@ -286,6 +333,7 @@ init
         {131, "otSupplies"},
         {136, "otTunnel"},
         {140, "otDrone"},
+        {143, "survivorEscape"},
         {144, "otTank"},
     };
 
@@ -360,6 +408,18 @@ init
     // For starting on player control
     vars.PrimeStart = false;
     vars.WillStart = false;
+
+    // Add Watchers for NPC Statues
+    vars.NPCStates = new MemoryWatcherList();
+
+    for (int i = 0; i < 51; ++i)
+    {
+        var statePtr = new DeepPointer("DeadRising.exe", 0x1946660, 0x58, 0x8 * i, 0x44);
+        var watcher = new MemoryWatcher<byte>(statePtr) { Name = i.ToString() };
+
+        vars.NPCStates.Add(watcher);
+    }
+
     // Add Watchers for NPC Health
     vars.NPCHealth = new MemoryWatcherList();
 
@@ -525,13 +585,20 @@ split
         };
     }
 
-    // Generic Survivor
-    if (old.safeSurvivorsCount != 0)
+    // Survivors
+
+    if (settings["survivor"])
     {
-        if (vars.SurvivorCount < current.safeSurvivorsCount)
+        vars.NPCStates.UpdateAll(game);
+
+        foreach (var watcher in vars.NPCStates)
         {
-            vars.SurvivorCount = current.safeSurvivorsCount;
-            return settings["survivor"];
+            if (watcher.Changed && watcher.Current == 4)
+            {
+                int i = int.Parse(watcher.Name);
+                string npcName = new DeepPointer("DeadRising.exe", 0x1946660, 0x58, 0x8 * i, 0x8, 0x8).DerefString(game, 6);
+                return settings[npcName];
+            }
         }
     }
 
