@@ -39,6 +39,7 @@ startup
                 settings.Add("case1.2", false, "Case 1-2", "case1");
                 settings.Add("case1.3", false, "Case 1-3", "case1");
                 settings.Add("case1.4", false, "Case 1-4", "case1");
+                settings.Add("convicts", false, "Convicts", "case1");
                 settings.Add("case1Transitions", false, "Room Transitions", "case1");
                     settings.Add("case1HP->SR", false, "Helipad->Security Room", "case1Transitions");
                     settings.Add("case1SR->EP", false, "Security Room->Entrance Plaza", "case1Transitions");
@@ -219,6 +220,7 @@ startup
             settings.Add("psychoCliff", false, "Cliff", "psycho");
             settings.Add("psychoCletus", false, "Cletus", "psycho");
             settings.Add("psychoAdam", false, "Adam", "psycho");
+            settings.Add("psychoGreg", false, "Greg", "psycho");
             settings.Add("psychoKent2", false, "Kent Second Encounter", "psycho");
             settings.Add("psychoJo", false, "Jo", "psycho");
             settings.Add("psychoBrad", false, "Brad", "psycho");
@@ -358,6 +360,16 @@ init
     // For starting on player control
     vars.PrimeStart = false;
     vars.WillStart = false;
+    // Add Watchers for NPC Health
+    vars.NPCHealth = new MemoryWatcherList();
+
+    for (int i = 0; i < 51; ++i)
+    {
+        var healthPtr = new DeepPointer("DeadRising.exe", 0x1946660, 0x58, 0x8 * i, 0x18);
+        var watcher = new MemoryWatcher<uint>(healthPtr) { Name = i.ToString() };
+
+        vars.NPCHealth.Add(watcher);
+    }
 }
 
 update 
@@ -523,40 +535,54 @@ split
         }
     }
 
-    // Psycho Brad
-    if (old.CaseMenuState == 0 && current.CaseMenuState == 2 && current.CutsceneId == 9)
+    if (settings["psycho"])
     {
-        // The truth vanished
-        if (current.CampaignProgress == 1100)
+        // Greg Skip
+        if (settings["psychoGreg"])
         {
-            return settings["psychoBrad"];
+            vars.NPCHealth.UpdateAll(game);
+
+            foreach (var watcher in vars.NPCHealth)
+            {
+                if (watcher.Changed && watcher.Current == uint.MaxValue)
+                {
+                    int i = int.Parse(watcher.Name);
+                    string npcName = new DeepPointer("DeadRising.exe", 0x1946660, 0x58, 0x8 * i, 0x8, 0x8).DerefString(game, 6);
+            
+                    if (npcName == "uNpc54")
+                    {
+                        return settings["psychoGreg"];
+                    }
+                }
+            }
+        }
+
+        // Brad death
+        if (old.CaseMenuState == 0 && current.CaseMenuState == 2 && current.CutsceneId == 9)
+        {
+            // The truth vanished
+            if (current.CampaignProgress == 1100)
+            {
+                return settings["psychoBrad"];
+            }
+        }
+
+        // Snipers
+        if (current.CutsceneId == 64 && current.RoomId == 256 && 
+            ((current.BossHealth == 0 && old.BossHealth != 0 && current.Boss2Health == 0 && current.Boss3Health == 0) || 
+            (current.Boss2Health == 0 && old.Boss2Health != 0 && current.BossHealth == 0 && current.Boss3Health == 0) ||
+            (current.Boss3Health == 0 && old.Boss3Health != 0 && current.Boss2Health == 0 && current.BossHealth == 0)))
+        {
+            return settings["psychoSnipers"];
         }
     }
 
-    // Snipers
-    if (current.CutsceneId == 64 && current.RoomId == 256 && 
-        ((current.BossHealth == 0 && old.BossHealth != 0 && current.Boss2Health == 0 && current.Boss3Health == 0) || 
-        (current.Boss2Health == 0 && old.Boss2Health != 0 && current.BossHealth == 0 && current.Boss3Health == 0) ||
-        (current.Boss3Health == 0 && old.Boss3Health != 0 && current.Boss2Health == 0 && current.BossHealth == 0)))
-    {
-        return settings["psychoSnipers"];
-    }
-
-    // Convicts First Encounter
-    if (current.RoomId == 1792 && current.CutsceneId == 63 &&
+    // Convicts
+    if (current.RoomId == 1792 &&
         ((current.Convict1Health == 0 && old.Convict1Health != 0 && current.Convict2Health == 0 && current.Convict3Health == 0) || 
         (current.Convict2Health == 0 && old.Convict2Health != 0 && current.Convict1Health == 0 && current.Convict3Health == 0) ||
         (current.Convict3Health == 0 && old.Convict3Health != 0 && current.Convict2Health == 0 && current.Convict1Health == 0)))
     {
-        return settings["psychoConvicts1"];
-    }
-
-    // Convicts Second Encounter
-    if (current.RoomId == 1792 && current.CutsceneId != 63 &&
-        ((current.Convict1Health == 0 && old.Convict1Health != 0 && current.Convict2Health == 0 && current.Convict3Health == 0) || 
-        (current.Convict2Health == 0 && old.Convict2Health != 0 && current.Convict1Health == 0 && current.Convict3Health == 0) ||
-        (current.Convict3Health == 0 && old.Convict3Health != 0 && current.Convict2Health == 0 && current.Convict1Health == 0)))
-    {
-        return settings["psychoConvicts2"];
+        return settings["convicts1"] || settings["psychoConvicts2"];
     }
 }
