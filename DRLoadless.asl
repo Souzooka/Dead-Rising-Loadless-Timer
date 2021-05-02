@@ -299,7 +299,6 @@ startup
         // PP stickers
         settings.Add("ppStickers", false, "PP Stickers", "splits");
             settings.Add("ppStickers1", false, "Split on every sticker", "ppStickers");
-            settings.Add("ppStickers2", false, "Split on every photo which includes PP stickers", "ppStickers");
 }
 
 init 
@@ -430,14 +429,21 @@ init
 
         vars.NPCHealth.Add(watcher);
     }
+
+    // Add Watchers for PP Stickers
+    vars.PPStickersWatchers = new MemoryWatcherList();
+
+    for (int i = 0; i < 100; ++i)
+    {
+        var ppStickerPtr = new DeepPointer("DeadRising.exe", 0x1CF3128, 0x40, 0x6E8 + (0x4 * i));
+        var watcher = new MemoryWatcher<int>(ppStickerPtr) { Name = i.ToString() };
+
+        vars.PPStickersWatchers.Add(watcher);
+    }
 }
 
 update 
 {
-    // Update PP stickers
-    uint ptr = current.PhotoStatsPtr;
-    current.PPStickers = new int[100].Select((_, i) => memory.ReadValue<int>((IntPtr)(4 * i + ptr + 0x2A8))).ToArray();
-
     // Clear any hit splits if timer stops
     if (timer.CurrentPhase == TimerPhase.NotRunning)
     {
@@ -481,19 +487,6 @@ split
 {
     // Any pending splits (only used if you get multiple PP stickers in one shot)
     if (vars.PendingSplits-- > 0) { return true; }
-
-    // PP Stickers
-    int[] currentPPStickers = (current.PPStickers as int[]);
-    int[] oldPPStickers = (old.PPStickers as int[]);
-    if (!currentPPStickers.SequenceEqual(oldPPStickers)) 
-    {
-        if (settings["ppStickers1"])
-        {
-            vars.PendingSplits = currentPPStickers.Sum() - oldPPStickers.Sum() - 1;
-            return true;
-        }
-        return settings["ppStickers2"];
-    }
 
     // Generic Case Split
     if (old.CaseMenuState == 2 && current.CaseMenuState == 0)
@@ -651,5 +644,18 @@ split
         (current.Convict3Health == 0 && old.Convict3Health != 0 && current.Convict2Health == 0 && current.Convict1Health == 0)))
     {
         return settings["convicts1"] || settings["psychoConvicts2"];
+    }
+    // PP Stickers
+    if (settings["ppStickers1"])
+    {
+        vars.PPStickersWatchers.UpdateAll(game);
+
+        foreach (var watcher in vars.PPStickersWatchers)
+        {
+            if (watcher.Changed)
+            {
+                return settings["ppStickers1"];
+            }
+        }
     }
 }
