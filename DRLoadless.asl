@@ -400,10 +400,6 @@ init
         {2818, "T3"},  // Tunnels 3
     };
 
-    // Track PP stickers array
-    uint ptr = current.PhotoStatsPtr;
-    current.PPStickers = new int[100].Select((_, i) => memory.ReadValue<int>((IntPtr)(4 * i + ptr + 0x2A8))).ToArray();
-
     // For starting on player control
     vars.PrimeStart = false;
     vars.WillStart = false;
@@ -560,41 +556,7 @@ split
         return settings["otBrock"];
     }
 
-    // Max Level
-    if (current.PlayerLevel != old.PlayerLevel)
-    {
-        return settings["level" + current.PlayerLevel.ToString()];
-    }
-
-    // Zombie Genocider
-    if (current.PlayerKills != old.PlayerKills)
-    {
-        foreach(int count in vars.GenociderKills)
-        {
-            if (old.PlayerKills < count && count <= current.PlayerKills)
-            {
-                return settings["kills" + count.ToString()];
-            }
-        };
-    }
-
-    // Survivors
-
-    if (settings["survivor"])
-    {
-        vars.NPCStates.UpdateAll(game);
-
-        foreach (var watcher in vars.NPCStates)
-        {
-            if (watcher.Changed && watcher.Current == 4)
-            {
-                int i = int.Parse(watcher.Name);
-                string npcName = new DeepPointer("DeadRising.exe", 0x1946660, 0x58, 0x8 * i, 0x8, 0x8).DerefString(game, 6);
-                return settings[npcName];
-            }
-        }
-    }
-
+    // Psycho
     if (settings["psycho"])
     {
         // Greg Skip
@@ -645,6 +607,41 @@ split
     {
         return settings["convicts1"] || settings["psychoConvicts2"];
     }
+
+    // Survivors
+    if (settings["survivor"])
+    {
+        vars.NPCStates.UpdateAll(game);
+
+        foreach (var watcher in vars.NPCStates)
+        {
+            if (watcher.Changed && watcher.Current == 4)
+            {
+                int i = int.Parse(watcher.Name);
+                string npcName = new DeepPointer("DeadRising.exe", 0x1946660, 0x58, 0x8 * i, 0x8, 0x8).DerefString(game, 6);
+                return settings[npcName];
+            }
+        }
+    }
+
+    // Max Level
+    if (current.PlayerLevel != old.PlayerLevel)
+    {
+        return settings["level" + current.PlayerLevel.ToString()];
+    }
+
+    // Zombie Genocider
+    if (current.PlayerKills != old.PlayerKills)
+    {
+        foreach(int count in vars.GenociderKills)
+        {
+            if (old.PlayerKills < count && count <= current.PlayerKills)
+            {
+                return settings["kills" + count.ToString()];
+            }
+        };
+    }
+
     // PP Stickers
     if (settings["ppStickers1"])
     {
