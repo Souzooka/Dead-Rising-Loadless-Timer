@@ -299,12 +299,15 @@ startup
         // PP stickers
         settings.Add("ppStickers", false, "PP Stickers", "splits");
             settings.Add("ppStickers1", false, "Split on every sticker", "ppStickers");
+            settings.Add("ppStickers2", false, "Split on every photo which includes PP stickers", "ppStickers");
 }
 
 init 
 {
     // Pending splits (for PP collector mostly)
     vars.PendingSplits = 0;
+
+    vars.PPStickersCount = 0;
 
     // Keep track of hit splits
     vars.Splits = new HashSet<string>();
@@ -425,17 +428,6 @@ init
 
         vars.NPCHealth.Add(watcher);
     }
-
-    // Add Watchers for PP Stickers
-    vars.PPStickersWatchers = new MemoryWatcherList();
-
-    for (int i = 0; i < 100; ++i)
-    {
-        var ppStickerPtr = new DeepPointer("DeadRising.exe", 0x1CF3128, 0x40, 0x6E8 + (0x4 * i));
-        var watcher = new MemoryWatcher<int>(ppStickerPtr) { Name = i.ToString() };
-
-        vars.PPStickersWatchers.Add(watcher);
-    }
 }
 
 update 
@@ -465,6 +457,20 @@ start
     {
         vars.PrimeStart = false;
         vars.WillStart = false;
+
+        // Add Watchers for PP Stickers
+        vars.PPStickersWatchers = new MemoryWatcherList();
+
+        current.PPStickersCount = 0;
+        for (int i = 0; i < 100; ++i)
+        {
+            var ppStickerPtr = new DeepPointer("DeadRising.exe", 0x1CF3128, 0x40, 0x6E8 + (0x4 * i));
+            var watcher = new MemoryWatcher<int>(ppStickerPtr) { Name = i.ToString() };
+
+            vars.PPStickersCount += watcher.Current;
+            vars.PPStickersWatchers.Add(watcher);
+        }
+
         return true;
     }
 }
@@ -639,19 +645,35 @@ split
             {
                 return settings["kills" + count.ToString()];
             }
-        };
+        }
     }
 
     // PP Stickers
-    if (settings["ppStickers1"])
+    if (settings["ppStickers"])
     {
+        if (vars.PendingSplits-- > 0) { return true; }
+
         vars.PPStickersWatchers.UpdateAll(game);
+
+        int CurrentPPStickersCount = 0;
 
         foreach (var watcher in vars.PPStickersWatchers)
         {
-            if (watcher.Changed)
+            CurrentPPStickersCount += watcher.Current;
+        }
+
+        if (CurrentPPStickersCount > vars.PPStickersCount)
+        {
+            if (settings["ppStickers1"])
             {
-                return settings["ppStickers1"];
+                vars.PendingSplits = CurrentPPStickersCount - vars.PPStickersCount - 1;
+                vars.PPStickersCount = CurrentPPStickersCount;
+                return true;
+            }
+            else if(settings["ppStickers2"])
+            {
+                vars.PPStickersCount = CurrentPPStickersCount;
+                return true;
             }
         }
     }
