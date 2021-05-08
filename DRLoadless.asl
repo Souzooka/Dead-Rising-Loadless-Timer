@@ -307,6 +307,7 @@ init
     // Pending splits (for PP collector mostly)
     vars.PendingSplits = 0;
 
+    // A PP Sticker Counter
     vars.PPStickersCount = 0;
 
     // Keep track of hit splits
@@ -406,10 +407,10 @@ init
     // For starting on player control
     vars.PrimeStart = false;
     vars.WillStart = false;
-
+    
     // Add Watchers for NPC Statues
     vars.NPCStates = new MemoryWatcherList();
-
+    
     for (int i = 0; i < 51; ++i)
     {
         var statePtr = new DeepPointer("DeadRising.exe", 0x1946660, 0x58, 0x8 * i, 0x44);
@@ -428,6 +429,10 @@ init
 
         vars.NPCHealth.Add(watcher);
     }
+
+    // Use for PP Stickers
+    vars.PPStickersLoaded = false;
+    vars.PPStickersWatchers = new MemoryWatcherList();
 }
 
 update 
@@ -436,6 +441,7 @@ update
     if (timer.CurrentPhase == TimerPhase.NotRunning)
     {
         vars.Splits.Clear();
+        vars.PPStickersLoaded = false;
     }
 
     // For starting on player control
@@ -458,17 +464,21 @@ start
         vars.PrimeStart = false;
         vars.WillStart = false;
 
-        // Add Watchers for PP Stickers
-        vars.PPStickersWatchers = new MemoryWatcherList();
-
-        current.PPStickersCount = 0;
-        for (int i = 0; i < 100; ++i)
+        // Load the PP Stickers watchers
+        if (settings["ppStickers"] && !vars.PPStickersLoaded)
         {
-            var ppStickerPtr = new DeepPointer("DeadRising.exe", 0x1CF3128, 0x40, 0x6E8 + (0x4 * i));
-            var watcher = new MemoryWatcher<int>(ppStickerPtr) { Name = i.ToString() };
+            current.PPStickersCount = 0;
 
-            vars.PPStickersCount += watcher.Current;
-            vars.PPStickersWatchers.Add(watcher);
+            for (int i = 0; i < 100; ++i)
+            {
+                var ppStickerPtr = new DeepPointer("DeadRising.exe", 0x1CF3128, 0x40, 0x6E8 + (0x4 * i));
+                var watcher = new MemoryWatcher<int>(ppStickerPtr) { Name = i.ToString() };
+
+                vars.PPStickersCount += ppStickerPtr.Deref<int>(game);
+                vars.PPStickersWatchers.Add(watcher);
+            }
+            
+            vars.PPStickersLoaded = true;
         }
 
         return true;
@@ -649,7 +659,7 @@ split
     }
 
     // PP Stickers
-    if (settings["ppStickers"])
+    if (settings["ppStickers"] && vars.PPStickersLoaded)
     {
         if (vars.PendingSplits-- > 0) { return true; }
 
