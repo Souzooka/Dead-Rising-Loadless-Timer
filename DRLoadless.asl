@@ -467,7 +467,8 @@ start
         // Load the PP Stickers watchers
         if (settings["ppStickers"] && !vars.PPStickersLoaded)
         {
-            current.PPStickersCount = 0;
+            vars.PPStickersCount = 0;
+            vars.PPStickersWatchers.Clear();
 
             for (int i = 0; i < 100; ++i)
             {
