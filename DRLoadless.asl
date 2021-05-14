@@ -590,7 +590,7 @@ split
 
             foreach (var watcher in vars.NPCHealth)
             {
-                if (watcher.Changed && (watcher.Current == uint.MaxValue || watcher.current == (uint)0))
+                if (watcher.Changed && (watcher.Current == uint.MaxValue || watcher.Current == (uint)0))
                 {
                     int i = int.Parse(watcher.Name);
                     string npcName = new DeepPointer("DeadRising.exe", 0x1946660, 0x58, 0x8 * i, 0x8, 0x8).DerefString(game, 6);
@@ -600,7 +600,7 @@ split
                     {
                         return settings["psychoGreg"];
                     }
-                    else
+                    else if (settings["willametteGenocider"] && settings["wgSurvivors"])
                     {
                         return vars.Survivors.Contains(npcName);
                     }
@@ -634,7 +634,8 @@ split
         (current.Convict2Health == 0 && old.Convict2Health != 0 && current.Convict1Health == 0 && current.Convict3Health == 0) ||
         (current.Convict3Health == 0 && old.Convict3Health != 0 && current.Convict2Health == 0 && current.Convict1Health == 0)))
     {
-        return settings["convicts1"] || settings["psychoConvicts2"];
+        print("FIRE!!!!");
+        return settings["convicts1"] || settings["psychoConvicts1"] || settings["psychoConvicts2"];
     }
 
     // Survivors
