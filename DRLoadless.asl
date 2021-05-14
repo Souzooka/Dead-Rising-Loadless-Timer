@@ -230,6 +230,8 @@ startup
             settings.Add("psychoKent3", false, "Kent Third Encounter", "psycho");
 
         settings.Add("survivor", false, "SurvivorSkip", "splits");
+            settings.Add("survivorsSafe", false, "Splits when a group of survivors enter the safe house", "survivor");
+            settings.Add("endingB", false, "Ending B", "survivor");
 
         // Max Level
         settings.Add("maxLevel", false, "Max Level", "splits");
@@ -286,7 +288,7 @@ init
         {131, "otSupplies"},
         {136, "otTunnel"},
         {140, "otDrone"},
-        {143, "survivorEscape"},
+        {143, "endingB"},
         {144, "otTank"},
     };
 
@@ -635,7 +637,7 @@ split
 
         foreach (var watcher in vars.NPCStates)
         {
-            if (watcher.Changed && watcher.Current == 4)
+            if (watcher.Changed && settings["survivorsSafe"] && watcher.Current == 3)
             {
                 int i = int.Parse(watcher.Name);
                 string npcName = new DeepPointer("DeadRising.exe", 0x1946660, 0x58, 0x8 * i, 0x8, 0x8).DerefString(game, 6);
