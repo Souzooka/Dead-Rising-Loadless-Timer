@@ -407,7 +407,7 @@ init
         "uNpc57",
         "uNpc59",
         "uNpc5a"
-    }
+    };
 
     // For starting on player control
     vars.PrimeStart = false;
