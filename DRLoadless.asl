@@ -252,6 +252,9 @@ startup
         settings.Add("ppStickers", false, "PP Stickers", "splits");
             settings.Add("ppStickers1", false, "Split on every sticker", "ppStickers");
             settings.Add("ppStickers2", false, "Split on every photo which includes PP stickers", "ppStickers");
+
+        settings.Add("willametteGenocider", false, "Willamette Genocider", "splits");
+            settings.Add("wgSurvivors", false, "Survivors death", "willametteGenocider");
 }
 
 init 
@@ -578,24 +581,28 @@ split
         return settings["otBrock"];
     }
 
-    // Psycho
-    if (settings["psycho"])
+    // Psycho and Willamette Genocider
+    if (settings["psycho"] || settings["willametteGenocider"])
     {
-        // Greg Skip
-        if (settings["psychoGreg"])
+        if (settings["psychoGreg"] || settings["wgSurvivors"])
         {
             vars.NPCHealth.UpdateAll(game);
 
             foreach (var watcher in vars.NPCHealth)
             {
-                if (watcher.Changed && watcher.Current == uint.MaxValue)
+                if (watcher.Changed && (watcher.Current == uint.MaxValue || watcher.current == (uint)0))
                 {
                     int i = int.Parse(watcher.Name);
                     string npcName = new DeepPointer("DeadRising.exe", 0x1946660, 0x58, 0x8 * i, 0x8, 0x8).DerefString(game, 6);
-            
-                    if (npcName == "uNpc54")
+
+                    // Greg Skip
+                    if (settings["psychoGreg"] && npcName == "uNpc54")
                     {
                         return settings["psychoGreg"];
+                    }
+                    else
+                    {
+                        return vars.Survivors.Contains(npcName);
                     }
                 }
             }
