@@ -415,6 +415,8 @@ init
         "uNpc5a"
     };
 
+    vars.DeadSurvivors = new List<string>();
+
     // For starting on player control
     vars.PrimeStart = false;
     vars.WillStart = false;
@@ -474,6 +476,11 @@ start
     {
         vars.PrimeStart = false;
         vars.WillStart = false;
+
+        if (settings["willametteGenocider"])
+        {
+            vars.DeadSurvivors.Clear();
+        }
 
         // Load the PP Stickers watchers
         if (settings["ppStickers"] && !vars.PPStickersLoaded)
@@ -590,7 +597,17 @@ split
         return settings["otBrock"];
     }
 
-    // Psycho and Willamette Genocider
+    // Willamette Genocider Case 1-4
+    // Generic Case Split
+    if (settings["willametteGenocider"] && old.CaseMenuState == 2 && current.CaseMenuState == 0)
+    {
+        if (current.CampaignProgress == 150)
+        {
+            return settings["case1.4"];
+        }
+    }
+
+    // Ps5ycho and Willamette Genocider
     if (settings["psycho"] || settings["willametteGenocider"])
     {
         if (settings["psychoGreg"] || settings["wgSurvivors"])
@@ -602,16 +619,25 @@ split
                 if (watcher.Changed && (watcher.Current == uint.MaxValue || watcher.Current == (uint)0))
                 {
                     int i = int.Parse(watcher.Name);
-                    string npcName = new DeepPointer("DeadRising.exe", 0x1946660, 0x58, 0x8 * i, 0x8, 0x8).DerefString(game, 6);
+                    
+                    if (game != null)
+                    {
 
-                    // Greg Skip
-                    if (settings["psychoGreg"] && npcName == "uNpc54")
-                    {
-                        return settings["psychoGreg"];
-                    }
-                    else if (settings["willametteGenocider"] && settings["wgSurvivors"])
-                    {
-                        return vars.Survivors.Contains(npcName);
+                        string npcName = new DeepPointer("DeadRising.exe", 0x1946660, 0x58, 0x8 * i, 0x8, 0x8).DerefString(game, 6);
+                    
+                        if (!string.IsNullOrEmpty(npcName) && !string.IsNullOrEmpty(npcName.Trim()) && npcName.Trim()[0] == 'u')
+                        {
+                            // Greg Skip
+                            if (settings["psychoGreg"] && npcName == "uNpc54")
+                            {
+                                return settings["psychoGreg"];
+                            }
+                            else if (settings["willametteGenocider"] && settings["wgSurvivors"] && !vars.DeadSurvivors.Contains(npcName))
+                            {
+                                vars.DeadSurvivors.Add(npcName);
+                                return vars.Survivors.Contains(npcName);
+                            }
+                        }
                     }
                 }
             }
