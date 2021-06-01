@@ -9,6 +9,7 @@ state("DeadRising", "SteamPatch3")
     byte Bombs : 0x1944DD8, 0x20DC0, 0x848D;
     int CampaignProgress : 0x1944DD8, 0x20DC0, 0x150;
     int CutsceneId : 0x1944DD8, 0x20DC0, 0x8308;
+    int Supplies : 0x1944DD8, 0x20FB0;
     int InGameTime : 0x1946FC0, 0x2F058, 0x198;
     int PlayerKills : 0x1959EA0, 0x3B0;
     int PlayerLevel : 0x1946950, 0x68;
@@ -179,6 +180,8 @@ startup
         settings.Add("overtime", false, "Overtime", "splits");
             settings.Add("otDrone", false, "Frank sees a sick RC Drone", "overtime");
             settings.Add("otSupplies", false, "Supplies", "overtime");
+                settings.Add("otSupplyTaken", false, "Splits when you grab the supplies", "otSupplies");
+                settings.Add("otSupplyHideout", false, "Back to hideout", "otSupplies");
             settings.Add("otClockTower", false, "Clock Tower", "overtime");
             settings.Add("otQueens", false, "Queens", "overtime");
             settings.Add("otTunnel", false, "Tunnel", "overtime");
@@ -288,7 +291,7 @@ init
         {117, "psychoKent2"},
         {125, "otClockTower"},
         {126, "otQueens"},
-        {131, "otSupplies"},
+        {131, "otSupplyHideout"},
         {136, "otTunnel"},
         {140, "otDrone"},
         {143, "endingB"},
@@ -575,6 +578,12 @@ split
         return settings["case7Bomb" + current.Bombs.ToString()];
     }
 
+    // Supplies
+    if(current.CutsceneId == 140 && current.Supplies > old.Supplies)
+    {
+        return settings["otSupplyTaken"];
+    }
+
     // Brock
     if (current.CutsceneId == 144 && current.BossHealth == 0 && old.BossHealth != 0)
     {
@@ -634,7 +643,6 @@ split
         (current.Convict2Health == 0 && old.Convict2Health != 0 && current.Convict1Health == 0 && current.Convict3Health == 0) ||
         (current.Convict3Health == 0 && old.Convict3Health != 0 && current.Convict2Health == 0 && current.Convict1Health == 0)))
     {
-        print("FIRE!!!!");
         return settings["convicts1"] || settings["psychoConvicts1"] || settings["psychoConvicts2"];
     }
 
