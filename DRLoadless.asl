@@ -669,7 +669,14 @@ split
         (current.Convict2Health == 0 && old.Convict2Health != 0 && current.Convict1Health == 0 && current.Convict3Health == 0) ||
         (current.Convict3Health == 0 && old.Convict3Health != 0 && current.Convict2Health == 0 && current.Convict1Health == 0)))
     {
-        return settings["convicts1"] || settings["psychoConvicts1"] || settings["psychoConvicts2"];
+        if (current.CutsceneId == 63)
+        {
+            return settings["convicts"] || settings["psychoConvicts1"];
+        }
+        else if (current.CutsceneId == 64)
+        {
+            return settings["psychoConvicts2"];
+        }
     }
 
     // Survivors
