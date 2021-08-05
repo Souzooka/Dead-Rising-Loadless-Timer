@@ -607,7 +607,7 @@ split
         }
     }
 
-    // Ps5ycho and Willamette Genocider
+    // Psycho and Willamette Genocider
     if (settings["psycho"] || settings["willametteGenocider"])
     {
         if (settings["psychoGreg"] || settings["wgSurvivors"])
