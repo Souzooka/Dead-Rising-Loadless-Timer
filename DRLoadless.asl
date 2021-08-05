@@ -516,9 +516,6 @@ isLoading
 
 split
 {
-    // Any pending splits (only used if you get multiple PP stickers in one shot)
-    if (vars.PendingSplits-- > 0) { return true; }
-
     // Generic Case Split
     if (old.CaseMenuState == 2 && current.CaseMenuState == 0)
     {
@@ -716,6 +713,7 @@ split
     // PP Stickers
     if (settings["ppStickers"] && vars.PPStickersLoaded)
     {
+        // Any pending splits (only used if you get multiple PP stickers in one shot)
         if (vars.PendingSplits-- > 0) { return true; }
 
         vars.PPStickersWatchers.UpdateAll(game);
