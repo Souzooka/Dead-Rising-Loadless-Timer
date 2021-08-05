@@ -582,21 +582,25 @@ split
     }
 
     // Bombs
-    if (current.Bombs > old.Bombs)
+    if (current.CampaignProgress <= 340 && current.CampaignProgress < 350 && current.Bombs > old.Bombs)
     {
         return settings["case7Bomb" + current.Bombs.ToString()];
     }
 
-    // Supplies
-    if(current.CutsceneId == 140 && current.Supplies > old.Supplies)
+    // Overtime splits
+    if (settings["overtime"])
     {
-        return settings["otSupplyTaken"];
-    }
+        // Supplies
+        if(current.CutsceneId == 140 && current.Supplies > old.Supplies)
+        {
+            return settings["otSupplyTaken"];
+        }
 
-    // Brock
-    if (current.CutsceneId == 144 && current.BossHealth == 0 && old.BossHealth != 0)
-    {
-        return settings["otBrock"];
+        // Brock
+        if (current.CutsceneId == 144 && current.BossHealth == 0 && old.BossHealth != 0)
+        {
+            return settings["otBrock"];
+        }
     }
 
     // Willamette Genocider Case 1-4
@@ -698,13 +702,13 @@ split
     }
 
     // Max Level
-    if (current.PlayerLevel != old.PlayerLevel)
+    if (settings["maxLevel"] && current.PlayerLevel != old.PlayerLevel)
     {
         return settings["level" + current.PlayerLevel.ToString()];
     }
 
     // Zombie Genocider
-    if (current.PlayerKills != old.PlayerKills)
+    if (settings["zombieGenocider"] && current.PlayerKills != old.PlayerKills)
     {
         foreach(int count in vars.GenociderKills)
         {
