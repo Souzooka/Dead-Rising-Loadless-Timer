@@ -25,6 +25,7 @@ state("DeadRising", "SteamPatch3")
 
 startup
 {
+    #region Settings
     // Settings tree
     settings.Add("splits", true, "All Splits");
 
@@ -33,6 +34,7 @@ startup
 
             // Case 1
             settings.Add("case1", false, "Case 1 Splits", "72Hour");
+                settings.Add("case1EntrancePlaza", false, "Entrance Plaza", "case1");
                 settings.Add("case1Barnaby", false, "Met Barnaby", "case1");
                 settings.Add("case1Prologue", false, "Prologue", "case1");
                 settings.Add("case1.1", false, "Case 1-1", "case1");
@@ -245,7 +247,7 @@ startup
 
         // Zombie Genocider
         settings.Add("zombieGenocider", false, "Zombie Genocider", "splits");
-            vars.GenociderKills = new List<int> {10000, 10719, 20000, 21438, 30000, 32157, 40000, 42876, 50000, 53594};
+            vars.GenociderKills = new List<int> {2500, 5000, 7500, 10000, 10719, 12500, 15000, 17500, 20000, 21438, 22500, 25000, 27500, 30000, 32157, 32500, 35000, 37500, 40000, 42500, 42876, 45000, 47500, 50000, 52500, 53594};
             foreach(int count in vars.GenociderKills)
             {
                 settings.Add("kills" + count.ToString(), false, String.Format("{0:n0}", count) + " kills", "zombieGenocider");
@@ -258,6 +260,8 @@ startup
 
         settings.Add("willametteGenocider", false, "Willamette Genocider", "splits");
             settings.Add("wgSurvivors", false, "Survivors death", "willametteGenocider");
+
+    #endregion Settings
 }
 
 init 
@@ -274,6 +278,7 @@ init
     // For splitting when hitting a cutscene
     vars.Cutscenes = new Dictionary<int, string>
     {
+        {2,   "case1EntrancePlaza"},
         {3,   "case1Barnaby"},
         {4,   "case1Prologue"},
         {22,  "case2Steven"},
