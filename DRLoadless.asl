@@ -541,7 +541,11 @@ split
     }
 
     // Splitting on room transitions
-    if (current.RoomId != old.RoomId)
+    if ((settings["case1Transitions"] || settings["case2Transitions"] ||
+            settings["case4Transitions"] || settings["case5Transitions"] || 
+            settings["case7Transitions"] || settings["case8Transitions"] || 
+            settings["overtimeTransitions"]) 
+            && current.RoomId != old.RoomId)
     {
         if (vars.Rooms.ContainsKey(current.RoomId) && vars.Rooms.ContainsKey(old.RoomId))
         {
