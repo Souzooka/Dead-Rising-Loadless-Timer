@@ -522,10 +522,11 @@ isLoading
 split
 {
     // Generic Case Split
-    if (old.CaseMenuState == 2 && current.CaseMenuState == 0)
+    if (old.CaseMenuState == 2 && (current.CaseMenuState == 0 || current.CaseMenuState == 19))
     {
-        if (vars.CaseStarts.ContainsKey(current.CampaignProgress))
+        if (vars.CaseStarts.ContainsKey(current.CampaignProgress) && !vars.Splits.Contains("case" + vars.CaseStarts[current.CampaignProgress]))
         {
+            vars.Splits.Add("case" + vars.CaseStarts[current.CampaignProgress]);
             return settings["case" + vars.CaseStarts[current.CampaignProgress]];
         }
     }
