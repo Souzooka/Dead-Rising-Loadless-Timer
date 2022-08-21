@@ -9,12 +9,19 @@ state("DeadRising", "SteamPatch3")
     byte Bombs : 0x1944DD8, 0x20DC0, 0x848D;
     int CampaignProgress : 0x1944DD8, 0x20DC0, 0x150;
     int CutsceneId : 0x1944DD8, 0x20DC0, 0x8308;
+    int Supplies : 0x1944DD8, 0x20FB0;
     int InGameTime : 0x1946FC0, 0x2F058, 0x198;
     int PlayerKills : 0x1959EA0, 0x3B0;
     int PlayerLevel : 0x1946950, 0x68;
     int RoomId : 0x1945F70, 0x48;
     float BossHealth : 0x1CF2620, 0x118, 0x12EC;
+    float Boss2Health : 0x1CF2620, 0x118, 0x10, 0x12EC;
+    float Boss3Health : 0x1CF2620, 0x118, 0x10, 0x10, 0x12EC;
+    float Convict1Health : 0x1CF2620, 0xA0, 0x1220, 0x1C0, 0x12EC;
+    float Convict2Health : 0x1CF2620, 0xA0, 0x1220, 0x1A0, 0x12EC;
+    float Convict3Health : 0x1CF2620, 0xA0, 0x1220, 0x180, 0x12EC;
     uint PhotoStatsPtr : 0x1959EA0, 0xA8;
+    int Transmissions : 0x1946398, 0xD10, 0xCA8, 0xCA8, 0xCB0;
 }
 
 startup
@@ -33,6 +40,7 @@ startup
                 settings.Add("case1.2", false, "Case 1-2", "case1");
                 settings.Add("case1.3", false, "Case 1-3", "case1");
                 settings.Add("case1.4", false, "Case 1-4", "case1");
+                settings.Add("convicts", false, "Convicts", "case1");
                 settings.Add("case1Transitions", false, "Room Transitions", "case1");
                     settings.Add("case1HP->SR", false, "Helipad->Security Room", "case1Transitions");
                     settings.Add("case1SR->EP", false, "Security Room->Entrance Plaza", "case1Transitions");
@@ -55,6 +63,7 @@ startup
             // Case 2
             settings.Add("case2", false, "Case 2 Splits", "72Hour");
                 settings.Add("case2.1", false, "Case 2-1", "case2");
+                settings.Add("case2Steven", false, "Steven", "case2");
                 settings.Add("case2FirstAid", false, "First Aid", "case2");
                 settings.Add("case2.2", false, "Case 2-2", "case2");
                 settings.Add("case2.3", false, "Case 2-3", "case2");
@@ -172,6 +181,8 @@ startup
         settings.Add("overtime", false, "Overtime", "splits");
             settings.Add("otDrone", false, "Frank sees a sick RC Drone", "overtime");
             settings.Add("otSupplies", false, "Supplies", "overtime");
+                settings.Add("otSupplyTaken", false, "Splits when you grab the supplies", "otSupplies");
+                settings.Add("otSupplyHideout", false, "Back to hideout", "otSupplies");
             settings.Add("otClockTower", false, "Clock Tower", "overtime");
             settings.Add("otQueens", false, "Queens", "overtime");
             settings.Add("otTunnel", false, "Tunnel", "overtime");
@@ -206,6 +217,25 @@ startup
                 settings.Add("case9.1T1->T2", false, "Tunnels 1->Tunnels 2", "overtimeTransitions");
                 settings.Add("case9.1T2->T3", false, "Tunnels 2->Tunnels 3", "overtimeTransitions");
 
+        settings.Add("psycho", false, "PsychoSkip", "splits");
+            settings.Add("psychoKent1", false, "Kent First Encounter", "psycho");
+            settings.Add("psychoConvicts1", false, "Convicts First Encounter", "psycho");
+            settings.Add("psychoCliff", false, "Cliff", "psycho");
+            settings.Add("psychoCletus", false, "Cletus", "psycho");
+            settings.Add("psychoAdam", false, "Adam", "psycho");
+            settings.Add("psychoGreg", false, "Greg", "psycho");
+            settings.Add("psychoKent2", false, "Kent Second Encounter", "psycho");
+            settings.Add("psychoJo", false, "Jo", "psycho");
+            settings.Add("psychoBrad", false, "Brad", "psycho");
+            settings.Add("psychoSnipers", false, "Snipers", "psycho");
+            settings.Add("psychoConvicts2", false, "Convicts Second Encounter", "psycho");
+            settings.Add("psychoSean", false, "Sean", "psycho");
+            settings.Add("psychoPaul", false, "Paul", "psycho");
+            settings.Add("psychoKent3", false, "Kent Third Encounter", "psycho");
+
+        settings.Add("survivor", false, "SurvivorSkip", "splits");
+            settings.Add("survivorsSafe", false, "Splits when a group of survivors enter the safe house", "survivor");
+            settings.Add("endingB", false, "Ending B", "survivor");
 
         // Max Level
         settings.Add("maxLevel", false, "Max Level", "splits");
@@ -226,12 +256,22 @@ startup
         settings.Add("ppStickers", false, "PP Stickers", "splits");
             settings.Add("ppStickers1", false, "Split on every sticker", "ppStickers");
             settings.Add("ppStickers2", false, "Split on every photo which includes PP stickers", "ppStickers");
+
+        settings.Add("willametteGenocider", false, "Willamette Genocider", "splits");
+            settings.Add("wgSurvivors", false, "Survivors death", "willametteGenocider");
+
+        //Otis Transistor Calls
+        settings.Add("Otis", false, "Otis Transmissions", "splits");
+            settings.Add("Otis1", false, "Split on every Otis Transmission picked up", "Otis");
 }
 
 init 
 {
     // Pending splits (for PP collector mostly)
     vars.PendingSplits = 0;
+
+    // A PP Sticker Counter
+    vars.PPStickersCount = 0;
 
     // Keep track of hit splits
     vars.Splits = new HashSet<string>();
@@ -241,14 +281,25 @@ init
     {
         {3,   "case1Barnaby"},
         {4,   "case1Prologue"},
+        {22,  "case2Steven"},
         {26,  "case4IsabelaStart"},
         {31,  "case5Zombie"},
         {53,  "endingA"},
+        {70,  "psychoKent3"},
+        {71,  "psychoCliff"},
+        {72,  "psychoCletus"},
+        {73,  "psychoSean"},
+        {74,  "psychoAdam"},
+        {75,  "psychoJo"},
+        {76,  "psychoPaul"},
+        {112, "psychoKent1"},
+        {117, "psychoKent2"},
         {125, "otClockTower"},
         {126, "otQueens"},
-        {131, "otSupplies"},
+        {131, "otSupplyHideout"},
         {136, "otTunnel"},
         {140, "otDrone"},
+        {143, "endingB"},
         {144, "otTank"},
     };
 
@@ -316,25 +367,97 @@ init
         {2818, "T3"},  // Tunnels 3
     };
 
-    // Track PP stickers array
-    uint ptr = current.PhotoStatsPtr;
-    current.PPStickers = new int[100].Select((_, i) => memory.ReadValue<int>((IntPtr)(4 * i + ptr + 0x2A8))).ToArray();
+    vars.Survivors = new List<string>
+    {
+        "uNpc00",
+        "uNpc01",
+        "uNpc02",
+        "uNpc03",
+        "uNpc04",
+        "uNpc05",
+        "uNpc06",
+        "uNpc07",
+        "uNpc08",
+        "uNpc09",
+        "uNpc0a",
+        "uNpc0b",
+        "uNpc0c",
+        "uNpc0d",
+        "uNpc0e",
+        "uNpc0f",
+        "uNpc10",
+        "uNpc11",
+        "uNpc12",
+        "uNpc13",
+        "uNpc14",
+        "uNpc15",
+        "uNpc16",
+        "uNpc17",
+        "uNpc18",
+        "uNpc19",
+        "uNpc1a",
+        "uNpc1b",
+        "uNpc1d",
+        "uNpc1e",
+        "uNpc1f",
+        "uNpc20",
+        "uNpc21",
+        "uNpc40",
+        "uNpc42",
+        "uNpc44",
+        "uNpc45",
+        "uNpc46",
+        "uNpc4c",
+        "uNpc4d",
+        "uNpc4e",
+        "uNpc4f",
+        "uNpc50",
+        "uNpc52",
+        "uNpc54",
+        "uNpc56",
+        "uNpc57",
+        "uNpc59",
+        "uNpc5a"
+    };
 
     // For starting on player control
     vars.PrimeStart = false;
     vars.WillStart = false;
+    
+    // Add Watchers for NPC Statues
+    vars.NPCStates = new MemoryWatcherList();
+    
+    for (int i = 0; i < 51; ++i)
+    {
+        var statePtr = new DeepPointer("DeadRising.exe", 0x1946660, 0x58, 0x8 * i, 0x44);
+        var watcher = new MemoryWatcher<byte>(statePtr) { Name = i.ToString() };
+
+        vars.NPCStates.Add(watcher);
+    }
+
+    // Add Watchers for NPC Health
+    vars.NPCHealth = new MemoryWatcherList();
+
+    for (int i = 0; i < 51; ++i)
+    {
+        var healthPtr = new DeepPointer("DeadRising.exe", 0x1946660, 0x58, 0x8 * i, 0x18);
+        var watcher = new MemoryWatcher<uint>(healthPtr) { Name = i.ToString() };
+
+        vars.NPCHealth.Add(watcher);
+    }
+
+    // Use for PP Stickers
+    vars.PPStickersLoaded = false;
+    vars.PPStickersWatchers = new MemoryWatcherList();
 }
 
 update 
 {
-    // Update PP stickers
-    uint ptr = current.PhotoStatsPtr;
-    current.PPStickers = new int[100].Select((_, i) => memory.ReadValue<int>((IntPtr)(4 * i + ptr + 0x2A8))).ToArray();
-
     // Clear any hit splits if timer stops
     if (timer.CurrentPhase == TimerPhase.NotRunning)
     {
         vars.Splits.Clear();
+        vars.PPStickersLoaded = false;
     }
 
     // For starting on player control
@@ -356,6 +479,25 @@ start
     {
         vars.PrimeStart = false;
         vars.WillStart = false;
+
+        // Load the PP Stickers watchers
+        if (settings["ppStickers"] && !vars.PPStickersLoaded)
+        {
+            vars.PPStickersCount = 0;
+            vars.PPStickersWatchers.Clear();
+
+            for (int i = 0; i < 100; ++i)
+            {
+                var ppStickerPtr = new DeepPointer("DeadRising.exe", 0x1CF3128, 0x40, 0x6E8 + (0x4 * i));
+                var watcher = new MemoryWatcher<int>(ppStickerPtr) { Name = i.ToString() };
+
+                vars.PPStickersCount += ppStickerPtr.Deref<int>(game);
+                vars.PPStickersWatchers.Add(watcher);
+            }
+            
+            vars.PPStickersLoaded = true;
+        }
+
         return true;
     }
 }
@@ -374,19 +516,6 @@ split
 {
     // Any pending splits (only used if you get multiple PP stickers in one shot)
     if (vars.PendingSplits-- > 0) { return true; }
-
-    // PP Stickers
-    int[] currentPPStickers = (current.PPStickers as int[]);
-    int[] oldPPStickers = (old.PPStickers as int[]);
-    if (!currentPPStickers.SequenceEqual(oldPPStickers)) 
-    {
-        if (settings["ppStickers1"])
-        {
-            vars.PendingSplits = currentPPStickers.Sum() - oldPPStickers.Sum() - 1;
-            return true;
-        }
-        return settings["ppStickers2"];
-    }
 
     // Generic Case Split
     if (old.CaseMenuState == 2 && current.CaseMenuState == 0)
@@ -454,10 +583,89 @@ split
         return settings["case7Bomb" + current.Bombs.ToString()];
     }
 
+    // Supplies
+    if(current.CutsceneId == 140 && current.Supplies > old.Supplies)
+    {
+        return settings["otSupplyTaken"];
+    }
+
     // Brock
     if (current.CutsceneId == 144 && current.BossHealth == 0 && old.BossHealth != 0)
     {
         return settings["otBrock"];
+    }
+
+    // Psycho and Willamette Genocider
+    if (settings["psycho"] || settings["willametteGenocider"])
+    {
+        if (settings["psychoGreg"] || settings["wgSurvivors"])
+        {
+            vars.NPCHealth.UpdateAll(game);
+
+            foreach (var watcher in vars.NPCHealth)
+            {
+                if (watcher.Changed && (watcher.Current == uint.MaxValue || watcher.Current == (uint)0))
+                {
+                    int i = int.Parse(watcher.Name);
+                    string npcName = new DeepPointer("DeadRising.exe", 0x1946660, 0x58, 0x8 * i, 0x8, 0x8).DerefString(game, 6);
+
+                    // Greg Skip
+                    if (settings["psychoGreg"] && npcName == "uNpc54")
+                    {
+                        return settings["psychoGreg"];
+                    }
+                    else if (settings["willametteGenocider"] && settings["wgSurvivors"])
+                    {
+                        return vars.Survivors.Contains(npcName);
+                    }
+                }
+            }
+        }
+
+        // Brad death
+        if (old.CaseMenuState == 0 && current.CaseMenuState == 2 && current.CutsceneId == 9)
+        {
+            // The truth vanished
+            if (current.CampaignProgress == 1100)
+            {
+                return settings["psychoBrad"];
+            }
+        }
+
+        // Snipers
+        if (current.CutsceneId == 64 && current.RoomId == 256 && 
+            ((current.BossHealth == 0 && old.BossHealth != 0 && current.Boss2Health == 0 && current.Boss3Health == 0) || 
+            (current.Boss2Health == 0 && old.Boss2Health != 0 && current.BossHealth == 0 && current.Boss3Health == 0) ||
+            (current.Boss3Health == 0 && old.Boss3Health != 0 && current.Boss2Health == 0 && current.BossHealth == 0)))
+        {
+            return settings["psychoSnipers"];
+        }
+    }
+
+    // Convicts
+    if (current.RoomId == 1792 &&
+        ((current.Convict1Health == 0 && old.Convict1Health != 0 && current.Convict2Health == 0 && current.Convict3Health == 0) || 
+        (current.Convict2Health == 0 && old.Convict2Health != 0 && current.Convict1Health == 0 && current.Convict3Health == 0) ||
+        (current.Convict3Health == 0 && old.Convict3Health != 0 && current.Convict2Health == 0 && current.Convict1Health == 0)))
+    {
+        print("FIRE!!!!");
+        return settings["convicts1"] || settings["psychoConvicts1"] || settings["psychoConvicts2"];
+    }
+
+    // Survivors
+    if (settings["survivor"])
+    {
+        vars.NPCStates.UpdateAll(game);
+
+        foreach (var watcher in vars.NPCStates)
+        {
+            if (watcher.Changed && settings["survivorsSafe"] && watcher.Current == 3)
+            {
+                int i = int.Parse(watcher.Name);
+                string npcName = new DeepPointer("DeadRising.exe", 0x1946660, 0x58, 0x8 * i, 0x8, 0x8).DerefString(game, 6);
+                return vars.Survivors.Contains(npcName);
+            }
+        }
     }
 
     // Max Level
@@ -475,6 +683,45 @@ split
             {
                 return settings["kills" + count.ToString()];
             }
-        };
+        }
+    }
+
+    // PP Stickers
+    if (settings["ppStickers"] && vars.PPStickersLoaded)
+    {
+        if (vars.PendingSplits-- > 0) { return true; }
+
+        vars.PPStickersWatchers.UpdateAll(game);
+
+        int CurrentPPStickersCount = 0;
+
+        foreach (var watcher in vars.PPStickersWatchers)
+        {
+            CurrentPPStickersCount += watcher.Current;
+        }
+
+        if (CurrentPPStickersCount > vars.PPStickersCount)
+        {
+            if (settings["ppStickers1"])
+            {
+                vars.PendingSplits = CurrentPPStickersCount - vars.PPStickersCount - 1;
+                vars.PPStickersCount = CurrentPPStickersCount;
+                return true;
+            }
+            else if(settings["ppStickers2"])
+            {
+                vars.PPStickersCount = CurrentPPStickersCount;
+                return true;
+            }
+        }
+    }
+
+    // Otis Transmissions
+    if (old.Transmissions == 1 && current.Transmissions < 1 && current.CaseStarts != 290)
+    {
+        {
+            vars.Splits.Add("Otis1");
+            return settings["Otis1"];
+        }
     }
 }
