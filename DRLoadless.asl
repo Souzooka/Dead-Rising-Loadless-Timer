@@ -766,7 +766,7 @@ split
 
         foreach (var watcher in vars.NPCStates)
         {
-            if (watcher.Changed && watcher.Current == 4)
+            if (watcher.Changed && watcher.Current == 4 && watcher.Old != 11)
             {
                 int i = int.Parse(watcher.Name);
                 string npcName = new DeepPointer("DeadRising.exe", 0x1946660, 0x58, 0x8 * i, 0x8, 0x8).DerefString(game, 6);
