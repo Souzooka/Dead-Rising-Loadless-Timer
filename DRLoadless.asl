@@ -7,6 +7,12 @@ state("DeadRising", "SteamPatch3")
     
     // Various split variables
     byte Bombs : 0x1944DD8, 0x20DC0, 0x848D;
+    byte WatchCase1 : 0x1D18C80, 0x1F58;
+    byte WatchCase2 : 0x1D18C80, 0x1F5F;
+    byte WatchCase3 : 0x1D18C80, 0x1F66;
+    byte WatchCase4 : 0x1D18C80, 0x1F6D;
+    byte PPRewardText1 : 0x1946950, 0x154;
+    byte PPRewardText2 : 0x1946950, 0x80;
     int CampaignProgress : 0x1944DD8, 0x20DC0, 0x150;
     int CutsceneId : 0x1944DD8, 0x20DC0, 0x8308;
     int Supplies : 0x1944DD8, 0x20FB0;
@@ -26,6 +32,7 @@ state("DeadRising", "SteamPatch3")
 
 startup
 {
+    #region Settings
     // Settings tree
     settings.Add("splits", true, "All Splits");
 
@@ -34,6 +41,7 @@ startup
 
             // Case 1
             settings.Add("case1", false, "Case 1 Splits", "72Hour");
+                settings.Add("case1EntrancePlaza", false, "Entrance Plaza", "case1");
                 settings.Add("case1Barnaby", false, "Met Barnaby", "case1");
                 settings.Add("case1Prologue", false, "Prologue", "case1");
                 settings.Add("case1.1", false, "Case 1-1", "case1");
@@ -233,9 +241,67 @@ startup
             settings.Add("psychoPaul", false, "Paul", "psycho");
             settings.Add("psychoKent3", false, "Kent Third Encounter", "psycho");
 
-        settings.Add("survivor", false, "SurvivorSkip", "splits");
-            settings.Add("survivorsSafe", false, "Splits when a group of survivors enter the safe house", "survivor");
-            settings.Add("endingB", false, "Ending B", "survivor");
+        settings.Add("survivor", false, "SurvivorSkip", "splits"); 
+            settings.Add("uNpc00", false, "Burt Thompson", "survivor");
+            settings.Add("uNpc01", false, "Heather Tompkins", "survivor");
+            settings.Add("uNpc02", false, "Nathalie Meyer", "survivor");
+            settings.Add("uNpc03", false, "Gordon Stalworth", "survivor");
+            settings.Add("uNpc04", false, "Aaron Swoop", "survivor");
+            settings.Add("uNpc05", false, "Jeff Meyer", "survivor");
+            settings.Add("uNpc06", false, "Pamela Tompkins", "survivor");
+            settings.Add("uNpc07", false, "Kindell Johnson", "survivor");
+            settings.Add("uNpc08", false, "Jolie Wu", "survivor");
+            settings.Add("uNpc09", false, "Rachel Decker", "survivor");
+            settings.Add("uNpc0a", false, "Susan Walsh", "survivor");
+            settings.Add("uNpc0b", false, "Ronald Shiner", "survivor");
+            settings.Add("uNpc0c", false, "Leah Stein", "survivor");
+            settings.Add("uNpc0d", false, "David Bailey", "survivor");
+            settings.Add("uNpc0e", false, "Floyd Sanders", "survivor"); 
+            settings.Add("uNpc0f", false, "Yuu Tanaka", "survivor");
+            settings.Add("uNpc10", false, "Shinji Kitano", "survivor");
+            settings.Add("uNpc11", false, "Tonya Waters", "survivor");
+            settings.Add("uNpc12", false, "Ross Folk", "survivor");
+            settings.Add("uNpc13", false, "Wayne Blackwell", "survivor");
+            settings.Add("uNpc14", false, "Bill Brenton", "survivor");
+            settings.Add("uNpc15", false, "Sally Mills", "survivor");
+            settings.Add("uNpc16", false, "Nick Evans", "survivor");
+            settings.Add("uNpc17", false, "Leroy McKenna", "survivor");
+            settings.Add("uNpc18", false, "Simone Ravendark", "survivor");
+            settings.Add("uNpc19", false, "Gil Jimenez", "survivor");
+            settings.Add("uNpc1a", false, "Brett Styles", "survivor");
+            settings.Add("uNpc1b", false, "Jonathan Picardsen", "survivor"); 
+            settings.Add("uNpc1d", false, "Alyssa Laurent", "survivor");
+            settings.Add("uNpc1e", false, "Paul Carson", "survivor");
+            settings.Add("uNpc1f", false, "Sophie Richards", "survivor");
+            settings.Add("uNpc20", false, "Jennifer Gorman", "survivor");
+            settings.Add("uNpc21", false, "Kent Swanson", "survivor");
+            settings.Add("uNpc40", false, "Ray Mathison", "survivor");
+            settings.Add("uNpc42", false, "Nathan Crabbe", "survivor");
+            settings.Add("uNpc44", false, "Michelle Feltz", "survivor");
+            settings.Add("uNpc45", false, "Cheryl Jones", "survivor");
+            settings.Add("uNpc46", false, "Beth Shrake", "survivor");
+            settings.Add("uNpc4c", false, "Josh Manning", "survivor");
+            settings.Add("uNpc4d", false, "Barbara Patterson", "survivor");
+            settings.Add("uNpc4e", false, "Rich Atkins", "survivor");
+            settings.Add("uNpc4f", false, "Mindy Baker", "survivor");
+            settings.Add("uNpc50", false, "Debbie Willet", "survivor");
+            settings.Add("uNpc52", false, "Tad Hawthorne", "survivor");
+            settings.Add("uNpc54", false, "Greg Simpson", "survivor");
+            settings.Add("uNpc56", false, "Kay Nelson", "survivor");
+            settings.Add("uNpc57", false, "Lilly Deacon", "survivor");
+            settings.Add("uNpc59", false, "Kelly Carpenter", "survivor");
+            settings.Add("uNpc5a", false, "Janet Star", "survivor");
+            settings.Add("survivorEscape", false, "Ending B", "survivor");
+
+        settings.Add("MRSplits", false, "Mutinies & Requests", "splits");
+            settings.Add("KBetrayal", false, "Kindell's Betrayal", "MRSplits");
+            settings.Add("RAppetite", false, "Ronald's Appetite", "MRSplits");
+            settings.Add("FSommelier", false, "Floyd The Sommelier", "MRSplits");
+            settings.Add("SGunslinger", false, "Simone The Gunslinger", "MRSplits");
+            settings.Add("PPresent", false, "Paul's Present", "MRSplits");
+            settings.Add("CRequest", false, "Cheryl's Request", "MRSplits");
+
+
 
         // Max Level
         settings.Add("maxLevel", false, "Max Level", "splits");
@@ -246,7 +312,7 @@ startup
 
         // Zombie Genocider
         settings.Add("zombieGenocider", false, "Zombie Genocider", "splits");
-            vars.GenociderKills = new List<int> {10000, 10719, 20000, 21438, 30000, 32157, 40000, 42876, 50000, 53594};
+            vars.GenociderKills = new List<int> {2500, 5000, 7500, 10000, 10719, 12500, 15000, 17500, 20000, 21438, 22500, 25000, 27500, 30000, 32157, 32500, 35000, 37500, 40000, 42500, 42876, 45000, 47500, 50000, 52500, 53594};
             foreach(int count in vars.GenociderKills)
             {
                 settings.Add("kills" + count.ToString(), false, String.Format("{0:n0}", count) + " kills", "zombieGenocider");
@@ -263,6 +329,8 @@ startup
         //Otis Transistor Calls
         settings.Add("Otis", false, "Otis Transmissions", "splits");
             settings.Add("Otis1", false, "Split on every Otis Transmission picked up", "Otis");
+
+#endregion
 }
 
 init 
@@ -279,6 +347,7 @@ init
     // For splitting when hitting a cutscene
     vars.Cutscenes = new Dictionary<int, string>
     {
+        {2,   "case1EntrancePlaza"},
         {3,   "case1Barnaby"},
         {4,   "case1Prologue"},
         {22,  "case2Steven"},
@@ -420,6 +489,8 @@ init
         "uNpc5a"
     };
 
+    vars.DeadSurvivors = new List<string>();
+
     // For starting on player control
     vars.PrimeStart = false;
     vars.WillStart = false;
@@ -480,6 +551,11 @@ start
         vars.PrimeStart = false;
         vars.WillStart = false;
 
+        if (settings["willametteGenocider"])
+        {
+            vars.DeadSurvivors.Clear();
+        }
+
         // Load the PP Stickers watchers
         if (settings["ppStickers"] && !vars.PPStickersLoaded)
         {
@@ -514,14 +590,12 @@ isLoading
 
 split
 {
-    // Any pending splits (only used if you get multiple PP stickers in one shot)
-    if (vars.PendingSplits-- > 0) { return true; }
-
     // Generic Case Split
-    if (old.CaseMenuState == 2 && current.CaseMenuState == 0)
+    if (old.CaseMenuState == 2 && (current.CaseMenuState == 0 || current.CaseMenuState == 19))
     {
-        if (vars.CaseStarts.ContainsKey(current.CampaignProgress))
+        if (vars.CaseStarts.ContainsKey(current.CampaignProgress) && !vars.Splits.Contains("case" + vars.CaseStarts[current.CampaignProgress]))
         {
+            vars.Splits.Add("case" + vars.CaseStarts[current.CampaignProgress]);
             return settings["case" + vars.CaseStarts[current.CampaignProgress]];
         }
     }
@@ -537,7 +611,11 @@ split
     }
 
     // Splitting on room transitions
-    if (current.RoomId != old.RoomId)
+    if ((settings["case1Transitions"] || settings["case2Transitions"] ||
+            settings["case4Transitions"] || settings["case5Transitions"] || 
+            settings["case7Transitions"] || settings["case8Transitions"] || 
+            settings["overtimeTransitions"]) 
+            && current.RoomId != old.RoomId)
     {
         if (vars.Rooms.ContainsKey(current.RoomId) && vars.Rooms.ContainsKey(old.RoomId))
         {
@@ -578,21 +656,35 @@ split
     }
 
     // Bombs
-    if (current.Bombs > old.Bombs)
+    if (current.CampaignProgress <= 340 && current.CampaignProgress < 350 && current.Bombs > old.Bombs)
     {
         return settings["case7Bomb" + current.Bombs.ToString()];
     }
 
-    // Supplies
-    if(current.CutsceneId == 140 && current.Supplies > old.Supplies)
+    // Overtime splits
+    if (settings["overtime"])
     {
-        return settings["otSupplyTaken"];
+        // Supplies
+        if(current.CutsceneId == 140 && current.Supplies > old.Supplies)
+        {
+            return settings["otSupplyTaken"];
+        }
+
+        // Brock
+        if (current.CutsceneId == 144 && current.BossHealth == 0 && old.BossHealth != 0)
+        {
+            return settings["otBrock"];
+        }
     }
 
-    // Brock
-    if (current.CutsceneId == 144 && current.BossHealth == 0 && old.BossHealth != 0)
+    // Willamette Genocider Case 1-4
+    // Generic Case Split
+    if (settings["willametteGenocider"] && old.CaseMenuState == 2 && current.CaseMenuState == 0)
     {
-        return settings["otBrock"];
+        if (current.CampaignProgress == 150)
+        {
+            return settings["case1.4"];
+        }
     }
 
     // Psycho and Willamette Genocider
@@ -607,16 +699,25 @@ split
                 if (watcher.Changed && (watcher.Current == uint.MaxValue || watcher.Current == (uint)0))
                 {
                     int i = int.Parse(watcher.Name);
-                    string npcName = new DeepPointer("DeadRising.exe", 0x1946660, 0x58, 0x8 * i, 0x8, 0x8).DerefString(game, 6);
+                    
+                    if (game != null)
+                    {
 
-                    // Greg Skip
-                    if (settings["psychoGreg"] && npcName == "uNpc54")
-                    {
-                        return settings["psychoGreg"];
-                    }
-                    else if (settings["willametteGenocider"] && settings["wgSurvivors"])
-                    {
-                        return vars.Survivors.Contains(npcName);
+                        string npcName = new DeepPointer("DeadRising.exe", 0x1946660, 0x58, 0x8 * i, 0x8, 0x8).DerefString(game, 6);
+                    
+                        if (!string.IsNullOrEmpty(npcName) && !string.IsNullOrEmpty(npcName.Trim()) && npcName.Trim()[0] == 'u')
+                        {
+                            // Greg Skip
+                            if (settings["psychoGreg"] && npcName == "uNpc54")
+                            {
+                                return settings["psychoGreg"];
+                            }
+                            else if (settings["willametteGenocider"] && settings["wgSurvivors"] && !vars.DeadSurvivors.Contains(npcName))
+                            {
+                                vars.DeadSurvivors.Add(npcName);
+                                return vars.Survivors.Contains(npcName);
+                            }
+                        }
                     }
                 }
             }
@@ -648,34 +749,98 @@ split
         (current.Convict2Health == 0 && old.Convict2Health != 0 && current.Convict1Health == 0 && current.Convict3Health == 0) ||
         (current.Convict3Health == 0 && old.Convict3Health != 0 && current.Convict2Health == 0 && current.Convict1Health == 0)))
     {
-        print("FIRE!!!!");
-        return settings["convicts1"] || settings["psychoConvicts1"] || settings["psychoConvicts2"];
+        if (current.CutsceneId == 63)
+        {
+            return settings["convicts"] || settings["psychoConvicts1"];
+        }
+        else if (current.CutsceneId == 64)
+        {
+            return settings["psychoConvicts2"];
+        }
     }
 
     // Survivors
-    if (settings["survivor"])
+   if (settings["survivor"])
     {
         vars.NPCStates.UpdateAll(game);
 
         foreach (var watcher in vars.NPCStates)
         {
-            if (watcher.Changed && settings["survivorsSafe"] && watcher.Current == 3)
+            if (watcher.Changed && watcher.Current == 4)
             {
                 int i = int.Parse(watcher.Name);
                 string npcName = new DeepPointer("DeadRising.exe", 0x1946660, 0x58, 0x8 * i, 0x8, 0x8).DerefString(game, 6);
-                return vars.Survivors.Contains(npcName);
+                return settings[npcName];
+            }
+        }
+    }
+
+        // Mutinies & Requests
+    if (settings["MRSplits"])
+    {
+        if (!vars.Splits.Contains("RAppetite"))
+        {
+            if (old.WatchCase3 == 37 && current.PPRewardText1 == 20 && current.PPRewardText2 == 1)
+            {
+                vars.Splits.Add("RAppetite");
+                return settings["RAppetite"];
+            }
+        }
+
+        if (!vars.Splits.Contains("KBetrayal"))
+        {
+            if (old.WatchCase2 == 36 && current.PPRewardText1 == 20 && current.PPRewardText2 == 1 || old.WatchCase3 == 36 && current.PPRewardText1 == 20 && current.PPRewardText2 == 1)
+            {
+                vars.Splits.Add("KBetrayal");
+                return settings["KBetrayal"];
+            }
+        }
+
+        if (!vars.Splits.Contains("FSommelier"))
+        {
+            if (old.WatchCase2 == 38 && current.PPRewardText1 == 21 && current.PPRewardText2 == 1 || old.WatchCase3 == 38 && current.PPRewardText1 == 21 && current.PPRewardText2 == 1 || old.WatchCase4 == 38 && current.PPRewardText1 == 21 && current.PPRewardText2 == 1)
+            {
+                vars.Splits.Add("FSommelier");
+                return settings["FSommelier"];
+            }
+        }
+
+        if (!vars.Splits.Contains("SGunslimger"))
+        {
+            if (old.WatchCase2 == 39 && current.PPRewardText1 == 21 && current.PPRewardText2 == 1 || old.WatchCase3 == 39 && current.PPRewardText1 == 21 && current.PPRewardText2 == 1 || old.WatchCase4 == 39 && current.PPRewardText1 == 21 && current.PPRewardText2 == 1)
+            {
+                vars.Splits.Add("SGunslinger");
+                return settings["SGunslinger"];
+            }
+        }
+
+        if (!vars.Splits.Contains("PPresent"))
+        {
+            if (old.WatchCase2 == 40 && current.PPRewardText1 == 21 && current.PPRewardText2 == 1 || old.WatchCase3 == 40 && current.PPRewardText1 == 21 && current.PPRewardText2 == 1 || old.WatchCase4 == 40 && current.PPRewardText1 == 21 && current.PPRewardText2 == 1)
+            {
+                vars.Splits.Add("PPresent");
+                return settings["PPresent"];
+            }
+        }
+
+        if (!vars.Splits.Contains("CRequest"))
+        {
+            if (old.WatchCase2 == 41 && current.PPRewardText1 == 21 && current.PPRewardText2 == 1 || old.WatchCase3 == 41 && current.PPRewardText1 == 21 && current.PPRewardText2 == 1 || old.WatchCase4 == 41 && current.PPRewardText1 == 21 && current.PPRewardText2 == 1)
+            {
+                vars.Splits.Add("CRequest");
+                return settings["CRequest"];
             }
         }
     }
 
     // Max Level
-    if (current.PlayerLevel != old.PlayerLevel)
+    if (settings["maxLevel"] && current.PlayerLevel != old.PlayerLevel)
     {
         return settings["level" + current.PlayerLevel.ToString()];
     }
 
     // Zombie Genocider
-    if (current.PlayerKills != old.PlayerKills)
+    if (settings["zombieGenocider"] && current.PlayerKills != old.PlayerKills)
     {
         foreach(int count in vars.GenociderKills)
         {
@@ -689,6 +854,7 @@ split
     // PP Stickers
     if (settings["ppStickers"] && vars.PPStickersLoaded)
     {
+        // Any pending splits (only used if you get multiple PP stickers in one shot)
         if (vars.PendingSplits-- > 0) { return true; }
 
         vars.PPStickersWatchers.UpdateAll(game);
