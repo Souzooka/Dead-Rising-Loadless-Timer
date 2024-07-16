@@ -7,18 +7,27 @@ state("DeadRising", "SteamPatch3")
     
     // Various split variables
     byte Bombs : 0x1944DD8, 0x20DC0, 0x848D;
+    byte MutinyByte : 0x1944DD8, 0x20EC4;
+    byte RequestByte : 0x1944DD8, 0x20EC7;
     int CampaignProgress : 0x1944DD8, 0x20DC0, 0x150;
     int CutsceneId : 0x1944DD8, 0x20DC0, 0x8308;
+    int Supplies : 0x1944DD8, 0x20FB0;
     int InGameTime : 0x1946FC0, 0x2F058, 0x198;
     int PlayerKills : 0x1959EA0, 0x3B0;
     int PlayerLevel : 0x1946950, 0x68;
     int RoomId : 0x1945F70, 0x48;
     float BossHealth : 0x1CF2620, 0x118, 0x12EC;
+    float Boss2Health : 0x1CF2620, 0x118, 0x10, 0x12EC;
+    float Boss3Health : 0x1CF2620, 0x118, 0x10, 0x10, 0x12EC;
+    float Convict1Health : 0x1CF2620, 0xA0, 0x1220, 0x1C0, 0x12EC;
+    float Convict2Health : 0x1CF2620, 0xA0, 0x1220, 0x1A0, 0x12EC;
+    float Convict3Health : 0x1CF2620, 0xA0, 0x1220, 0x180, 0x12EC;
     uint PhotoStatsPtr : 0x1959EA0, 0xA8;
 }
 
 startup
 {
+    #region Settings
     // Settings tree
     settings.Add("splits", true, "All Splits");
 
@@ -27,12 +36,14 @@ startup
 
             // Case 1
             settings.Add("case1", false, "Case 1 Splits", "72Hour");
+                settings.Add("case1EntrancePlaza", false, "Entrance Plaza", "case1");
                 settings.Add("case1Barnaby", false, "Met Barnaby", "case1");
                 settings.Add("case1Prologue", false, "Prologue", "case1");
                 settings.Add("case1.1", false, "Case 1-1", "case1");
                 settings.Add("case1.2", false, "Case 1-2", "case1");
                 settings.Add("case1.3", false, "Case 1-3", "case1");
                 settings.Add("case1.4", false, "Case 1-4", "case1");
+                settings.Add("convicts", false, "Convicts", "case1");
                 settings.Add("case1Transitions", false, "Room Transitions", "case1");
                     settings.Add("case1HP->SR", false, "Helipad->Security Room", "case1Transitions");
                     settings.Add("case1SR->EP", false, "Security Room->Entrance Plaza", "case1Transitions");
@@ -41,13 +52,13 @@ startup
                     settings.Add("case1RT->WH", false, "Rooftop->Warehouse", "case1Transitions");
                     settings.Add("case1WH->PP", false, "Warehouse->Paradise Plaza", "case1Transitions");
                     settings.Add("case1PP->LP", false, "Paradise Plaza->Leisure Park", "case1Transitions");
-                    settings.Add("case1LP->FC", false, "Lesiure Park->Food Court", "case1Transitions");
+                    settings.Add("case1LP->FC", false, "Leisure Park->Food Court", "case1Transitions");
                     settings.Add("case1FC->AP", false, "Food Court->Al Fresca Plaza", "case1Transitions");
                     settings.Add("case1AP->EP", false, "Al Fresca Plaza->Entrance Plaza", "case1Transitions");
                     settings.Add("case1EP->AP", false, "Entrance Plaza->Al Fresca Plaza", "case1Transitions");
                     settings.Add("case1AP->FC", false, "Al Fresca Plaza->Food Court", "case1Transitions");
                     settings.Add("case1FC->LP", false, "Food Court->Leisure Park", "case1Transitions");
-                    settings.Add("case1LP->PP", false, "Lesiure Park->Paradise Plaza", "case1Transitions");
+                    settings.Add("case1LP->PP", false, "Leisure Park->Paradise Plaza", "case1Transitions");
                     settings.Add("case1PP->WH", false, "Paradise Plaza->Warehouse", "case1Transitions");
                     settings.Add("case1WH->RT", false, "Warehouse->Rooftop", "case1Transitions");
                     settings.Add("case1RT->SR", false, "Rooftop->Security Room", "case1Transitions");
@@ -55,6 +66,7 @@ startup
             // Case 2
             settings.Add("case2", false, "Case 2 Splits", "72Hour");
                 settings.Add("case2.1", false, "Case 2-1", "case2");
+                settings.Add("case2Steven", false, "Steven", "case2");
                 settings.Add("case2FirstAid", false, "First Aid", "case2");
                 settings.Add("case2.2", false, "Case 2-2", "case2");
                 settings.Add("case2.3", false, "Case 2-3", "case2");
@@ -70,13 +82,13 @@ startup
                     settings.Add("case2.1PP->WP", false, "Paradise Plaza->Wonderland Plaza (Any%)", "case2Transitions");
                     settings.Add("case2.1WP->NP", false, "Wonderland Plaza->North Plaza (Any%)", "case2Transitions");
                     settings.Add("case2.1PP->LP", false, "Paradise Plaza->Leisure Park (Low%)", "case2Transitions");
-                    settings.Add("case2.1LP->NP", false, "Lesiure Park->North Plaza (Low%)", "case2Transitions");
+                    settings.Add("case2.1LP->NP", false, "Leisure Park->North Plaza (Low%)", "case2Transitions");
                     settings.Add("case2.1NP->SFS", false, "North Plaza->Seon's Food & Stuff", "case2Transitions");
                     settings.Add("case2.2SFS->NP", false, "Seon's Food & Stuff->North Plaza", "case2Transitions");
                     settings.Add("case2.2NP->WP", false, "North Plaza->Wonderland Plaza (Any%)", "case2Transitions");
                     settings.Add("case2.2WP->PP", false, "Wonderland Plaza->Paradise Plaza (Any%)", "case2Transitions");
                     settings.Add("case2.2NP->LP", false, "North Plaza->Leisure Park (Low%)", "case2Transitions");
-                    settings.Add("case2.2LP->PP", false, "Lesiure Park->Paradise Plaza (Low%)", "case2Transitions");
+                    settings.Add("case2.2LP->PP", false, "Leisure Park->Paradise Plaza (Low%)", "case2Transitions");
                     settings.Add("case2.2PP->WH", false, "Paradise Plaza->Warehouse", "case2Transitions");
                     settings.Add("case2.2WH->RT", false, "Warehouse->Rooftop", "case2Transitions");
                     settings.Add("case2.2RT->SR", false, "Rooftop->Security Room", "case2Transitions");
@@ -97,7 +109,7 @@ startup
                     settings.Add("case4PP->WP", false, "Paradise Plaza->Wonderland Plaza (Any%)", "case4Transitions");
                     settings.Add("case4WP->NP", false, "Wonderland Plaza->North Plaza (Any%)", "case4Transitions");
                     settings.Add("case4PP->LP", false, "Paradise Plaza->Leisure Park (Low%)", "case4Transitions");
-                    settings.Add("case4LP->NP", false, "Lesiure Park->North Plaza (Low%)", "case4Transitions");
+                    settings.Add("case4LP->NP", false, "Leisure Park->North Plaza (Low%)", "case4Transitions");
 
             // Case 5
             settings.Add("case5", false, "Case 5 Splits", "72Hour");
@@ -106,7 +118,7 @@ startup
                 settings.Add("case5.2", false, "Case 5-2", "case5");
                 settings.Add("case5Transitions", false, "Room Transitions", "case5");
                     settings.Add("case5NP->LP", false, "North Plaza->Leisure Park", "case5Transitions");
-                    settings.Add("case5LP->PP", false, "Lesiure Park->Paradise Plaza", "case5Transitions");
+                    settings.Add("case5LP->PP", false, "Leisure Park->Paradise Plaza", "case5Transitions");
                     settings.Add("case5PP->WH", false, "Paradise Plaza->Warehouse", "case5Transitions");
                     settings.Add("case5WH->RT", false, "Warehouse->Rooftop", "case5Transitions");
                     settings.Add("case5RT->SR", false, "Rooftop->Security Room", "case5Transitions");
@@ -122,6 +134,7 @@ startup
                 {
                     settings.Add("case7Bomb" + i.ToString(), false, "Bomb #" + i.ToString(), "case7");
                 }
+                settings.Add("Carlito3", false, "Carlito 3", "case7");
                 settings.Add("case7.2", false, "Case 7-2", "case7");
                 settings.Add("case7Transitions", false, "Room Transitions", "case7");
                     settings.Add("case7SR->RT", false, "Security Room->Rooftop", "case7Transitions");
@@ -129,7 +142,7 @@ startup
                     settings.Add("case7WH->PP", false, "Warehouse->Paradise Plaza", "case7Transitions");
                     settings.Add("case7PP->MT", false, "Paradise Plaza->Maintenance Tunnels (Any%)", "case7Transitions");
                     settings.Add("case7PP->LP", false, "Paradise Plaza->Leisure Park (Low%)", "case7Transitions");
-                    settings.Add("case7LP->MT", false, "Lesiure Park->Maintenance Tunnels (Low%)", "case7Transitions");
+                    settings.Add("case7LP->MT", false, "Leisure Park->Maintenance Tunnels (Low%)", "case7Transitions");
                     settings.Add("case7MT->LP", false, "Maintenance Tunnels->Leisure Park", "case7Transitions");
 
             // Case 8
@@ -143,13 +156,13 @@ startup
                     settings.Add("case8RT->WH", false, "Rooftop->Warehouse", "case8Transitions"); // First time
                     settings.Add("case8WH->PP", false, "Warehouse->Paradise Plaza", "case8Transitions"); // First time
                     settings.Add("case8PP->LP", false, "Paradise Plaza->Leisure Park", "case8Transitions");
-                    settings.Add("case8LP->NP", false, "Lesiure Park->North Plaza", "case8Transitions");
+                    settings.Add("case8LP->NP", false, "Leisure Park->North Plaza", "case8Transitions");
                     settings.Add("case8NP->CH", false, "North Plaza->Carlito's Hideout", "case8Transitions");
                     settings.Add("case8CH->NP", false, "Carlito's Hideout->North Plaza", "case8Transitions");
                     settings.Add("case8NP->WP", false, "North Plaza->Wonderland Plaza (Any%)", "case8Transitions");
                     settings.Add("case8WP->PP", false, "Wonderland Plaza->Paradise Plaza (Any%)", "case8Transitions");
                     settings.Add("case8NP->LP", false, "North Plaza->Leisure Park (Low%)", "case8Transitions");
-                    settings.Add("case8LP->PP", false, "Lesiure Park->Paradise Plaza (Low%)", "case8Transitions");
+                    settings.Add("case8LP->PP", false, "Leisure Park->Paradise Plaza (Low%)", "case8Transitions");
                     settings.Add("case8PP->WH", false, "Paradise Plaza->Warehouse", "case8Transitions");
                     settings.Add("case8WH->RT", false, "Warehouse->Rooftop", "case8Transitions");
                     settings.Add("case8RT->SR", false, "Rooftop->Security Room", "case8Transitions");
@@ -158,7 +171,7 @@ startup
                     settings.Add("case8.1WH->PP", false, "Warehouse->Paradise Plaza (After Jessie)", "case8Transitions"); // Second time
                     settings.Add("case8.1PP->MT", false, "Paradise Plaza->Maintenance Tunnels (Any%)", "case8Transitions");
                     settings.Add("case8.1PP->LP", false, "Paradise Plaza->Leisure Park (Low%)", "case8Transitions");
-                    settings.Add("case8.1LP->MT", false, "Lesiure Park->Maintenance Tunnels (Low%)", "case8Transitions");
+                    settings.Add("case8.1LP->MT", false, "Leisure Park->Maintenance Tunnels (Low%)", "case8Transitions");
                     settings.Add("case8.1MT->MPA", false, "Maintenance Tunnels->Meat Processing Area", "case8Transitions");
 
             // Case 9
@@ -172,6 +185,8 @@ startup
         settings.Add("overtime", false, "Overtime", "splits");
             settings.Add("otDrone", false, "Frank sees a sick RC Drone", "overtime");
             settings.Add("otSupplies", false, "Supplies", "overtime");
+                settings.Add("otSupplyTaken", false, "Splits when you grab the supplies", "otSupplies");
+                settings.Add("otSupplyHideout", false, "Back to hideout", "otSupplies");
             settings.Add("otClockTower", false, "Clock Tower", "overtime");
             settings.Add("otQueens", false, "Queens", "overtime");
             settings.Add("otTunnel", false, "Tunnel", "overtime");
@@ -182,7 +197,7 @@ startup
                 settings.Add("case9NP->WP", false, "North Plaza->Wonderland Plaza (Any%)", "overtimeTransitions");
                 settings.Add("case9WP->PP", false, "Wonderland Plaza->Paradise Plaza (Any%)", "overtimeTransitions");
                 settings.Add("case9NP->LP", false, "North Plaza->Leisure Park (Low%)", "overtimeTransitions");
-                settings.Add("case9LP->PP", false, "Lesiure Park->Paradise Plaza (Low%)", "overtimeTransitions");
+                settings.Add("case9LP->PP", false, "Leisure Park->Paradise Plaza (Low%)", "overtimeTransitions");
                 settings.Add("case9PP->WH", false, "Paradise Plaza->Warehouse", "overtimeTransitions");
                 settings.Add("case9WH->RT", false, "Warehouse->Rooftop", "overtimeTransitions");
                 settings.Add("case9RT->SR", false, "Rooftop->Security Room", "overtimeTransitions");
@@ -192,7 +207,7 @@ startup
                 settings.Add("case9PP->CM", false, "Paradise Plaza->Colby's Movieland (Low%)", "overtimeTransitions");
                 settings.Add("case9CM->PP", false, "Colby's Movieland->Paradise Plaza (Low%)", "overtimeTransitions");
                 settings.Add("case9PP->LP", false, "Paradise Plaza->Leisure Park (Low%)", "overtimeTransitions");
-                settings.Add("case9LP->FC", false, "Lesiure Park->Food Court (Low%)", "overtimeTransitions");
+                settings.Add("case9LP->FC", false, "Leisure Park->Food Court (Low%)", "overtimeTransitions");
                 settings.Add("case9FC->WP", false, "Food Court->Wonderland Plaza (Low%)", "overtimeTransitions");
                 settings.Add("case9WP->NP", false, "Wonderland Plaza->North Plaza", "overtimeTransitions");
                 settings.Add("case9NP->SFS", false, "North Plaza->Seon's Food & Stuff", "overtimeTransitions");
@@ -200,11 +215,40 @@ startup
                 settings.Add("case9NP->CH", false, "North Plaza->Carlito's Hideout", "overtimeTransitions");
                 settings.Add("case9.1CH->NP", false, "Carlito's Hideout->North Plaza (Queens)", "overtimeTransitions");
                 settings.Add("case9.1NP->LP", false, "North Plaza->Leisure Park (Queens)", "overtimeTransitions");
-                settings.Add("case9.1LP->NP", false, "Lesiure Park->North Plaza (Queens)", "overtimeTransitions");
+                settings.Add("case9.1LP->NP", false, "Leisure Park->North Plaza (Queens)", "overtimeTransitions");
                 settings.Add("case9.1NP->CH", false, "North Plaza->Carlito's Hideout (Queens)", "overtimeTransitions");
                 settings.Add("case9.1CH->T1", false, "Carlito's Hideout->Tunnels 1", "overtimeTransitions");
                 settings.Add("case9.1T1->T2", false, "Tunnels 1->Tunnels 2", "overtimeTransitions");
                 settings.Add("case9.1T2->T3", false, "Tunnels 2->Tunnels 3", "overtimeTransitions");
+
+        settings.Add("psycho", false, "PsychoSkip", "splits");
+            settings.Add("psychoKent1", false, "Kent First Encounter", "psycho");
+            settings.Add("psychoConvicts1", false, "Convicts First Encounter", "psycho");
+            settings.Add("psychoCliff", false, "Cliff", "psycho");
+            settings.Add("psychoCletus", false, "Cletus", "psycho");
+            settings.Add("psychoAdam", false, "Adam", "psycho");
+            settings.Add("psychoGreg", false, "Greg", "psycho");
+            settings.Add("psychoKent2", false, "Kent Second Encounter", "psycho");
+            settings.Add("psychoJo", false, "Jo", "psycho");
+            settings.Add("psychoBrad", false, "Brad", "psycho");
+            settings.Add("psychoSnipers", false, "Snipers", "psycho");
+            settings.Add("psychoConvicts2", false, "Convicts Second Encounter", "psycho");
+            settings.Add("psychoSean", false, "Sean", "psycho");
+            settings.Add("psychoPaul", false, "Paul", "psycho");
+            settings.Add("psychoKent3", false, "Kent Third Encounter", "psycho");
+
+        settings.Add("survivor", false, "SurvivorSkip", "splits"); 
+            settings.Add("GroupSaved", false, "Split on group saved", "survivor");
+            settings.Add("survivorEscape", false, "Ending B", "survivor");
+
+        settings.Add("MRSplits", false, "Mutinies & Requests", "splits");
+            settings.Add("RAppetite", false, "Ronald's Appetite", "MRSplits");
+            settings.Add("KBetrayal", false, "Kindell's Betrayal", "MRSplits");
+            settings.Add("FSommelier", false, "Floyd The Sommelier", "MRSplits");
+            settings.Add("SGunslinger", false, "Simone The Gunslinger", "MRSplits");
+            settings.Add("PPresent", false, "Paul's Present", "MRSplits");
+            settings.Add("CRequest", false, "Cheryl's Request", "MRSplits");
+
 
 
         // Max Level
@@ -216,16 +260,25 @@ startup
 
         // Zombie Genocider
         settings.Add("zombieGenocider", false, "Zombie Genocider", "splits");
-            vars.GenociderKills = new List<int> {10000, 10719, 20000, 21438, 30000, 32157, 40000, 42876, 50000, 53594};
+            vars.GenociderKills = new List<int> {2500, 5000, 7500, 10000, 10719, 12500, 15000, 17500, 20000, 21438, 22500, 25000, 27500, 30000, 32157, 32500, 35000, 37500, 40000, 42500, 42876, 45000, 47500, 50000, 52500, 53594};
             foreach(int count in vars.GenociderKills)
             {
                 settings.Add("kills" + count.ToString(), false, String.Format("{0:n0}", count) + " kills", "zombieGenocider");
             };
 
-        // PP stickers
+        // PP Stickers
         settings.Add("ppStickers", false, "PP Stickers", "splits");
             settings.Add("ppStickers1", false, "Split on every sticker", "ppStickers");
             settings.Add("ppStickers2", false, "Split on every photo which includes PP stickers", "ppStickers");
+
+        settings.Add("willametteGenocider", false, "Willamette Genocider", "splits");
+            settings.Add("wgSurvivors", false, "Survivors death", "willametteGenocider");
+
+        // Otis Transceiver Calls
+        settings.Add("Otis", false, "Otis Transmissions", "splits");
+            settings.Add("Otis1", false, "Split on every Otis Transmission picked up", "Otis");
+
+#endregion
 }
 
 init 
@@ -233,22 +286,38 @@ init
     // Pending splits (for PP collector mostly)
     vars.PendingSplits = 0;
 
+    // A PP Sticker Counter
+    vars.PPStickersCount = 0;
+
     // Keep track of hit splits
     vars.Splits = new HashSet<string>();
 
     // For splitting when hitting a cutscene
     vars.Cutscenes = new Dictionary<int, string>
     {
+        {2,   "case1EntrancePlaza"},
         {3,   "case1Barnaby"},
         {4,   "case1Prologue"},
+        {22,  "case2Steven"},
         {26,  "case4IsabelaStart"},
         {31,  "case5Zombie"},
+        {38, "Carlito3"},
         {53,  "endingA"},
+        {70,  "psychoKent3"},
+        {71,  "psychoCliff"},
+        {72,  "psychoCletus"},
+        {73,  "psychoSean"},
+        {74,  "psychoAdam"},
+        {75,  "psychoJo"},
+        {76,  "psychoPaul"},
+        {112, "psychoKent1"},
+        {117, "psychoKent2"},
         {125, "otClockTower"},
         {126, "otQueens"},
-        {131, "otSupplies"},
+        {131, "otSupplyHideout"},
         {136, "otTunnel"},
         {140, "otDrone"},
+        {143, "endingB"},
         {144, "otTank"},
     };
 
@@ -290,7 +359,8 @@ init
         {360, "8.2"},
         {370, "8.3"},
         {390, "8.4"},
-        {400, "9.1"}
+        {400, "9.1"},
+        {420, "9.1"}
     };
 
     vars.Rooms = new Dictionary<int, string>
@@ -316,25 +386,48 @@ init
         {2818, "T3"},  // Tunnels 3
     };
 
-    // Track PP stickers array
-    uint ptr = current.PhotoStatsPtr;
-    current.PPStickers = new int[100].Select((_, i) => memory.ReadValue<int>((IntPtr)(4 * i + ptr + 0x2A8))).ToArray();
+    vars.DeadSurvivors = new List<string>();
 
     // For starting on player control
     vars.PrimeStart = false;
     vars.WillStart = false;
+    
+    // Add Watchers for NPC Statues
+    vars.NPCStates = new MemoryWatcherList();
+    
+    for (int i = 0; i < 51; ++i)
+    {
+        var statePtr = new DeepPointer("DeadRising.exe", 0x1946660, 0x58, 0x8 * i, 0x44);
+        var watcher = new MemoryWatcher<byte>(statePtr) { Name = i.ToString() };
+
+        vars.NPCStates.Add(watcher);
+    }
+
+    // Add Watchers for Transmissions
+    vars.Transmissions = new MemoryWatcherList();
+
+    for (int i = 0; i < 11; ++i)
+    {
+        if (i == 0 || i == 4 || i == 5 || i >= 8)
+        {
+            var TransmissionPtr = new DeepPointer("DeadRising.exe", 0x1944DD8, (0x20F6C + i));
+            var watcher = new MemoryWatcher<byte>(TransmissionPtr) { Name = i.ToString() };
+            vars.Transmissions.Add(watcher);
+        }
+    }
+
+    // Use for PP Stickers
+    vars.PPStickersLoaded = false;
+    vars.PPStickersWatchers = new MemoryWatcherList();
 }
 
 update 
 {
-    // Update PP stickers
-    uint ptr = current.PhotoStatsPtr;
-    current.PPStickers = new int[100].Select((_, i) => memory.ReadValue<int>((IntPtr)(4 * i + ptr + 0x2A8))).ToArray();
-
     // Clear any hit splits if timer stops
     if (timer.CurrentPhase == TimerPhase.NotRunning)
     {
         vars.Splits.Clear();
+        vars.PPStickersLoaded = false;
     }
 
     // For starting on player control
@@ -356,6 +449,30 @@ start
     {
         vars.PrimeStart = false;
         vars.WillStart = false;
+
+        if (settings["willametteGenocider"])
+        {
+            vars.DeadSurvivors.Clear();
+        }
+
+        // Load the PP Stickers watchers
+        if (settings["ppStickers"] && !vars.PPStickersLoaded)
+        {
+            vars.PPStickersCount = 0;
+            vars.PPStickersWatchers.Clear();
+
+            for (int i = 0; i < 100; ++i)
+            {
+                var ppStickerPtr = new DeepPointer("DeadRising.exe", 0x1CF3128, 0x40, 0x6E8 + (0x4 * i));
+                var watcher = new MemoryWatcher<int>(ppStickerPtr) { Name = i.ToString() };
+
+                vars.PPStickersCount += ppStickerPtr.Deref<int>(game);
+                vars.PPStickersWatchers.Add(watcher);
+            }
+            
+            vars.PPStickersLoaded = true;
+        }
+
         return true;
     }
 }
@@ -372,27 +489,14 @@ isLoading
 
 split
 {
-    // Any pending splits (only used if you get multiple PP stickers in one shot)
-    if (vars.PendingSplits-- > 0) { return true; }
+    // Case Split
 
-    // PP Stickers
-    int[] currentPPStickers = (current.PPStickers as int[]);
-    int[] oldPPStickers = (old.PPStickers as int[]);
-    if (!currentPPStickers.SequenceEqual(oldPPStickers)) 
+    // Changed to a different logic statement to account for running on different FPS settings
+    if (old.CaseMenuState == 2 && current.CaseMenuState != 2)
     {
-        if (settings["ppStickers1"])
+        if (vars.CaseStarts.ContainsKey(current.CampaignProgress) && !vars.Splits.Contains("case" + vars.CaseStarts[current.CampaignProgress]))
         {
-            vars.PendingSplits = currentPPStickers.Sum() - oldPPStickers.Sum() - 1;
-            return true;
-        }
-        return settings["ppStickers2"];
-    }
-
-    // Generic Case Split
-    if (old.CaseMenuState == 2 && current.CaseMenuState == 0)
-    {
-        if (vars.CaseStarts.ContainsKey(current.CampaignProgress))
-        {
+            vars.Splits.Add("case" + vars.CaseStarts[current.CampaignProgress]);
             return settings["case" + vars.CaseStarts[current.CampaignProgress]];
         }
     }
@@ -408,7 +512,11 @@ split
     }
 
     // Splitting on room transitions
-    if (current.RoomId != old.RoomId)
+    if ((settings["case1Transitions"] || settings["case2Transitions"] ||
+            settings["case4Transitions"] || settings["case5Transitions"] || 
+            settings["case7Transitions"] || settings["case8Transitions"] || 
+            settings["overtimeTransitions"]) 
+            && current.RoomId != old.RoomId)
     {
         if (vars.Rooms.ContainsKey(current.RoomId) && vars.Rooms.ContainsKey(old.RoomId))
         {
@@ -449,25 +557,176 @@ split
     }
 
     // Bombs
-    if (current.Bombs > old.Bombs)
+    if (current.CampaignProgress <= 340 && current.CampaignProgress < 350 && current.Bombs > old.Bombs)
     {
         return settings["case7Bomb" + current.Bombs.ToString()];
     }
 
-    // Brock
-    if (current.CutsceneId == 144 && current.BossHealth == 0 && old.BossHealth != 0)
+    // Overtime splits
+    if (settings["overtime"])
     {
-        return settings["otBrock"];
+        // Supplies
+        if(current.CutsceneId == 140 && current.Supplies > old.Supplies)
+        {
+            return settings["otSupplyTaken"];
+        }
+
+        // Brock
+        if (current.CutsceneId == 144 && current.BossHealth == 0 && old.BossHealth != 0)
+        {
+            return settings["otBrock"];
+        }
+    }
+
+    // Willamette Genocider Case 1-4
+    // Generic Case Split
+    if (settings["willametteGenocider"] && old.CaseMenuState == 2 && current.CaseMenuState == 0)
+    {
+        if (current.CampaignProgress == 150)
+        {
+            return settings["case1.4"];
+        }
+    }
+
+    // Psycho and Willamette Genocider
+    if (settings["psycho"] || settings["willametteGenocider"])
+    {
+        if (settings["psychoGreg"] || settings["wgSurvivors"])
+        {
+            vars.NPCHealth.UpdateAll(game);
+
+            foreach (var watcher in vars.NPCHealth)
+            {
+                if (watcher.Changed && (watcher.Current == uint.MaxValue || watcher.Current == (uint)0))
+                {
+                    int i = int.Parse(watcher.Name);
+                    
+                    if (game != null)
+                    {
+
+                        string npcName = new DeepPointer("DeadRising.exe", 0x1946660, 0x58, 0x8 * i, 0x8, 0x8).DerefString(game, 6);
+                    
+                        if (!string.IsNullOrEmpty(npcName) && !string.IsNullOrEmpty(npcName.Trim()) && npcName.Trim()[0] == 'u')
+                        {
+                            // Greg Skip
+                            if (settings["psychoGreg"] && npcName == "uNpc54")
+                            {
+                                return settings["psychoGreg"];
+                            }
+                            else if (settings["willametteGenocider"] && settings["wgSurvivors"] && !vars.DeadSurvivors.Contains(npcName))
+                            {
+                                vars.DeadSurvivors.Add(npcName);
+                                return vars.Survivors.Contains(npcName);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Brad death
+        if (old.CaseMenuState == 0 && current.CaseMenuState == 2 && current.CutsceneId == 9)
+        {
+            // The truth vanished
+            if (current.CampaignProgress == 1100)
+            {
+                return settings["psychoBrad"];
+            }
+        }
+
+        // Snipers
+        if (current.CutsceneId == 64 && current.RoomId == 256 && 
+            ((current.BossHealth == 0 && old.BossHealth != 0 && current.Boss2Health == 0 && current.Boss3Health == 0) || 
+            (current.Boss2Health == 0 && old.Boss2Health != 0 && current.BossHealth == 0 && current.Boss3Health == 0) ||
+            (current.Boss3Health == 0 && old.Boss3Health != 0 && current.Boss2Health == 0 && current.BossHealth == 0)))
+        {
+            return settings["psychoSnipers"];
+        }
+    }
+
+    // Convicts
+    if (current.RoomId == 1792 &&
+        ((current.Convict1Health == 0 && old.Convict1Health != 0 && current.Convict2Health == 0 && current.Convict3Health == 0) || 
+        (current.Convict2Health == 0 && old.Convict2Health != 0 && current.Convict1Health == 0 && current.Convict3Health == 0) ||
+        (current.Convict3Health == 0 && old.Convict3Health != 0 && current.Convict2Health == 0 && current.Convict1Health == 0)))
+    {
+        if (current.CutsceneId == 63)
+        {
+            return settings["convicts"] || settings["psychoConvicts1"];
+        }
+        else if (current.CutsceneId == 64)
+        {
+            return settings["psychoConvicts2"];
+        }
+    }
+
+    // Survivors
+    if (settings["survivor"])
+    {
+        bool EmptyParty = true;
+        vars.NPCStates.UpdateAll(game);
+        foreach (var watcher in vars.NPCStates)
+        {
+            if (watcher.Current == 2)
+            {
+                EmptyParty = false;
+            }
+        }
+
+        foreach (var watcher in vars.NPCStates)
+        {
+            if (watcher.Changed && watcher.Current == 4 && watcher.Old != 11 && EmptyParty)
+            {
+                int i = int.Parse(watcher.Name);
+                string npcName = new DeepPointer("DeadRising.exe", 0x1946660, 0x58, 0x8 * i, 0x8, 0x8).DerefString(game, 6);
+                return settings["GroupSaved"];
+            }
+        }
+    }
+
+    // Mutinies & Requests
+    if (settings["MRSplits"])
+    {
+        if (old.MutinyByte == current.MutinyByte - 64)
+        {
+            vars.Splits.Add("RAppetite");
+            return settings["RAppetite"];
+        }
+        if (old.MutinyByte == current.MutinyByte - 32)
+        {
+            vars.Splits.Add("KBetrayal");
+            return settings["KBetrayal"];
+        }
+        if (old.RequestByte == current.RequestByte - 32)
+        {
+            vars.Splits.Add("CRequest");
+            return settings["CRequest"];
+        }
+        if (old.RequestByte == current.RequestByte - 16)
+        {
+            vars.Splits.Add("PPresent");
+            return settings["PPresent"];
+        }
+        if (old.RequestByte == current.RequestByte - 8)
+        {
+            vars.Splits.Add("SGunslinger");
+            return settings["SGunslinger"];
+        }
+        if (old.RequestByte == current.RequestByte - 4)
+        {
+            vars.Splits.Add("FSommelier");
+            return settings["FSommelier"];
+        }
     }
 
     // Max Level
-    if (current.PlayerLevel != old.PlayerLevel)
+    if (settings["maxLevel"] && current.PlayerLevel != old.PlayerLevel)
     {
         return settings["level" + current.PlayerLevel.ToString()];
     }
 
     // Zombie Genocider
-    if (current.PlayerKills != old.PlayerKills)
+    if (settings["zombieGenocider"] && current.PlayerKills != old.PlayerKills)
     {
         foreach(int count in vars.GenociderKills)
         {
@@ -475,6 +734,51 @@ split
             {
                 return settings["kills" + count.ToString()];
             }
-        };
+        }
+    }
+
+    // PP Stickers
+    if (settings["ppStickers"] && vars.PPStickersLoaded)
+    {
+        // Any pending splits (only used if you get multiple PP stickers in one shot)
+        if (vars.PendingSplits-- > 0) { return true; }
+
+        vars.PPStickersWatchers.UpdateAll(game);
+
+        int CurrentPPStickersCount = 0;
+
+        foreach (var watcher in vars.PPStickersWatchers)
+        {
+            CurrentPPStickersCount += watcher.Current;
+        }
+
+        if (CurrentPPStickersCount > vars.PPStickersCount)
+        {
+            if (settings["ppStickers1"])
+            {
+                vars.PendingSplits = CurrentPPStickersCount - vars.PPStickersCount - 1;
+                vars.PPStickersCount = CurrentPPStickersCount;
+                return true;
+            }
+            else if(settings["ppStickers2"])
+            {
+                vars.PPStickersCount = CurrentPPStickersCount;
+                return true;
+            }
+        }
+    }
+
+    // Otis Transmissions
+    if (settings["Otis1"])
+    {
+        vars.Transmissions.UpdateAll(game);
+        foreach (var watcher in vars.Transmissions)
+        {
+            if (watcher.Changed && watcher.Current > watcher.Old && !current.IsLoading)
+            {
+                vars.Splits.Add("Otis1");
+                return settings["Otis1"];
+            }
+        }
     }
 }
