@@ -386,6 +386,59 @@ init
         {2818, "T3"},  // Tunnels 3
     };
 
+    vars.Survivors = new List<string>
+    {
+        "uNpc00",
+        "uNpc01",
+        "uNpc02",
+        "uNpc03",
+        "uNpc04",
+        "uNpc05",
+        "uNpc06",
+        "uNpc07",
+        "uNpc08",
+        "uNpc09",
+        "uNpc0a",
+        "uNpc0b",
+        "uNpc0c",
+        "uNpc0d",
+        "uNpc0e",
+        "uNpc0f",
+        "uNpc10",
+        "uNpc11",
+        "uNpc12",
+        "uNpc13",
+        "uNpc14",
+        "uNpc15",
+        "uNpc16",
+        "uNpc17",
+        "uNpc18",
+        "uNpc19",
+        "uNpc1a",
+        "uNpc1b",
+        "uNpc1d",
+        "uNpc1e",
+        "uNpc1f",
+        "uNpc20",
+        "uNpc21",
+        "uNpc40",
+        "uNpc42",
+        "uNpc44",
+        "uNpc45",
+        "uNpc46",
+        "uNpc4c",
+        "uNpc4d",
+        "uNpc4e",
+        "uNpc4f",
+        "uNpc50",
+        "uNpc52",
+        "uNpc54",
+        "uNpc56",
+        "uNpc57",
+        "uNpc59",
+        "uNpc5a"
+    };
+
     vars.DeadSurvivors = new List<string>();
 
     // For starting on player control
@@ -675,11 +728,11 @@ split
 
         foreach (var watcher in vars.NPCStates)
         {
-            if (watcher.Changed && watcher.Current == 4 && watcher.Old != 11 && EmptyParty)
+            if (settings["GroupSaved"] && watcher.Changed && watcher.Current == 4 && watcher.Old != 11 && EmptyParty)
             {
                 int i = int.Parse(watcher.Name);
                 string npcName = new DeepPointer("DeadRising.exe", 0x1946660, 0x58, 0x8 * i, 0x8, 0x8).DerefString(game, 6);
-                return settings["GroupSaved"];
+                return vars.Survivors.Contains(npcName);
             }
         }
     }
