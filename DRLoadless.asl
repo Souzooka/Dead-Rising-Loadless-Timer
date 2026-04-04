@@ -9,6 +9,7 @@ state("DeadRising", "ENG")
     byte Bombs : 0x1944DD8, 0x20DC0, 0x848D;
     byte MutinyByte : 0x1944DD8, 0x20EC4;
     byte RequestByte : 0x1944DD8, 0x20EC7;
+    byte HelicopterByte : 0x1CF3128, 0x40, 0x6954;
     int CampaignProgress : 0x1944DD8, 0x20DC0, 0x150;
     int CutsceneId : 0x1944DD8, 0x20DC0, 0x8308;
     int Supplies : 0x1944DD8, 0x20FB0;
@@ -33,6 +34,7 @@ state("DeadRising", "JPN")
     byte Bombs : 0x1944DD8, 0x20DC0, 0x848D;
     byte MutinyByte : 0x1944DD8, 0x20EC4;
     byte RequestByte : 0x1944DD8, 0x20EC7;
+    byte HelicopterByte : 0x1CF3170, 0x40, 0x6954;
     int CampaignProgress : 0x1944DD8, 0x20DC0, 0x150;
     int CutsceneId : 0x1944DD8, 0x20DC0, 0x8308;
     int Supplies : 0x1944DD8, 0x20FB0;
@@ -89,10 +91,10 @@ startup
             // Case 2
             settings.Add("case2", false, "Case 2 Splits", "72Hour");
                 settings.Add("case2.1", false, "Case 2-1", "case2");
-                settings.Add("case2Steven", false, "Steven", "case2");
-                settings.Add("case2FirstAid", false, "First Aid", "case2");
                 settings.Add("case2.2", false, "Case 2-2", "case2");
                 settings.Add("case2.3", false, "Case 2-3", "case2");
+                    settings.Add("case2Steven", false, "Steven", "case2");
+                    settings.Add("case2FirstAid", false, "First Aid", "case2");
                 settings.Add("case2Transitions", false, "Room Transitions", "case2");
                     settings.Add("case2SR->RT", false, "Security Room->Rooftop", "case2Transitions"); // first time
                     settings.Add("case2RT->WH", false, "Rooftop->Warehouse", "case2Transitions"); // first time
@@ -157,7 +159,6 @@ startup
                 {
                     settings.Add("case7Bomb" + i.ToString(), false, "Bomb #" + i.ToString(), "case7");
                 }
-                settings.Add("Carlito3", false, "Carlito 3", "case7");
                 settings.Add("case7.2", false, "Case 7-2", "case7");
                 settings.Add("case7Transitions", false, "Room Transitions", "case7");
                     settings.Add("case7SR->RT", false, "Security Room->Rooftop", "case7Transitions");
@@ -259,9 +260,10 @@ startup
             settings.Add("psychoSean", false, "Sean", "psycho");
             settings.Add("psychoPaul", false, "Paul", "psycho");
             settings.Add("psychoKent3", false, "Kent Third Encounter", "psycho");
+            settings.Add("Carlito3", false, "Carlito 3", "psycho");
 
         settings.Add("survivor", false, "SurvivorSkip", "splits"); 
-            settings.Add("GroupSaved", false, "Split on group saved", "survivor");
+            settings.Add("GroupSaved", false, "Split on Group Saved", "survivor");
             settings.Add("survivorEscape", false, "Ending B", "survivor");
 
         settings.Add("MRSplits", false, "Mutinies & Requests", "splits");
@@ -271,8 +273,6 @@ startup
             settings.Add("SGunslinger", false, "Simone The Gunslinger", "MRSplits");
             settings.Add("PPresent", false, "Paul's Present", "MRSplits");
             settings.Add("CRequest", false, "Cheryl's Request", "MRSplits");
-
-
 
         // Max Level
         settings.Add("maxLevel", false, "Max Level", "splits");
@@ -296,10 +296,15 @@ startup
 
         settings.Add("willametteGenocider", false, "Willamette Genocider", "splits");
             settings.Add("wgSurvivors", false, "Survivors death", "willametteGenocider");
+            settings.Add("EndingF", false, "Ending F", "willametteGenocider");
 
         // Otis Transceiver Calls
-        settings.Add("Otis", false, "Otis Transmissions", "splits");
-            settings.Add("Otis1", false, "Split on every Otis Transmission picked up", "Otis");
+        settings.Add("Transmission", false, "Otis Transmissions", "splits");
+            settings.Add("Otis", false, "Split on every Otis Transmission picked up", "Transmission");
+
+        settings.Add("100%", false, "100% Splits", "splits");
+            settings.Add("100Bool", false, "Split for Second Overtime", "100%");
+            settings.Add("Helicopter", false, "Helicopter Defeated", "100%");
 
 #endregion
 }
@@ -310,20 +315,31 @@ string MD5Hash;
     using (var md5 = System.Security.Cryptography.MD5.Create())
     using (var s = File.Open(modules.First().FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
     MD5Hash = md5.ComputeHash(s).Select(x => x.ToString("X2")).Aggregate((a, b) => a + b);
+
     print("Hash is: " + MD5Hash);
+
+    vars.NPCPtr = 0x1946660;
+    vars.PhotoPtr = 0x1CF3128;
 
     switch (MD5Hash)
     {
         case "0017200B07F7721FBA8624A028D24F60":
             version = "JPN";
+            vars.NPCPtr = 0x1946678;
+            vars.PhotoPtr = 0x1CF3170;
+            break;
+
+        case "015AEC72A70696A7F8F0AE57FFEE727F":
+            version = "ENG";
             break;
 
         default:
-            version = "ENG";
+            version = "Unknown";
             break;
     }
+
     print("Version is: " + version);
-    vars.ResetCounter = 0;
+
     // Pending splits (for PP collector mostly)
     vars.PendingSplits = 0;
 
@@ -332,6 +348,14 @@ string MD5Hash;
 
     // Keep track of hit splits
     vars.Splits = new HashSet<string>();
+
+    vars.Overtime2 = new List<string>
+    {
+        "otQueens",
+        "otSupplyHideout",
+        "otTunnel",
+        "otTank",
+    };
 
     // For splitting when hitting a cutscene
     vars.Cutscenes = new Dictionary<int, string>
@@ -343,6 +367,7 @@ string MD5Hash;
         {26,  "case4IsabelaStart"},
         {31,  "case5Zombie"},
         {38, "Carlito3"},
+        {40, "EndingF"},
         {53,  "endingA"},
         {70,  "psychoKent3"},
         {71,  "psychoCliff"},
@@ -488,26 +513,17 @@ string MD5Hash;
     
     // Add Watchers for NPC Statues
     vars.NPCStates = new MemoryWatcherList();
-
-    int NPCPtr;
-    if (version == "ENG")
-    {
-        NPCPtr = 0x1946660;
-    }
-    else
-    {
-        NPCPtr = 0x1946678;
-    }
     
     for (int i = 0; i < 51; ++i)
     {
-        var statePtr = new DeepPointer("DeadRising.exe", NPCPtr, 0x58, 0x8 * i, 0x44);
+        var statePtr = new DeepPointer("DeadRising.exe", vars.NPCPtr, 0x58, 0x8 * i, 0x44);
         var watcher = new MemoryWatcher<byte>(statePtr) { Name = i.ToString() };
+        watcher.FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull;
 
         vars.NPCStates.Add(watcher);
     }
 
-    // Add Watchers for Transmissions, Will work for Japanese
+    // Add Watchers for Transmissions
     vars.Transmissions = new MemoryWatcherList();
 
     for (int i = 0; i < 11; ++i)
@@ -525,7 +541,7 @@ string MD5Hash;
 
     for (int i = 0; i < 51; ++i)
     {
-        var healthPtr = new DeepPointer("DeadRising.exe", NPCPtr, 0x58, 0x8 * i, 0x18);
+        var healthPtr = new DeepPointer("DeadRising.exe", vars.NPCPtr, 0x58, 0x8 * i, 0x18);
         var watcher = new MemoryWatcher<uint>(healthPtr) { Name = i.ToString() };
 
         vars.NPCHealth.Add(watcher);
@@ -570,16 +586,6 @@ start
             vars.DeadSurvivors.Clear();
         }
 
-        int PhotoPtr;
-        if (version == "ENG")
-        {
-            PhotoPtr = 0x1CF3128;
-        }
-        else
-        {
-            PhotoPtr = 0x1CF3170;
-        }
-
         // Load the PP Stickers watchers
         if (settings["ppStickers"] && !vars.PPStickersLoaded)
         {
@@ -588,7 +594,7 @@ start
 
             for (int i = 0; i < 100; ++i)
             {
-                var ppStickerPtr = new DeepPointer("DeadRising.exe", PhotoPtr, 0x40, 0x6E8 + (0x4 * i));
+                var ppStickerPtr = new DeepPointer("DeadRising.exe", vars.PhotoPtr, 0x40, 0x6E8 + (0x4 * i));
                 var watcher = new MemoryWatcher<int>(ppStickerPtr) { Name = i.ToString() };
 
                 vars.PPStickersCount += ppStickerPtr.Deref<int>(game);
@@ -629,7 +635,7 @@ split
     // Splitting when hitting cutscenes
     if (current.CutsceneId != old.CutsceneId)
     {
-        if (vars.Cutscenes.ContainsKey(current.CutsceneId) && !vars.Splits.Contains(vars.Cutscenes[current.CutsceneId]))
+        if (vars.Cutscenes.ContainsKey(current.CutsceneId) && !vars.Splits.Contains(vars.Cutscenes[current.CutsceneId]) || vars.Overtime2.Contains(vars.Cutscenes[current.CutsceneId]) && settings["100Bool"])
         {
             vars.Splits.Add(vars.Cutscenes[current.CutsceneId]);
             return settings[vars.Cutscenes[current.CutsceneId]];
@@ -701,10 +707,6 @@ split
         {
             return settings["otBrock"];
         }
-        if (current.CutsceneId == 134 && old.CutsceneId != 134)
-        {
-            vars.ResetCounter += 1;
-        }
     }
 
     // Willamette Genocider Case 1-4
@@ -732,16 +734,7 @@ split
                     
                     if (game != null)
                     {
-                        int NPCPtr;
-                        if (version == "ENG")
-                        {
-                            NPCPtr = 0x1946660;
-                        }
-                        else
-                        {
-                            NPCPtr = 0x1946678;
-                        }
-                        string npcName = new DeepPointer("DeadRising.exe", NPCPtr, 0x58, 0x8 * i, 0x8, 0x8).DerefString(game, 6);
+                        string npcName = new DeepPointer("DeadRising.exe", vars.NPCPtr, 0x58, 0x8 * i, 0x8, 0x8).DerefString(game, 6);
                     
                         if (!string.IsNullOrEmpty(npcName) && !string.IsNullOrEmpty(npcName.Trim()) && npcName.Trim()[0] == 'u')
                         {
@@ -798,10 +791,12 @@ split
     }
 
     // Survivors
-    if (settings["survivor"])
+    if (settings["GroupSaved"] && !current.IsLoading)
     {
         bool EmptyParty = true;
+
         vars.NPCStates.UpdateAll(game);
+
         foreach (var watcher in vars.NPCStates)
         {
             if (watcher.Current == 2)
@@ -812,54 +807,46 @@ split
 
         foreach (var watcher in vars.NPCStates)
         {
-            if (settings["GroupSaved"] && watcher.Changed && watcher.Current == 4 && watcher.Old != 11 && EmptyParty)
+            if (watcher.Changed && watcher.Current == 4 && watcher.Old != 11 && EmptyParty)
             {
                 int i = int.Parse(watcher.Name);
-                int NPCPtr;
-                if (version == "ENG")
-                {
-                    NPCPtr = 0x1946660;
-                }
-                else
-                {
-                    NPCPtr = 0x1946678;
-                }
-                string npcName = new DeepPointer("DeadRising.exe", NPCPtr, 0x58, 0x8 * i, 0x8, 0x8).DerefString(game, 6);
+                string npcName = new DeepPointer("DeadRising.exe", vars.NPCPtr, 0x58, 0x8 * i, 0x8, 0x8).DerefString(game, 6);
                 return vars.Survivors.Contains(npcName);
             }
         }
     }
+
+    // Helicopter Split
+    if (current.RoomId == 1792 && old.HelicopterByte == current.HelicopterByte - 128)
+    {
+        return settings["Helicopter"];
+    }
+
     // Mutinies & Requests
     if (settings["MRSplits"])
     {
         if (old.MutinyByte == current.MutinyByte - 64)
         {
-            vars.Splits.Add("RAppetite");
             return settings["RAppetite"];
         }
         if (old.MutinyByte == current.MutinyByte - 32)
         {
-            vars.Splits.Add("KBetrayal");
             return settings["KBetrayal"];
         }
         if (old.RequestByte == current.RequestByte - 32)
         {
-            vars.Splits.Add("CRequest");
             return settings["CRequest"];
         }
         if (old.RequestByte == current.RequestByte - 16)
         {
-            vars.Splits.Add("PPresent");
             return settings["PPresent"];
         }
         if (old.RequestByte == current.RequestByte - 8)
         {
-            vars.Splits.Add("SGunslinger");
             return settings["SGunslinger"];
         }
         if (old.RequestByte == current.RequestByte - 4)
         {
-            vars.Splits.Add("FSommelier");
             return settings["FSommelier"];
         }
     }
@@ -914,15 +901,15 @@ split
     }
 
     // Otis Transmissions
-    if (settings["Otis1"])
+    if (settings["Otis"] && !current.IsLoading)
     {
         vars.Transmissions.UpdateAll(game);
+
         foreach (var watcher in vars.Transmissions)
         {
-            if (watcher.Changed && watcher.Current > watcher.Old && !current.IsLoading)
+            if (watcher.Changed && watcher.Current > watcher.Old)
             {
-                vars.Splits.Add("Otis1");
-                return settings["Otis1"];
+                return settings["Otis"];
             }
         }
     }
